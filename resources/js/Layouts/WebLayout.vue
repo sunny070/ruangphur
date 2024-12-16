@@ -21,20 +21,23 @@
 
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2 mb-6">
             <!-- Button for Dilna -->
-            <button
-                class="bg-[#202429] p-4 rounded-lg shadow-md hover:bg-[#3a3f45] transition duration-300"
+            <Link
+                :href="route('form.step1')"
+                class="bg-[#202429] p-4 rounded-lg shadow-md hover:bg-[#3a3f45] transition duration-300 flex items-center space-x-4"
             >
-                <h3 class="font-semibold text-white">Dilna</h3>
-                <p class="text-muted-foreground text-white">
-                    Application form fill-up
-                </p>
+                <div>
+                    <h3 class="font-semibold text-white">Dilna</h3>
+                    <p class="text-muted-foreground text-white">
+                        Application form fill-up
+                    </p>
+                </div>
                 <img
                     id="background"
-                    align="right"
-                    class=""
+                    class="h-9 w-auto"
                     src="/build/img/Layer_1.png"
+                    alt="Icon"
                 />
-            </button>
+            </Link>
 
             <!-- Button for Zawnna -->
             <button
@@ -73,6 +76,9 @@
 </template>
 
 <script setup>
+
+
+import { Link } from '@inertiajs/vue3';
 const faqs = [
     "Ruang Phurh tu hi te in nge di thei?",
     "Lorem ipsum zawnha lorem ipsum zawnha?",
@@ -81,6 +87,8 @@ const faqs = [
     "Lorem ipsum zawnha lorem zawnha lorem 6?",
     "Lorem ipsum zawnha lorem zawnha lorem 67?",
 ];
+
+
 </script>
 
 <style scoped></style>

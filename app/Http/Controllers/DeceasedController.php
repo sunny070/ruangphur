@@ -9,9 +9,6 @@ class DeceasedController extends Controller
 {
     public function index()
     {
-        return inertia(
-            'Deceased/Create'
-            
-            );
+        return inertia('Deceased/Create');
     }
 }

@@ -1,165 +1,129 @@
 <template>
-    <q-page class="p-10">
-        <div class="">
-            <q-form 
-            @submit.prevent="onSubmit">
-                <div
-                    class="bg-gray-50 grid-cols-1 grid md:grid-cols-2 pl-4 pb-4 pr-4 col-span-2 q-gutter-sm "
-                >
+    <q-page padding>
+        <q-form class="q-pa-md row q-col-gutter-xs q-pa-xs"> <!-- Compact gutter and padding -->
+            <!-- Input 1 -->
+            <div class="col-xs-12 col-sm-4">
                 <q-input
-                v-model="form.department_name"
-                        outlined
-                        :error="!!form.errors?.department_name"
-                        :error-message="form.errors?.department_name?.toString()"
-                        :rules="[(val) => !!val || 'Department Name is required']"
-                        label="Department Name"
+                    filled
+                    dense
+                    v-model="form.name"
+                    label="Name"
                 />
-                <q-input
-                v-model="form.post_name"
-                        outlined
-                        :error="!!form.errors?.post_name"
-                        :error-message="form.errors?.post_name?.toString()"
-                        :rules="[(val) => !!val || 'Post Name is required']"
-                        label="Post Name"
-                />
-                <q-input
-                v-model="form.no_of_post"
-                        outlined
-                        :error="!!form.errors?.no_of_post"
-                        :error-message="form.errors?.no_of_post?.toString()"
-                        :rules="[(val) => !!val || 'No. of Post is required']"
-                        label="No. of Post"
-                />
-                <q-input
-                v-model="form.salary"
-                        outlined
-                        :error="!!form.errors?.salary"
-                        :error-message="form.errors?.salary?.toString()"
-                        :rules="[(val) => !!val || 'Pay Scale is required']"
-                        label="Pay Scale"
-                />
-                <q-input
-                v-model="form.age_limit"
-                        outlined
-                        :error="!!form.errors?.age_limit"
-                        :error-message="form.errors?.age_limit?.toString()"
-                        :rules="[(val) => !!val || 'Age limit is required']"
-                        label="Age limit"
-                />
-                <q-select
-                filled
-                v-model="form.qualification"
-                label="Qualification"
-                lazy-rules
-                :rules="[(val) => (val !== null && val !== '') || 'Please Select your qualification']"
-                :options="['Non Graduate', 'Graduate', 'Post Graduate', 'Doctorate']"
-            />
-                <q-input
-                v-model="form.application_fee"
-                        outlined
-                        :error="!!form.errors?.application_fee"
-                        :error-message="form.errors?.application_fee?.toString()"
-                        :rules="[(val) => !!val || 'Application Fee is required']"
-                        label="Application Fee"
-                />
-                <q-input
-                v-model="form.description"
-                        outlined
-                        :error="!!form.errors?.description"
-                        :error-message="form.errors?.description?.toString()"
-                        :rules="[(val) => !!val || 'Description is required']"
-                        label="Description"
-                /> 
-                <q-select outlined v-model="form.group" label="Select Group" :options="group" style="width: 250px"
-                behavior="menu" />
-                <q-select outlined v-model="form.department" label="Select Department" :options="department" style="width: 250px"
-                behavior="menu" />
-                <q-select outlined v-model="form.test_type" label="Select Test Type" :options="test" style="width: 250px"
-                behavior="menu" />
-              
-                
-               
-                <q-toggle v-model="form.active" label="Active" />
             </div>
-            <q-btn type="submit">Submit</q-btn>
-            </q-form>
-        </div>
+
+            <!-- Input 2 -->
+            <div class="col-xs-12 col-sm-3">
+                <q-select
+                    filled
+                    dense
+                    v-model="form.sex"
+                    label="Relative *"
+                    lazy-rules
+                    :rules="[(val) => (val && val.length > 0) || 'Relative is required']"
+                    :options="['Pa', 'Nu', 'Others']"
+                />
+            </div>
+
+            <!-- Input 3 -->
+            <div class="col-xs-12 col-sm-5">
+                <q-input
+                    filled
+                    dense
+                    v-model="form.relative_name"
+                    label="Relative Name"
+                />
+            </div>
+
+            <!-- Additional Inputs -->
+            <div class="col-xs-12 col-sm-6">
+                <q-input
+                    filled
+                    dense
+                    v-model="form.mobile"
+                    label="Mobile"
+                />
+            </div>
+
+            <div class="col-xs-12 col-sm-6">
+                <q-input
+                    filled
+                    dense
+                    v-model="form.district"
+                    label="District"
+                />
+            </div>
+
+            <!-- More Inputs -->
+            <div class="col-xs-12 col-sm-4">
+                <q-input
+                    filled
+                    dense
+                    v-model="form.locality"
+                    label="Locality"
+                />
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <q-input
+                    filled
+                    dense
+                    v-model="form.constituency"
+                    label="Constituency"
+                />
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <q-input
+                    filled
+                    dense
+                    v-model="form.time_of_death"
+                    label="Time of Death"
+                />
+            </div>
+
+            <div class="col-xs-12 col-sm-12">
+                <q-input
+                    filled
+                    dense
+                    v-model="form.place_of_death"
+                    label="Place of Death"
+                />
+            </div>
+            <q-btn color="black" type="submit">Next</q-btn>
+        </q-form>
     </q-page>
 </template>
 
 <script setup>
-import AppLayout from "@/Layouts/AppLayout.vue";
-import { useQuasar } from "quasar";
+import FormLayout from "@/Layouts/FormLayout.vue";
 import { ref } from "vue";
 
 defineOptions({
-    layout: AppLayout,
+    layout: FormLayout,
 });
 
-const q =useQuasar()
-
-
-
-
-const props = defineProps({
-    
-    groups:Object,
-    tests:Object,
-    departments:Object,
-})
-const group = ref(props.groups)
-const test = ref(props.tests)
-const department = ref(props.departments)
 const form = ref({
-    department_name: "",
-    post_name: "",
-    no_of_post: "",
-    salary: "",
-    age_limit: "",
-    qualification: "",
-    application_fee: "",
-    description: "",
-    active: false,
-    test_type: "",
-    group: "",
-    department: "",
+    name: "",
+    relative_name: "",
+    dob: "",
+    gender: "",
+    mobile: "",
+    district: "",
+    locality: "",
+    constituency: "",
+    time_of_death: "",
+    place_of_death: "",
 });
-
-const onSubmit = (e) => {
-    e.preventDefault();
-    form.active = !!form.active;
-    
-    axios.post(route("job.store"),form.value)
-    .then((response)=>{
-        if(response.data.redirect){
-            window.location.href = response.data.redirect;
-            q.notify({
-                    message: response.data.message,
-                    type: "positive",
-                });
-        }
-        else{
-            q.notify({
-                    message: response.data.message,
-                    type: "positive",
-                });
-        }
-    })
-    .catch((error) => {
-            // Show error messages
-            if (error.response && error.response.data.errors) {
-                form.value.errors = error.response.data.errors;
-                q.notify({
-                message: "Failed to create Job Details.",
-                type: "negative",
-            });
-            }
-            q.notify({
-                message: "Failed to create Job Details.",
-                type: "negative",
-            });
-        });
-};
-
-
 </script>
+
+<style>
+.text-foreground {
+    color: hsl(240, 10%, 3.9%);
+}
+.text-muted {
+    color: hsl(240, 3.8%, 46.1%);
+}
+.bg-background {
+    background-color: hsl(0, 0%, 100%);
+}
+</style>
