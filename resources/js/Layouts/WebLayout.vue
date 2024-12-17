@@ -35,12 +35,29 @@
                     id="background"
                     class="h-9 w-auto"
                     src="/build/img/Layer_1.png"
-                    alt="Icon"
+                    
+                />
+            </Link>
+            <Link
+                :href="route('track')"
+                class="bg-[#202429] p-4 rounded-lg shadow-md hover:bg-[#3a3f45] transition duration-300 flex items-center space-x-4"
+            >
+                <div>
+                    <h3 class="font-semibold text-white">Zawnna</h3>
+                    <p class="text-muted-foreground text-white">
+                        Track your bill!
+                    </p>
+                </div>
+                <img
+                    id="background"
+                    align="right"
+                    class=""
+                    src="/build/img/fi_2936980.png"
                 />
             </Link>
 
             <!-- Button for Zawnna -->
-            <button
+            <!-- <button
                 class="bg-[#202429] p-4 rounded-lg shadow-md hover:bg-[#3a3f45] transition duration-300"
             >
                 <h3 class="font-semibold text-white">Zawnna</h3>
@@ -51,7 +68,7 @@
                     class=""
                     src="/build/img/fi_2936980.png"
                 />
-            </button>
+            </button> -->
         </div>
 
         <section>
@@ -76,9 +93,7 @@
 </template>
 
 <script setup>
-
-
-import { Link } from '@inertiajs/vue3';
+import { Link } from "@inertiajs/vue3";
 const faqs = [
     "Ruang Phurh tu hi te in nge di thei?",
     "Lorem ipsum zawnha lorem ipsum zawnha?",
@@ -87,8 +102,6 @@ const faqs = [
     "Lorem ipsum zawnha lorem zawnha lorem 6?",
     "Lorem ipsum zawnha lorem zawnha lorem 67?",
 ];
-
-
 </script>
 
 <style scoped></style>

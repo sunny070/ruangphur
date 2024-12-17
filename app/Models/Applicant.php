@@ -9,6 +9,11 @@ class Applicant extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'user_id', 'district', 'locality', 'bank_name', 'account_no', 'ifsc_code',
+        'name','mobile', 'district', 'locality', 'bank_name', 'account_no', 'ifsc_code',
     ];
+
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
+    }
 }

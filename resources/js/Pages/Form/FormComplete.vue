@@ -1,51 +1,46 @@
 <template>
-    <q-page padding>
-      <h2>Review and Submit Your Application</h2>
-  
-      <div>
-        <h3>Deceased Information:</h3>
-        <q-list bordered>
-          <q-item v-for="(value, key) in form.deceased" :key="key">
-            <q-item-label>{{ key }}: {{ value }}</q-item-label>
-          </q-item>
-        </q-list>
-      </div>
-  
-      <div>
-        <h3>Transport Information:</h3>
-        <q-list bordered>
-          <q-item v-for="(value, key) in form.transport" :key="key">
-            <q-item-label>{{ key }}: {{ value }}</q-item-label>
-          </q-item>
-        </q-list>
-      </div>
-  
-      <div>
-        <h3>Applicant Information:</h3>
-        <q-list bordered>
-          <q-item v-for="(value, key) in form.applicant" :key="key">
-            <q-item-label>{{ key }}: {{ value }}</q-item-label>
-          </q-item>
-        </q-list>
-      </div>
-  
-      <q-btn label="Submit" color="primary" @click="submitForm" />
+    <q-page>
+        <div class="flex justify-center flex-col items-center">
+            <div
+                class="flex justify-center items-center w-8 rounded-full h-8 bg-[#3B6939]"
+            >
+                <img
+                    id="background"
+                    class="text-white"
+                    src="/build/img/check.png"
+                />
+            </div>
+            <h7>Form Submission Complete</h7>
+            <p>
+                Your application number is:
+                <strong>{{ application_no }}</strong>
+            </p>
+            <p>
+                Thank you for submitting your form. We will process your
+                application soon.
+            </p>
+            <Link href="/"
+                class="bg-[#202429] p-4 rounded-lg shadow-md hover:bg-[#3a3f45] transition duration-300 flex items-center"
+            >
+                <p class="text-white">Back To Home</p>
+            </Link>
+        </div>
     </q-page>
-  </template>
-  
-  <script setup>
-  import { usePage } from '@inertiajs/vue3';
-  
-  const form = usePage().props;
-  
-  // Final submission
-  const submitForm = () => {
-    Inertia.post(route('form.submit'), form, {
-      onSuccess: () => {
-        // Handle success
-        alert('Application Submitted Successfully');
-      },
-    });
-  };
-  </script>
-  
+</template>
+
+<script setup>
+import FormLayout from "@/Layouts/FormLayout.vue";
+import { Link } from "@inertiajs/vue3";
+
+
+defineOptions({
+    layout: FormLayout,
+});
+defineProps({
+    application_no: String, // Define the 'application_no' prop
+});
+</script>
+
+<style scoped>
+/* Add any custom styles here */
+</style>

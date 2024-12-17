@@ -81,7 +81,10 @@ function handleImageError() {
                         </template>
                     </nav>
                 </header>
-                <WebLayout> </WebLayout>
+                <WebLayout>
+                    
+                
+                </WebLayout>
 
                 <footer
                     class="py-16 text-center text-sm text-black dark:text-white/70"

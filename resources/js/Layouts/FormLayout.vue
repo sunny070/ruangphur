@@ -23,11 +23,12 @@ import { Link } from "@inertiajs/vue3";
                         <clipPath id="clip0_75_1185">
                             <rect width="24" height="24" fill="white" />
                         </clipPath>
-                    </defs></svg>
+                    </defs>
+                </svg>
             </Link>
             <h5 class="text-black">Ruang Phurh Report Form</h5>
         </q-header>
-         <q-page-container>
+        <q-page-container>
             <div class="q-pa-md">
                 <slot />
             </div>

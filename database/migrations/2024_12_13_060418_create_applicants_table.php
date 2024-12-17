@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('applicants', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            // $table->string('name');
+            
+            $table->string('name');
+            $table->string('mobile');
             $table->string('district');
+
             $table->string('locality');
             $table->string('bank_name');
             $table->string('account_no');
