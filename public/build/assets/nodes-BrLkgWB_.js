@@ -1,1 +1,0 @@
-import{ae as t}from"./app-BnQApiW_.js";let d=1,n=document.body;function i(e,l){const o=document.createElement("div");if(o.id=l!==void 0?`q-portal--${l}--${d++}`:e,t.globalNodes!==void 0){const a=t.globalNodes.class;a!==void 0&&(o.className=a)}return n.appendChild(o),o}function r(e){e.remove()}export{i as c,r};
