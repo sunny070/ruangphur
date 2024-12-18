@@ -21,9 +21,9 @@ return new class extends Migration
             $table->string('destination_locality');
             $table->string('distance');
             $table->string('vehicle_number');
+            $table->string('vehicle_name');
             $table->string('driver_name');
             $table->string('driver_phone');
-            $table->string('vehicle_owner');
             $table->string('transport_cost');
             $table->timestamps();
         });

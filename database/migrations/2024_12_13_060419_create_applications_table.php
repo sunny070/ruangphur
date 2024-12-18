@@ -16,6 +16,9 @@ return new class extends Migration
             $table->foreignId('applicant_id')->constrained()->onDelete('cascade');
             $table->string('status')->nullable();
             $table->string('application_no')->unique();
+            $table->timestamp('verified_at')->nullable();
+            $table->timestamp('processing_at')->nullable();
+            $table->timestamp('processed_at')->nullable();
             $table->timestamps();
         });
     }

@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('application_id')->constrained()->onDelete('cascade');
             $table->string('name');
+            $table->string('relative');
+            
             $table->string('relative_name');
             $table->date('dob');
             $table->string('gender');

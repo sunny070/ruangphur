@@ -8,9 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Transport extends Model
 {
     use HasFactory;
+
+    
     protected $fillable = [
-        'deceased_id', 'source_district', 'source_locality', 'destination_district', 
-        'destination_locality', 'distance', 'vehicle_number', 'driver_name', 
-        'driver_phone', 'vehicle_owner', 'transport_cost',
+        'deceased_id', 'source_district', 'source_locality', 
+        'destination_district', 'destination_locality', 'distance', 
+        'vehicle_number', 'vehicle_name', 'driver_name', 
+        'driver_phone', 'transport_cost',
     ];
+
+    public function deceased()
+    {
+        return $this->belongsTo(Deceased::class);
+    }
 }

@@ -24,6 +24,7 @@ class FormController extends Controller
         // dd($request);
         $validated = $request->validate([
             'name' => 'string',
+            'relative' => 'string',
             'relative_name' => 'string',
             'dob' => 'required|date',
             'gender' => 'required',
@@ -72,9 +73,10 @@ class FormController extends Controller
             'destination_locality' => 'required|string',
             'distance' => 'required|string',
             'vehicle_number' => 'required|string',
+            'vehicle_name' => 'required|string',
             'driver_name' => 'required|string',
             'driver_phone' => 'required|string',
-            'vehicle_owner' => 'required|string',
+            
             'transport_cost' => 'required|string',
         ]);
 

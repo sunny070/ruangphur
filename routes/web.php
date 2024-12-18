@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\DeceasedController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\ProfileController;
@@ -47,7 +48,9 @@ Route::post('/form-validate-otp', [FormController::class, 'validateOtp'])->name(
 
 
 //Form Track
-Route::get('/deceased-tracking', [TrackingController::class, 'index'])->name('track');
+Route::get('/deceased-tracking', [ApplicationController::class, 'index'])->name('track');
+
+Route::get('/track/{id}', [ApplicationController::class, 'trackApplication']);
 
 // // Step 1
 // Route::get('/form-step-1', [FormController::class, 'step1'])->name('form.step1'); // Display Step 1 form
