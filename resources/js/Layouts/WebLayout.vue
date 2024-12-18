@@ -34,7 +34,7 @@
                 <img
                     id="background"
                     class="h-9 w-auto"
-                    src="/build/img/Layer_1.png"
+                    src="image/Layer_1.png"
                     
                 />
             </Link>
@@ -52,7 +52,7 @@
                     id="background"
                     align="right"
                     class=""
-                    src="/build/img/fi_2936980.png"
+                    src="image/fi_2936980.png"
                 />
             </Link>
 

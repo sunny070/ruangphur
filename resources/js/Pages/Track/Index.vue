@@ -44,8 +44,8 @@ const trackApplication = async () => {
     <q-layout>
         <q-header class="bg-[#E9F4FF]">
             <div class="flex gap-2 lg:col-start-2 lg:justify-start">
-                <img id="background" src="/build/img/Group.png" />
-                <img id="background" src="/build/img/Group 1321315089.png" />
+                <img id="background" src="image/Group.png" />
+                <img id="background" src="/image/Group 1321315089.png" />
             </div>
             <section class="mb-6 flex flex-col justify-center items-center">
                 <h2 class="text-xl font-semibold text-black">

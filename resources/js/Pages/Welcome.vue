@@ -46,12 +46,12 @@ function handleImageError() {
                         <img
                             id="background"
                             class=""
-                            src="/build/img/Group.png"
+                            src="image/Group.png"
                         />
                         <img
                             id="background"
                             class=""
-                            src="/build/img/Group 1321315089.png"
+                            src="image/Group 1321315089.png"
                         />
                     </div>
                     <nav v-if="canLogin" class="-mx-3 flex flex-1 justify-end">
