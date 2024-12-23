@@ -50,6 +50,7 @@
                   A pianni leh thla
                 </div>
                 <q-input
+                type="date"
                     outlined
                     placeholder="Mitthi hming chhu lut rawh le"
                     dense
@@ -71,33 +72,95 @@
               required
               />
             </div>
-            <q-input filled v-model="form.mobile" label="Mobile" required />
-            <q-input filled v-model="form.district" label="District" required />
-            <q-input filled v-model="form.locality" label="Locality" required />
-            <q-select
-                filled
-                label="Assembly constituency"
-                v-model="form.constituency"
-                lazy-rules
-                :rules="[
-                    (val) =>
-                        (val && val.length > 0) || 'Chhungte Hming is required',
-                ]"
+            <div>
+                <div class="text-sm font-medium text-black q-mb-xs">
+                  A phone number
+                </div>
+                <q-input
+                    outlined
+                    placeholder="Mitthi phone number"
+                    dense
+                    class="custom-input"
+                    v-model="form.mobile"
+                />
+            </div>
+
+            <div>
+                <div class="text-sm font-medium text-black q-mb-xs">
+                  District
+                </div>
+                <q-input
+                    outlined
+                    placeholder="Ruang Zalhna tur District awmna"
+                    dense
+                    class="custom-input"
+                    v-model="form.district"
+                />
+            </div>
+
+            <div>
+                <div class="text-sm font-medium text-black q-mb-xs">
+                  Veng/Khua
+                </div>
+                <q-input
+                    outlined
+                    placeholder="Ruang Zalhna tur veng"
+                    dense
+                    class="custom-input"
+                    v-model="form.locality"
+                />
+            </div>
+            <!-- <q-input filled v-model="form.mobile" label="Mobile" required /> -->
+            <!-- <q-input filled v-model="form.district" label="District" required /> -->
+            <!-- <q-input filled v-model="form.locality" label="Locality" required /> -->
+
+            <div>
+
+              <div class="text-sm font-medium text-black q-mb-xs">
+                Assembly constituency
+              </div>
+              <q-select
+              outlined
+              dense
+              label="Mitthi te awmna assembly constituency"
+              v-model="form.constituency"
+              lazy-rules
+              :rules="[
+                (val) =>
+                (val && val.length > 0) || 'Assembly constituency is required',
+              ]"
                 :options="['A', 'B', 'Others']"
-            />
-            <q-input
-                filled
-                v-model="form.dob"
-                label="Time of Death"
+                />
+              </div>
+
+
+            <div>
+                <div class="text-sm font-medium text-black q-mb-xs">
+                  Thih ni leh darkar
+                </div>
+                <q-input
                 type="date"
-                required
-            />
-            <q-input
-                filled
-                v-model="form.locality"
-                label="Place of Death"
-                required
-            />
+                    outlined
+                    placeholder="Mitthi thih ni leh darkar"
+                    dense
+                    class="custom-input"
+                    v-model="form.time_of_death"
+                />
+            </div>
+            <div>
+                <div class="text-sm font-medium text-black q-mb-xs">
+                  Thihna hmun
+                </div>
+                <q-input
+                    outlined
+                    placeholder="Thihna hmun"
+                    dense
+                    class="custom-input"
+                    v-model="form.place_of_death"
+                />
+            </div>
+            
+            
             <q-btn label="Next" color="black" type="submit" />
         </q-form>
     </q-page>

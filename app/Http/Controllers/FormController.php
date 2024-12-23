@@ -95,6 +95,7 @@ class FormController extends Controller
 
     public function storeStep3(Request $request)
 {
+    // dd($request->all());
     $validated = $request->validate([
         'name' => 'required|string',
         'mobile' => 'required|string',
@@ -103,7 +104,25 @@ class FormController extends Controller
         'bank_name' => 'required|string',
         'account_no' => 'required|string',
         'ifsc_code' => 'required|string',
+        'id_proof' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'receipt' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'death_certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'additional_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
     ]);
+
+    // Handle file uploads
+    if ($request->hasFile('id_proof')) {
+        $validated['id_proof'] = $request->file('id_proof')->store('documents', 'public');
+    }
+    if ($request->hasFile('receipt')) {
+        $validated['receipt'] = $request->file('receipt')->store('documents', 'public');
+    }
+    if ($request->hasFile('death_certificate')) {
+        $validated['death_certificate'] = $request->file('death_certificate')->store('documents', 'public');
+    }
+    if ($request->hasFile('additional_document')) {
+        $validated['additional_document'] = $request->file('additional_document')->store('documents', 'public');
+    }
 
     session()->put('applicant', $validated);
 
@@ -112,10 +131,6 @@ class FormController extends Controller
     session()->put('otp', $otp);
 
     \Log::info("Generated OTP: $otp");
-
-    // Logic to send OTP (e.g., SMS or email)
-    // $mobile = session('deceased')['mobile'];
-    // Use your preferred service to send OTP to $mobile.
 
     return redirect()->route('form.otp');
 }
