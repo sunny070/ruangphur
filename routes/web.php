@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\DeceasedController;
 use App\Http\Controllers\FormController;
@@ -72,5 +73,7 @@ Route::get('/track/{id}', [ApplicationController::class, 'trackApplication']);
 // Route::post('/form-preview-step-2', [FormController::class, 'previewStep2'])->name('form.previewStep2');
 // Route::post('/form-preview-step-3', [FormController::class, 'previewStep3'])->name('form.previewStep3');
 
+
+Route::get('application',[AdminController::class,'index'])->name('application');
 
 require __DIR__.'/auth.php';

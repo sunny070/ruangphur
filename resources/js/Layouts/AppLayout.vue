@@ -25,8 +25,8 @@
                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                     Dashboard
                 </NavLink>
-                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                    Group
+                <NavLink :href="route('application')" :active="route().current('application')">
+                    Applications
                 </NavLink>
                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                     Post
