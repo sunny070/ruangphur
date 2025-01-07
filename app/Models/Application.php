@@ -8,10 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class Application extends Model
 {
     use HasFactory;
-
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'verified_at' => 'datetime',
+        'approved_at' => 'datetime',
+        'processed_at' => 'datetime',
+    ];
     protected $fillable = [
-        'applicant_id', 'status', 'application_no', 'verified_at', 
-        'processing_at', 'processed_at'
+        'applicant_id',
+        'status',
+    'application_no',
+    'verified_at',
+    'approved_at',
+    'processed_at',
     ];
 
     public function transport()

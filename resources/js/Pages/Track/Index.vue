@@ -40,6 +40,7 @@ const trackApplication = async () => {
     }
 };
 </script>
+
 <template>
     <q-layout>
         <q-header class="bg-[#E9F4FF]">
@@ -74,7 +75,7 @@ const trackApplication = async () => {
                         class="text-black"
                         label="Reset"
                         color="white"
-                        @click="() => { ph = ''; }"
+                        @click="() => { ph.value = ''; }"
                     />
                     <q-btn
                         class="w-3"
@@ -87,9 +88,6 @@ const trackApplication = async () => {
                 <!-- Application Details -->
                 <q-card-section v-if="dilnaId">
                     <div class="mt-6">
-                        <!-- <span class="text-2xl font-bold text-primary">{{
-                            amount
-                        }}</span> -->
                         <p class="text-muted-foreground">Status: {{ status }}</p>
                         <p class="text-muted-foreground">
                             Applied date: {{ appliedDate }}
@@ -121,52 +119,12 @@ const trackApplication = async () => {
                                 {{ step.description }}
                             </p>
                             <p class="text-muted-foreground">
-                                {{ step.timestamp || 'Pending' }}
+                                {{ step.timestamp }}
                             </p>
                         </div>
                     </div>
-                </q-card-section>
-
-                <!-- Special Section for Pending Status -->
-                <q-card-section v-if="status === 'pending'" class="mt-6">
-                    <h2 class="text-xl font-semibold text-orange-500">
-                        Application Pending
-                    </h2>
-                    <p class="text-muted-foreground">
-                        Your application is still pending. It will be verified soon.
-                    </p>
-                    <!-- <p class="text-muted-foreground">
-                        Your application is still pending. It will be verified soon.
-                    </p> -->
-                </q-card-section>
-
-                <!-- Special Section for Verified Status -->
-                <q-card-section v-if="status === 'verified'" class="mt-6">
-                    <h2 class="text-xl font-semibold text-green-500">
-                        Application Verified!
-                    </h2>
-                    <p class="text-muted-foreground">
-                        District thuneitu te atangin verify a ni a, Directorate lamah thawn a ni
-                    </p>
-                </q-card-section>
-                <q-card-section v-if="status === 'approved'" class="mt-6">
-                    <h2 class="text-xl font-semibold text-green-500">
-                        Application under process
-                    </h2>
-                    <p class="text-muted-foreground">
-                        Directorate kutah a awm mek a, bank lama deposit turin file tih kal a ni
-                    </p>
-                </q-card-section>
-                <q-card-section v-if="status === 'payment'" class="mt-6">
-                    <h2 class="text-xl font-semibold text-green-500">
-                        Bill Process
-                    </h2>
-                    <p class="text-muted-foreground">
-                        I ruang phurh dilna chu bank lamah process mek a ni
-                    </p>
                 </q-card-section>
             </q-page>
         </q-page-container>
     </q-layout>
 </template>
-

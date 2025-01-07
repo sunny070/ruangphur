@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('status')->nullable();
             $table->string('application_no')->unique();
             $table->timestamp('verified_at')->nullable();
-            $table->timestamp('processing_at')->nullable();
+            $table->timestamp('approved_at')->nullable();
             $table->timestamp('processed_at')->nullable();
             $table->timestamps();
         });
