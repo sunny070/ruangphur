@@ -15,9 +15,9 @@ use Inertia\Inertia;
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => true,
-    'canRegister' => true,
-    'laravelVersion' => app()->version(),
-    'phpVersion' => PHP_VERSION,
+        'canRegister' => true,
+        'laravelVersion' => app()->version(),
+        'phpVersion' => PHP_VERSION,
     ]);
 });
 Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -29,10 +29,12 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+
+// Amin login
 Route::middleware('auth')->group(function () {
     Route::get('application', [AdminController::class, 'index'])->name('application');
-Route::post('/admin/application/{application}/approve', [AdminController::class, 'approve'])->name('admin.application.approve');
-Route::post('/admin/application/{application}/reject', [AdminController::class, 'reject'])->name('admin.application.reject');
+    Route::post('/admin/application/{application}/approve', [AdminController::class, 'approve'])->name('admin.application.approve');
+    Route::post('/admin/application/{application}/reject', [AdminController::class, 'reject'])->name('admin.application.reject');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -43,19 +45,13 @@ Route::post('/admin/application/{application}/reject', [AdminController::class, 
 
 // Form
 
-Route::group(['middleware' => [RoleMiddleware::using('admin')]], function () {
-    
-});
-Route::group(['middleware' => [RoleMiddleware::using('approver')]], function () {
-    
-});
-Route::group(['middleware' => [RoleMiddleware::using('verifier')]], function () {
-    
-});
+Route::group(['middleware' => [RoleMiddleware::using('admin')]], function () {});
+Route::group(['middleware' => [RoleMiddleware::using('approver')]], function () {});
+Route::group(['middleware' => [RoleMiddleware::using('verifier')]], function () {});
 
 
 
-
+// Form Submit
 Route::get('/form-step-1', [FormController::class, 'step1'])->name('form.step1');
 Route::post('/form-step-1', [FormController::class, 'storeStep1'])->name('form.storeStep1');
 
@@ -78,4 +74,4 @@ Route::get('/track/{id}', [ApplicationController::class, 'trackApplication']);
 
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
