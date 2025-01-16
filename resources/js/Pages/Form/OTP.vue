@@ -8,7 +8,7 @@
                         <h5>Enter OTP to verify</h5>
                         <p>An OTP has been sent to 97666 44441 </p>
                     </div>
-                    <q-form @submit.prevent="submitOtp" class="q-gutter-md">
+                    <q-form @submit.prevent="submitOtp" class="q-gutter-md" >
                         <div id="q-app" style="min-height: 100vh">
                             <div class="q-pa-md">
                                 <div class="row q-gutter-x-sm justify-center">

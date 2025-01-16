@@ -63,7 +63,7 @@ function handleImageError() {
                         >
                             Chibai! In chhiattawhn naah Mizoram Sorkar a awm e.
                         </h2>
-                        <p class="text-muted-foreground text-sm">
+                        <p class="text-muted-foreground text-sm text-[#5B656F]">
                             Mithiin ruang chu i duhna huna taka phur thleng
                             turin dilna document dik tak upload turin leh
                             hriatirii ni e.
@@ -144,7 +144,7 @@ function handleImageError() {
                             </h3>
                             <div class="space-y-4">
                                 <div
-                                    class="border-b border-border py-2"
+                                    class="border-b border-border py-2 text-[#000]"
                                     v-for="(faq, index) in faqs"
                                     :key="index"
                                 >

@@ -1,5 +1,7 @@
 <template>
-    <q-page>
+    <q-layout>
+        <q-page-container>
+            <q-page>
         <div class="flex justify-center flex-col items-center">
             <div
                 class="flex justify-center items-center w-8 rounded-full h-8 bg-[#3B6939]"
@@ -26,15 +28,18 @@
             </Link>
         </div>
     </q-page>
+        </q-page-container>
+    </q-layout>
+    
 </template>
 
 <script setup>
-import FormLayout from "@/Layouts/FormLayout.vue";
+import WebLayout from "@/Layouts/WebLayout.vue";
 import { Link } from "@inertiajs/vue3";
 
 
 defineOptions({
-    layout: FormLayout,
+    layout: WebLayout,
 });
 defineProps({
     application_no: String, // Define the 'application_no' prop

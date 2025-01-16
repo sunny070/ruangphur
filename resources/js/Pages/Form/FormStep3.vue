@@ -32,7 +32,12 @@
                             </svg>
                         </Link>
                         <h5 class="text-black">Ruang Phurh Report Form</h5>
-                        <h5>Step 3: Ruang phurhna man diltu Chhungchang</h5>
+                        <!-- <h5>Step 3: Ruang phurhna man diltu Chhungchang</h5> -->
+                        <img
+                                id="background"
+                                class="w-[369px] h-[88px]"
+                                src="image/Vertical Stepper with numbers3.png"
+                            />
                     </div>
                     <div
                         class="border w-[412px] h-auto rounded-[10px] p-[23px]"
