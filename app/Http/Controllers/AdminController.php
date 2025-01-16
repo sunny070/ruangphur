@@ -27,13 +27,13 @@ class AdminController extends Controller
     {
         if ($application && $application->status === 'Pending') {
             $application->status = 'Approved'; // Change the status to 'Approved'
-            $application->approved_at = now(); // Set the approved_at timestamp
+            $application->processing_at = now(); // Set the approved_at timestamp
             $application->save();
 
-            return redirect()->route('admin.applications')->with('success', 'Application approved.');
+            return redirect()->route('application')->with('success', 'Application approved.');
         }
 
-        return redirect()->route('admin.applications')->with('error', 'Application is already processed or invalid.');
+        return redirect()->route('application')->with('error', 'Application is already processed or invalid.');
     }
 
     public function verify(Application $application)

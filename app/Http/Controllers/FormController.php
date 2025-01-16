@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Applicant;
 use App\Models\Application;
 use App\Models\Deceased;
+use App\Models\District;
 use App\Models\Transport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -42,7 +43,12 @@ class FormController extends Controller
     public function step2()
     {
         $transportData = session('transport', []);
-        return Inertia::render('Form/FormStep2', ['form' => $transportData]);
+    $districts = District::query()->get(['id as value', 'name as label']); // Fetch districts
+
+    return Inertia::render('Form/FormStep2', [
+        'form' => $transportData,
+        'districts' => $districts, // Pass districts to the view
+    ]);
     }
 
     // public function storeStep2(Request $request)
@@ -225,6 +231,6 @@ class FormController extends Controller
 
     private function generateApplicationNumber()
     {
-        return 'APP-' . strtoupper(uniqid());
+        return 'RNG-' . strtoupper(uniqid());
     }
 }

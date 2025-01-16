@@ -2,6 +2,10 @@
 import { Head, Link } from "@inertiajs/vue3";
 import WebLayout from "@/Layouts/WebLayout.vue";
 
+defineOptions({
+    layout: WebLayout,
+});
+
 defineProps({
     canLogin: {
         type: Boolean,
@@ -18,6 +22,15 @@ defineProps({
         required: true,
     },
 });
+const faqs = [
+    "Ruang Phurh tu hi te in nge di thei?",
+    "Lorem ipsum zawnha lorem ipsum zawnha?",
+    "Lorem ipsum zawnha lorem?",
+    "Lorem ipsum zawnha lorem 4?",
+    "Lorem ipsum zawnha lorem zawnha lorem 6?",
+    "Lorem ipsum zawnha lorem zawnha lorem 67?",
+];
+
 
 function handleImageError() {
     document.getElementById("screenshot-container")?.classList.add("!hidden");
@@ -28,70 +41,130 @@ function handleImageError() {
 </script>
 
 <template>
-    <Head title="Welcome" />
-    <div class="bg-[#E9F4FF] text-black/50 dark:bg-black dark:text-white/50">
-        <!-- <img
-            id="background"
-            class="absolute -left-20 top-0 max-w-[877px]"
-            src="https://laravel.com/assets/img/welcome/background.svg"
-        /> -->
+    <Head title="Ruangphur" />
+    
+
+    
+    <div class="text-black/50 dark:bg-black dark:text-white/50">
         <div
-            class="relative flex min-h-screen flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white"
+            class="relative min-h-screen flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white"
         >
-            <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
-                <header
-                    class="grid grid-cols-2 items-center gap-2 py-10 lg:grid-cols-3"
-                >
-                    <div class="flex gap-2 lg:col-start-2 lg:justify-start">
-                        <img
-                            id="background"
-                            class=""
-                            src="image/Group.png"
-                        />
-                        <img
-                            id="background"
-                            class=""
-                            src="image/Group 1321315089.png"
-                        />
-                    </div>
-                    <nav v-if="canLogin" class="-mx-3 flex flex-1 justify-end">
-                        <Link
-                            v-if="$page.props.auth.user"
-                            :href="route('dashboard')"
-                            class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                        >
-                            Dashboard
-                        </Link>
-
-                        <template v-else>
-                            <Link
-                                :href="route('login')"
-                                class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                            >
-                                Log in
-                            </Link>
-
-                            <Link
-                                v-if="canRegister"
-                                :href="route('register')"
-                                class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                            >
-                                Register
-                            </Link>
-                        </template>
-                    </nav>
-                </header>
-                <WebLayout>
-                    
+            <div class="bg-[#F8F8F8] w-full max-w-2xl lg:max-w-7xl">
                 
-                </WebLayout>
 
-                <footer
-                    class="py-16 text-center text-sm text-black dark:text-white/70"
+                <!-- <WebLayout> -->
+                    <section
+                    class="bg-[#E9F4FF] grid grid-cols-1 gap-14 md:grid-cols-2 mb-6 text-foreground p-4 md:pl-[223px] md:pt-[119px] md:pr-[55px] md:pb-[65px]"
                 >
-                    Laravel v{{ laravelVersion }} (PHP v{{ phpVersion }})
-                </footer>
+                    <!-- Button for Dilna -->
+                    <div class="mb-6 w-[420px] h-[120px]">
+                        <h2
+                            class="font-semibold w-[100%] h-auto text-2xl text-black"
+                        >
+                            Chibai! In chhiattawhn naah Mizoram Sorkar a awm e.
+                        </h2>
+                        <p class="text-muted-foreground text-sm">
+                            Mithiin ruang chu i duhna huna taka phur thleng
+                            turin dilna document dik tak upload turin leh
+                            hriatirii ni e.
+                        </p>
+                        <Link
+                            class="px-4 py-2 bg-black text-white font-medium text-sm rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                        >
+                            Download Circular
+                        </Link>
+                    </div>
+                    <div class="flex gap-3">
+                        <Link
+                            :href="route('form.step1')"
+                            class="bg-[#202429] w-[171px] shrink-0 h-[167px] p-4 rounded-lg shadow-md hover:bg-[#3a3f45] transition duration-300 flex items-center space-x-4"
+                        >
+                            <div>
+                                <h3 class="font-semibold text-white text-base">
+                                    Dilna
+                                </h3>
+                                <p
+                                    class="text-muted-foreground text-white text-xs"
+                                >
+                                    Application form fill-up
+                                </p>
+                            </div>
+                            <img
+                                id="background"
+                                class="w-[58px] h-[81px]"
+                                src="image/Layer_1.png"
+                            />
+                        </Link>
+                        <Link
+                            :href="route('track')"
+                            class="bg-[#202429] w-[171px] shrink-0 h-[167px] p-4 rounded-lg shadow-md hover:bg-[#3a3f45] transition duration-300 flex items-center space-x-4"
+                        >
+                            <div>
+                                <h3 class="font-semibold text-white text-base">
+                                    Chhuina
+                                </h3>
+                                <p
+                                    class="text-muted-foreground text-white text-xs"
+                                >
+                                    Track your bill!
+                                </p>
+                            </div>
+                            <img
+                                id="background"
+                                class="w-[58px] h-[81px]"
+                                src="image/fi_2936980.png"
+                            />
+                        </Link>
+                    </div>
+                </section>
+
+                <div
+                    class="bg-[#F8F8F8] text-foreground md:pl-[223px] md:pt-[119px] md:pr-[55px]"
+                >
+                    <section class="md:grid-cols-2 grid gap-9 bg-[#F8F8F8]">
+                        <!-- Image -->
+                        <div>
+                            <img
+                                id="background"
+                                src="image/Group 1321315121.png"
+                            />
+                        </div>
+                        <!-- Content -->
+                        <div
+                            class="rounded-[10px] border border-[#EEE] bg-[#FFF] md:p-4"
+                        >
+                            <h2
+                                class="text-[#000] text-center font-[Noto Sans] text-[20px] font-semibold leading-[24px] tracking-[0.15px]"
+                            >
+                                Ruang Phurh chungchang a <br />
+                                zawhna leh chhana tlanglawn
+                            </h2>
+                            <h3 class="font-semibold text-base text-[#000]">
+                                FAQs
+                            </h3>
+                            <div class="space-y-4">
+                                <div
+                                    class="border-b border-border py-2"
+                                    v-for="(faq, index) in faqs"
+                                    :key="index"
+                                >
+                                    <button
+                                        class="flex justify-between w-full text-left"
+                                    >
+                                        <span>{{ index + 1 }}. {{ faq }}</span>
+                                        <span>+</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <!-- </WebLayout> -->
+
+                
             </div>
         </div>
     </div>
+
 </template>
+<style scoped></style>

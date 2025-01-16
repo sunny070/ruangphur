@@ -1,107 +1,85 @@
 <template>
-    <div class="bg-[#E9F4FF] text-foreground p-4 md:p-8">
-        <header class="flex items-center justify-between mb-6">
-            <h1 class="text-2xl font-bold">Ruang Phurh</h1>
-            <button
-                class="md:hidden p-2 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80"
-            >
-                Menu
-            </button>
-        </header>
-
-        <section class="mb-6">
-            <h2 class="text-xl font-semibold">
-                Chibai! In chhiattawhn naah Mizoram Sorkar a awm e.
-            </h2>
-            <p class="text-muted-foreground">
-                Mithiin ruang chu i duhna huna taka phur thleng turin dilna
-                document dik tak upload turin leh hriatirii ni e.
-            </p>
-        </section>
-
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 mb-6">
-            <!-- Button for Dilna -->
-            <Link
-                :href="route('form.step1')"
-                class="bg-[#202429] p-4 rounded-lg shadow-md hover:bg-[#3a3f45] transition duration-300 flex items-center space-x-4"
-            >
-                <div>
-                    <h3 class="font-semibold text-white">Dilna</h3>
-                    <p class="text-muted-foreground text-white">
-                        Application form fill-up
-                    </p>
-                </div>
-                <img
-                    id="background"
-                    class="h-9 w-auto"
-                    src="image/Layer_1.png"
-                    
-                />
-            </Link>
-            <Link
-                :href="route('track')"
-                class="bg-[#202429] p-4 rounded-lg shadow-md hover:bg-[#3a3f45] transition duration-300 flex items-center space-x-4"
-            >
-                <div>
-                    <h3 class="font-semibold text-white">Zawnna</h3>
-                    <p class="text-muted-foreground text-white">
-                        Track your bill!
-                    </p>
-                </div>
-                <img
-                    id="background"
-                    align="right"
-                    class=""
-                    src="image/fi_2936980.png"
-                />
-            </Link>
-
-            <!-- Button for Zawnna -->
-            <!-- <button
-                class="bg-[#202429] p-4 rounded-lg shadow-md hover:bg-[#3a3f45] transition duration-300"
-            >
-                <h3 class="font-semibold text-white">Zawnna</h3>
-                <p class="text-muted-foreground text-white">Track your bill!</p>
-                <img
-                    id="background"
-                    align="right"
-                    class=""
-                    src="/build/img/fi_2936980.png"
-                />
-            </button> -->
-        </div>
-
-        <section>
-            <h2 class="text-xl font-semibold mb-4">
-                Ruang Phurh chungchang a zawhna leh chhana
-            </h2>
-            <h3 class="font-semibold">FAQs</h3>
-            <div class="space-y-4">
-                <div
-                    class="border-b border-border py-2"
-                    v-for="(faq, index) in faqs"
-                    :key="index"
+    <q-layout>
+        <q-container>
+            <header
+                    class="bg-[#E9F4FF] grid grid-cols-2 items-center gap-2 py-10 lg:grid-cols-3"
                 >
-                    <button class="flex justify-between w-full text-left">
-                        <span>{{ index + 1 }}. {{ faq }}</span>
-                        <span>+</span>
-                    </button>
-                </div>
+                    <div class="md:pl-[223px] md:pr-[55px]">
+                        <img
+                            id="background"
+                            class="w-[140.7px] h-[45px]"
+                            src="image/Group 1321315097.png"
+                        />
+                        <!-- <img
+                            id="background"
+                            class=""
+                            src="image/Group 1321315089.png"
+                        /> -->
+                    </div>
+                    <nav v-if="canLogin" class="flex flex-1 justify-end">
+                        <Link
+                            v-if="$page.props.auth.user"
+                            :href="route('dashboard')"
+                            class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                        >
+                            Dashboard
+                        </Link>
+
+                        <template v-else>
+                            <Link
+                                :href="route('login')"
+                                class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                            >
+                                Log in
+                            </Link>
+
+                            <Link
+                                v-if="canRegister"
+                                :href="route('register')"
+                                class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                            >
+                                Register
+                            </Link>
+                        </template>
+                    </nav>
+                </header>
+            <div class="q-pa-md">
+                <slot />
             </div>
-        </section>
-    </div>
+
+
+
+
+            <footer
+                    class="py-16 text-center text-sm text-black dark:text-white/70"
+                >
+                    <div class="flex justify-center items-center flex-col">
+                        <img id="background" class="" src="image/Group.png" />
+                        <p class="text-[#5B656F] text-center font-[Noto Sans] text-[12px] font-medium leading-[18px] w-[403px] h-[36px]">
+                            An initiative of Department of Social Welfare &
+                            Tribal Affairs, Government of Mizoram
+                        </p>
+                    </div>
+                    <div class="flex justify-center items-center gap-16 text-[12px] text-[#5B656F]">
+                        <Link >About Us</Link>
+                        <Link>Contact Us</Link>
+                        <Link>Login for Officials</Link>
+                    </div>
+                    <p class="text-[12px] text-[#5B656F]">Crafted with care by Mizoram State e-Governance Society (MSeGS)</p>
+                </footer>
+        </q-container>
+    </q-layout>
+
+    
 </template>
 
+
+
 <script setup>
-import { Link } from "@inertiajs/vue3";
-const faqs = [
-    "Ruang Phurh tu hi te in nge di thei?",
-    "Lorem ipsum zawnha lorem ipsum zawnha?",
-    "Lorem ipsum zawnha lorem?",
-    "Lorem ipsum zawnha lorem 4?",
-    "Lorem ipsum zawnha lorem zawnha lorem 6?",
-    "Lorem ipsum zawnha lorem zawnha lorem 67?",
-];
+import { Head, Link } from "@inertiajs/vue3";
+
+
+
 </script>
 
 <style scoped></style>

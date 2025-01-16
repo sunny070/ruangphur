@@ -1,0 +1,1 @@
+import{as as t}from"./app-DPhOyHFh.js";let d=1,n=document.body;function c(e,l){const o=document.createElement("div");if(o.id=l!==void 0?`q-portal--${l}--${d++}`:e,t.globalNodes!==void 0){const a=t.globalNodes.class;a!==void 0&&(o.className=a)}return n.appendChild(o),o}function i(e){e.remove()}export{c,i as r};
