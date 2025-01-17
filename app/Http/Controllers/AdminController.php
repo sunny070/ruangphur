@@ -55,9 +55,9 @@ class AdminController extends Controller
             $application->status = 'Rejected'; // Change the status to 'Rejected'
             $application->save();
 
-            return redirect()->route('admin.applications')->with('success', 'Application rejected.');
+            return redirect()->route('application')->with('success', 'Application rejected.');
         }
 
-        return redirect()->route('admin.applications')->with('error', 'Application is already processed or invalid.');
+        return redirect()->route('application')->with('error', 'Application is already processed or invalid.');
     }
 }

@@ -130,6 +130,7 @@
                                     v-model="form.place_of_death"  />
                             </div>
 
+                            <q-btn label="Preview" color="black" type="submit" />
                             <q-btn label="Next" color="black" type="submit" />
                         </q-form>
                     </div>

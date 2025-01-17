@@ -6,22 +6,7 @@ defineOptions({
     layout: WebLayout,
 });
 
-defineProps({
-    canLogin: {
-        type: Boolean,
-    },
-    canRegister: {
-        type: Boolean,
-    },
-    laravelVersion: {
-        type: String,
-        required: true,
-    },
-    phpVersion: {
-        type: String,
-        required: true,
-    },
-});
+
 const faqs = [
     "Ruang Phurh tu hi te in nge di thei?",
     "Lorem ipsum zawnha lorem ipsum zawnha?",
@@ -32,12 +17,7 @@ const faqs = [
 ];
 
 
-function handleImageError() {
-    document.getElementById("screenshot-container")?.classList.add("!hidden");
-    document.getElementById("docs-card")?.classList.add("!row-span-1");
-    document.getElementById("docs-card-content")?.classList.add("!flex-row");
-    document.getElementById("background")?.classList.add("!hidden");
-}
+
 </script>
 
 <template>
@@ -47,9 +27,9 @@ function handleImageError() {
     
     <div class="text-black/50 dark:bg-black dark:text-white/50">
         <div
-            class="relative min-h-screen flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white"
+            class="bg-[#E9F4FF] relative min-h-screen flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white"
         >
-            <div class="bg-[#F8F8F8] w-full max-w-2xl lg:max-w-7xl">
+            <div class="m-0 bg-[#E9F4FF]">
                 
 
                 <!-- <WebLayout> -->
@@ -125,13 +105,14 @@ function handleImageError() {
                         <!-- Image -->
                         <div>
                             <img
+                                class="w-[412px] h-[473px]"
                                 id="background"
                                 src="image/Group 1321315121.png"
                             />
                         </div>
                         <!-- Content -->
                         <div
-                            class="rounded-[10px] border border-[#EEE] bg-[#FFF] md:p-4"
+                            class="rounded-[10px] border border-[#EEE] bg-[#FFF] md:p-4 w-[412px] h-[545px]"
                         >
                             <h2
                                 class="text-[#000] text-center font-[Noto Sans] text-[20px] font-semibold leading-[24px] tracking-[0.15px]"

@@ -30,7 +30,7 @@
                         <q-form @submit.prevent="submitForm" class="q-gutter-md">
                             <div class="q-mb-sm">
                                 <p>Ruang phurh tanna hmun</p>
-                                <!-- <div>
+                                <div>
                                     <div class="text-sm font-medium text-black q-mb-xs">
                                         District
                                     </div>
@@ -38,10 +38,10 @@
                                         :options="district" style="width: 250px" behavior="menu"  
                                         />
                                          
-                                </div> -->
+                                </div>
 
-                                <div>
-                    <div class="text-sm font-medium text-black q-mb-xs">
+                                <!-- <div> -->
+                    <!-- <div class="text-sm font-medium text-black q-mb-xs">
                         District
                     </div>
                     <q-input
@@ -51,7 +51,7 @@
                         class="custom-input"
                         v-model="form.source_district"
                     />
-                </div>
+                </div> -->
                             </div>
                             <div>
                                 <div>
@@ -155,6 +155,7 @@ defineOptions({
 });
 
 const props = defineProps(["form", "districts"]);
+console.log(props.districts)
 
 const form = useForm({
     source_district: props.form.source_district || "",

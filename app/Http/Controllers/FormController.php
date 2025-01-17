@@ -18,10 +18,10 @@ class FormController extends Controller
     {
         $deceasedData = session('deceased', []); // Retrieve session data or empty array
         return Inertia::render('Form/FormStep1', [
-            
+
             'form' => $deceasedData,
             'districts' => District::query()->get(['id as value', 'name as label']),
-    ]);
+        ]);
     }
 
     public function storeStep1(Request $request)
@@ -81,16 +81,16 @@ class FormController extends Controller
     {
         // dd($request);
         $validated = $request->validate([
-            'source_district' => 'required|string|max:255',
-        'source_locality' => 'required|string|max:255',
-        'destination_district' => 'required|string|max:255',
-        'destination_locality' => 'required|string|max:255',
-        'distance' => 'required|numeric|min:1', // Distance must be a positive number
-        'vehicle_number' => 'required|string|max:20',
-        'vehicle_name' => 'required|string|max:255',
-        'driver_name' => 'required|string|max:255',
-        'driver_phone' => 'required|string|regex:/^[0-9]{10}$/', // Only 10-digit phone numbers
-        'transport_cost' => 'required|numeric|min:0', // Transport cost must be a positive number
+            'source_district' => 'required|max:255',
+            'source_locality' => 'required|string|max:255',
+            'destination_district' => 'required|string|max:255',
+            'destination_locality' => 'required|string|max:255',
+            'distance' => 'required|numeric|min:1', // Distance must be a positive number
+            'vehicle_number' => 'required|string|max:20',
+            'vehicle_name' => 'required|string|max:255',
+            'driver_name' => 'required|string|max:255',
+            'driver_phone' => 'required|string|regex:/^[0-9]{10}$/', // Only 10-digit phone numbers
+            'transport_cost' => 'required|numeric|min:0', // Transport cost must be a positive number
         ]);
 
         session()->put('transport', $validated);
@@ -186,7 +186,8 @@ class FormController extends Controller
 
     // Validate OTP and Submit
     public function validateOtp(Request $request)
-    {
+    {   
+        // dd($request);
         // Validate OTP
         $request->validate(['otp' => 'required|digits:6']);
 
@@ -222,8 +223,16 @@ class FormController extends Controller
         // Create the Deceased record
         $deceased = Deceased::create(array_merge($deceasedData, ['application_id' => $application->id]));
 
+
+        Transport::create(array_merge($transportData,[
+            'deceased_id' => $deceased->id,
+            'source_district'=> $transportData['source_district']['value'],
+
+        ]));
         // Create the Transport record
-        Transport::create(array_merge($transportData, ['deceased_id' => $deceased->id]));
+        // Transport::create(array_merge($transportData,
+        // 'source_district'=> $transportData['source_distict']['value'],
+        // ['deceased_id' => $deceased->id]));0
 
         // Clear session data
         session()->forget(['deceased', 'transport', 'applicant', 'otp']);

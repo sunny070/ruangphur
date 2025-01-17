@@ -14,17 +14,16 @@ class ApplicationController extends Controller
     }
 
     public function trackApplication($id)
-    {
-        $application = Application::where('application_no', $id)
+{
+    $application = Application::where('application_no', $id)
         ->with(['applicant'])
         ->first();
-        
-        if (!$application) {
-            return response()->json([
-                'message' => 'Application not found.',
-            ], 404);
-        }
-        // dd($application->approved_at);
+
+    if (!$application) {
+        return response()->json([
+            'message' => 'Application not found.',
+        ], 404);
+    }
 
     // Define dynamic steps based on application status
     $statusMapping = [
@@ -43,7 +42,7 @@ class ApplicationController extends Controller
         'Approved' => [
             'title' => 'Application under process',
             'description' => 'Directorate kutah a awm mek a, bank lama deposit turin file tih kal a ni.',
-            'timestamp' => optional($application->approved_at)->format('Y-m-d H:i:s'),
+            'timestamp' => optional($application->processing_at)->format('Y-m-d H:i:s'),
             'completed' => true,
         ],
         'Payment' => [
@@ -54,7 +53,7 @@ class ApplicationController extends Controller
         ],
     ];
 
-    // Prepare the response
+    // Default step (form submission)
     $steps = [
         [
             'title' => 'Form Submitted',
@@ -64,10 +63,12 @@ class ApplicationController extends Controller
         ],
     ];
 
+    // Add dynamic steps based on the application's status
     if (isset($statusMapping[$application->status])) {
         $steps[] = $statusMapping[$application->status];
     }
 
+    // Prepare the response
     $response = [
         'amount' => $application->transport?->transport_cost ?? 'N/A',
         'status' => $application->status,
@@ -77,5 +78,6 @@ class ApplicationController extends Controller
     ];
 
     return response()->json($response);
-    }
+}
+
 }
