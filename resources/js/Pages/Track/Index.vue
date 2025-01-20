@@ -1,129 +1,198 @@
+<template>
+    <q-layout>
+        <q-page-container>
+            <q-page padding>
+
+
+
+
+                <div class="flex items-center flex-col">
+                    <div
+                        class="w-[412px] h-[381px] flex-shrink-0 rounded-[10px] border border-[#EEE] bg-[#E9F4FF] p-5 mt-6">
+                        <div class="flex flex-col">
+                            <h5 class="text-2xl">Ruang phurh dil chhuina/track</h5>
+                            <p class="font-bold mb-4 text-[#5B656F] text-sm">
+                                I ruang phurh dilna a thlen chin zawnna a ni. Mipui
+                                ten zawldawh takin min lo ngaichang zel dawn nia.
+                            </p>
+                            Track ID chhu lut rawh le
+                            <q-input outlined v-model="applicationId" placeholder="I dilna thlen chin zawnna" dense
+                                class="custom-input" />
+                        </div>
+
+                        <div class="flex gap-3 pt-6" >
+                            <q-btn class="text-black" label="View" color="white"
+                                @click="viewApplication" />
+                            <q-btn class="w-3" label="Track Now" color="black" @click="fetchApplication"
+                                :loading="loading" />
+                        </div>
+                    </div>
+
+
+
+                    <q-card v-if="application" class="q-ma-md h-[983px] w-[412px]">
+
+
+                        <q-card-section v-if="currentStatus">
+                            <div class="mt-6">
+                                <p class="text-muted-foreground">Status: {{ currentStatus.status || 'N/A' }}</p>
+                                <p class="text-muted-foreground">Applied date: {{ currentStatus.timestamp || 'N/A' }}
+                                </p>
+                            </div>
+                        </q-card-section>
+                        <q-card-section>
+                            <h5>Current Status</h5>
+
+                            <q-timeline class="q-mt-lg">
+                                <q-timeline-entry v-for="(status, key) in statusMessages" :key="key"
+                                    :title="status.title" :subtitle="status.description"
+                                    :color="status.completed ? 'green' : 'grey'">
+
+
+                                    <template v-if="status.timestamp">
+                                        <q-icon name="schedule" size="xs" class="q-mr-sm" />
+                                        <span>{{ status.timestamp }}</span>
+                                    </template>
+                                </q-timeline-entry>
+                            </q-timeline>
+                        </q-card-section>
+                    </q-card>
+
+                </div>
+
+
+
+
+
+
+
+
+
+            </q-page>
+        </q-page-container>
+    </q-layout>
+
+</template>
+
 <script setup>
-import { ref } from "vue";
-import { Notify } from "quasar";
-import axios from "axios";
+import { ref, computed } from 'vue';
+import { useQuasar } from 'quasar';
+import axios from 'axios';
 import WebLayout from "@/Layouts/WebLayout.vue";
 
 defineOptions({
     layout: WebLayout,
 });
 
-const ph = ref(""); // Track ID input
-const amount = ref("");
-const status = ref("");
-const appliedDate = ref("");
-const dilnaId = ref("");
-const steps = ref([]);
+const $q = useQuasar();
 
-// Track Application Function
-const trackApplication = async () => {
-    if (!ph.value) {
-        Notify.create({
-            type: "negative",
-            message: "Please enter a valid Track ID.",
+const applicationId = ref('');
+const application = ref(null);
+const loading = ref(false);
+
+const viewApplication = () => {
+    if (!applicationId.value) {
+        $q.notify({
+            color: 'negative',
+            message: 'Please enter a valid Application ID.',
         });
         return;
     }
 
+    loading.value = true;
     try {
-        const response = await axios.get(`/track/${ph.value}`);
-        const data = response.data;
-
-        if (data.message) {
-            Notify.create({
-                type: "negative",
-                message: data.message,
-            });
-            return;
-        }
-
-        // Update state with the response
-        amount.value = data.amount || "N/A";
-        status.value = data.status || "Pending";
-        appliedDate.value = data.appliedDate || "";
-        dilnaId.value = data.dilnaId || "";
-        steps.value = data.steps || [];
+        // Redirect to Inertia View page
+        window.location.href = `/application/${applicationId.value}/view`;
     } catch (error) {
-        console.error(error);
-        Notify.create({
-            type: "negative",
-            message: "There was an error tracking the application.",
+        $q.notify({
+            color: 'negative',
+            message: 'Failed to load application details. Please try again.',
         });
+    } finally {
+        loading.value = false;
     }
 };
+
+const fetchApplication = async () => {
+    loading.value = true;
+    try {
+        const { data } = await axios.get(`/track/${applicationId.value}`);
+        application.value = data.application;
+
+        // Debugging
+        console.log(application.value);
+
+        $q.notify({
+            color: 'positive',
+            message: 'Application found.',
+        });
+    } catch (error) {
+        application.value = null;
+        const message = error.response?.data?.message
+            || (error.request ? 'Network error. Please try again later.' : 'An unknown error occurred.');
+        $q.notify({
+            color: 'negative',
+            message,
+        });
+    } finally {
+        loading.value = false;
+    }
+};
+
+
+const statusMessages = computed(() => {
+    if (!application.value) return {
+        Pending: {
+            status: null,
+            title: 'No Data',
+            description: 'No application data found.',
+            timestamp: null,
+            completed: false,
+        },
+    };
+
+    const currentStatus = application.value.status;
+
+    return {
+        Pending: {
+            status: currentStatus,
+            title: 'Form Submitted',
+            description:
+                'I ruang phurh dilna chu thehluah fel a ni tawh e, District lama thuneitu ten verify turin a thang mek.',
+            timestamp: application.value.created_at
+                ? new Date(application.value.created_at).toLocaleString()
+                : null,
+            completed: currentStatus === 'Pending' || currentStatus === 'Verified' || currentStatus === 'Approved' || currentStatus === 'Payment',
+        },
+        Verified: {
+            status: currentStatus,
+            title: 'Verified',
+            description:
+                'District thuneitu te atangin verify a ni a, Directorate lamah thawn a ni.',
+            timestamp: application.value.verified_at
+                ? new Date(application.value.verified_at).toLocaleString()
+                : null,
+            completed: currentStatus === 'Verified' || currentStatus === 'Approved' || currentStatus === 'Payment',
+        },
+        Approved: {
+            status: currentStatus,
+            title: 'Application under process',
+            description:
+                'Directorate kutah a awm mek a, bank lama deposit turin file tih kal a ni.',
+            timestamp: application.value.approved_at
+                ? new Date(application.value.approved_at).toLocaleString()
+                : null,
+            completed: currentStatus === 'Approved' || currentStatus === 'Payment',
+        },
+        Payment: {
+            status: currentStatus,
+            title: 'Bill Process',
+            description: 'I ruang phurh dilna chu bank lamah process mek a ni.',
+            timestamp: application.value.processed_at
+                ? new Date(application.value.processed_at).toLocaleString()
+                : null,
+            completed: currentStatus === 'Payment',
+        },
+    };
+});
 </script>
-
-<template>
-    <q-layout>
-        <q-page-container>
-            <q-page class="flex items-center flex-col">
-                <div
-                    class="w-[412px] h-[381px] flex-shrink-0 rounded-[10px] border border-[#EEE] bg-[#E9F4FF] p-5 mt-6"
-                >
-                    <div class="flex flex-col">
-                        <h5 class="text-2xl">Ruang phurh dil chhuina/track</h5>
-                        <p class="font-bold mb-4 text-[#5B656F] text-sm">
-                            I ruang phurh dilna a thlen chin zawnna a ni. Mipui
-                            ten zawldawh takin min lo ngaichang zel dawn nia.
-                        </p>
-                       Track ID chhu lut rawh le
-                        <q-input
-                            outlined
-                            v-model="ph"
-                            placeholder="I dilna thlen chin zawnna"
-                            dense
-                            class="custom-input"
-                        />
-                    </div>
-
-                    <div class="flex gap-3 pt-6">
-                        <q-btn
-                            class="text-black"
-                            label="View"
-                            color="white"
-                            @click="() => { ph.value = ''; }"
-                        />
-                        <q-btn
-                            class="w-3"
-                            label="Track Now"
-                            color="black"
-                            @click="trackApplication"
-                        />
-                    </div>
-                </div>
-
-                <!-- Application Details -->
-                <q-card-section v-if="dilnaId">
-                    <div class="mt-6">
-                        <p class="text-muted-foreground">Status: {{ status }}</p>
-                        <p class="text-muted-foreground">Applied date: {{ appliedDate }}</p>
-                        <p class="text-muted-foreground">Dilna ID: {{ dilnaId }}</p>
-                    </div>
-                </q-card-section>
-
-                <!-- Current Status -->
-                <q-card-section v-if="steps.length">
-                    <h2 class="text-xl font-bold text-primary mt-6">Current Status</h2>
-
-                    <div
-                        v-for="(step, index) in steps"
-                        :key="index"
-                        class="flex items-center mt-4"
-                    >
-                        <q-icon
-                            :name="step.completed ? 'check_circle' : 'circle'"
-                            :color="step.completed ? 'green-500' : 'grey-5'"
-                            size="xs"
-                            class="mr-2"
-                        />
-                        <div>
-                            <h3 class="font-semibold">{{ step.title }}</h3>
-                            <p class="text-muted-foreground">{{ step.description }}</p>
-                            <p class="text-muted-foreground">{{ step.timestamp }}</p>
-                        </div>
-                    </div>
-                </q-card-section>
-            </q-page>
-        </q-page-container>
-    </q-layout>
-</template>

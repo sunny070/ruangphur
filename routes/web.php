@@ -67,11 +67,19 @@ Route::post('/form-validate-otp', [FormController::class, 'validateOtp'])->name(
 
 
 
+// Route::get('/deceased-tracking', [ApplicationController::class, 'index'])->name('track');
+
+// Route::get('/track/{id}', [ApplicationController::class, 'trackApplication']);
+
+
+
 //Form Track
 Route::get('/deceased-tracking', [ApplicationController::class, 'index'])->name('track');
-
 Route::get('/track/{id}', [ApplicationController::class, 'trackApplication']);
 
 
-
+//Form View
+// Route::get('/deceased-tracking', [ApplicationController::class, 'view'])->name('view');
+// Route::get('/view-form/{id}', [ApplicationController::class, 'viewApplication']);
+Route::get('/application/{id}/view', [ApplicationController::class, 'view'])->name('application.view');
 require __DIR__ . '/auth.php';
