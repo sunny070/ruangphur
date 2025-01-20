@@ -82,4 +82,6 @@ Route::get('/track/{id}', [ApplicationController::class, 'trackApplication']);
 // Route::get('/deceased-tracking', [ApplicationController::class, 'view'])->name('view');
 // Route::get('/view-form/{id}', [ApplicationController::class, 'viewApplication']);
 Route::get('/application/{id}/view', [ApplicationController::class, 'view'])->name('application.view');
+
+
 require __DIR__ . '/auth.php';
