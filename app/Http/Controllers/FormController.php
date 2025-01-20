@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OTPMail;
 use App\Models\Applicant;
 use App\Models\Application;
 use App\Models\Deceased;
@@ -10,6 +11,7 @@ use App\Models\Transport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Mail;
 
 class FormController extends Controller
 {
@@ -33,7 +35,8 @@ class FormController extends Controller
             'relative_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
             'dob' => 'required|date',
             'gender' => 'required',
-            'mobile' => ['required', 'string', 'regex:/^[0-9]{10}$/'], // 10 digits only
+            // 'mobile' => ['required', 'string', 'regex:/^[0-9]{10}$/'], // 10 digits only
+            'mobile' => ['required', 'string'], // 10 digits only
             'district' => 'required|string',
             'locality' => 'required|string',
             'time_of_death' => 'required|string',
@@ -58,25 +61,7 @@ class FormController extends Controller
         ]);
     }
 
-    // public function storeStep2(Request $request)
-    // {
-    //     $validated = $request->validate([
-    //         'source_district' => 'required|string',
-    //         'source_locality' => 'required|string',
-    //         'destination_district' => 'required|string',
-    //         'destination_locality' => 'required|string',
-    //         'distance' => 'required|string',
-    //         'vehicle_number' => 'required|string',
-    //         'driver_name' => 'required|string',
-    //         'driver_phone' => 'required|string',
-    //         'vehicle_owner' => 'required|string',
-    //         'transport_cost' => 'required|string',
-    //     ]);
-
-    //     session()->put('transport', $validated);
-
-    //     return redirect()->route('form.step3');
-    // }
+   
     public function storeStep2(Request $request)
     {
         // dd($request);
@@ -108,7 +93,6 @@ class FormController extends Controller
 
     public function storeStep3(Request $request)
     {
-        // dd($request->all());
         $validated = $request->validate([
             'name' => 'required|string',
             'mobile' => 'required|string',
@@ -122,7 +106,7 @@ class FormController extends Controller
             'death_certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'additional_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
-
+    
         // Handle file uploads
         if ($request->hasFile('id_proof')) {
             $validated['id_proof'] = $request->file('id_proof')->store('documents', 'public');
@@ -136,47 +120,22 @@ class FormController extends Controller
         if ($request->hasFile('additional_document')) {
             $validated['additional_document'] = $request->file('additional_document')->store('documents', 'public');
         }
-
+    
         session()->put('applicant', $validated);
-
+    
         // Generate OTP
         $otp = random_int(100000, 999999);
         session()->put('otp', $otp);
-
+    
+        // Send OTP via email
+        Mail::to($validated['mobile'])->send(new OTPMail($otp, $validated['name']));
+    
         \Log::info("Generated OTP: $otp");
-
+    
         return redirect()->route('form.otp');
     }
 
-    // public function storeStep3(Request $request)
-    // {
-    //     $validated = $request->validate([
-    //         'name' => 'required|string',
-    //         'mobile' => 'required|string',
-    //         'district' => 'required|string',
-    //         'locality' => 'required|string',
-    //         'bank_name' => 'required|string',
-    //         'account_no' => 'required|string',
-    //         'ifsc_code' => 'required|string',
-    //     ]);
-
-    //     // Add the authenticated user's ID to the validated data
-
-
-    //     session()->put('applicant', $validated);
-
-    //     // Generate OTP
-    //     $otp = random_int(100000, 999999);
-    //     session()->put('otp', $otp);
-
-    //     \Log::info("Generated OTP: $otp");
-
-    //     // Logic to send OTP (e.g., SMS or email)
-    //     // $mobile = session('deceased')['mobile'];
-    //     // Use your preferred service to send OTP to $mobile.
-
-    //     return redirect()->route('form.otp');
-    // }
+   
 
     // OTP Page
     public function otpPage()
@@ -186,67 +145,62 @@ class FormController extends Controller
 
     // Validate OTP and Submit
     public function validateOtp(Request $request)
-    {   
-        // dd($request);
-        // Validate OTP
-        $request->validate(['otp' => 'required|digits:6']);
+{   
+    // Validate OTP
+    $request->validate(['otp' => 'required|digits:6']);
 
-        // Retrieve OTP from session
-        $sessionOtp = session('otp');
-        if ($sessionOtp != $request->otp) {
-            return back()->withErrors(['otp' => 'Invalid OTP.']);
-        }
-
-        // Retrieve form data from session
-        $deceasedData = session('deceased');
-        $transportData = session('transport');
-        $applicantData = session('applicant');
-
-        // Fix the gender data (assuming 'gender' is an object)
-        if (isset($deceasedData['gender']) && is_array($deceasedData['gender'])) {
-            $deceasedData['gender'] = $deceasedData['gender']['value'];  // Extract the value
-        }
-
-        // Create the Applicant
-        $applicant = Applicant::create($applicantData);
-
-        // Generate the Application Number
-        $applicationNumber = $this->generateApplicationNumber();
-
-        // Create the Application record
-        $application = Application::create([
-            'applicant_id' => $applicant->id,
-            'status' => 'Pending',
-            'application_no' => $this->generateApplicationNumber(),
-        ]);
-
-        // Create the Deceased record
-        $deceased = Deceased::create(array_merge($deceasedData, ['application_id' => $application->id]));
-
-
-        Transport::create(array_merge($transportData,[
-            'deceased_id' => $deceased->id,
-            'source_district'=> $transportData['source_district']['value'],
-
-        ]));
-        // Create the Transport record
-        // Transport::create(array_merge($transportData,
-        // 'source_district'=> $transportData['source_distict']['value'],
-        // ['deceased_id' => $deceased->id]));0
-
-        // Clear session data
-        session()->forget(['deceased', 'transport', 'applicant', 'otp']);
-
-        // Pass the application number to the FormComplete page
-        return Inertia::render('Form/FormComplete', [
-            'application_no' => $applicationNumber,  // Pass the generated application number
-        ]);
+    // Retrieve OTP from session
+    $sessionOtp = session('otp');
+    if ($sessionOtp != $request->otp) {
+        return back()->withErrors(['otp' => 'Invalid OTP.']);
     }
 
+    // Retrieve form data from session
+    $deceasedData = session('deceased');
+    $transportData = session('transport');
+    $applicantData = session('applicant');
 
-
-    private function generateApplicationNumber()
-    {
-        return 'RNG-' . strtoupper(uniqid());
+    // Fix the gender data (assuming 'gender' is an object)
+    if (isset($deceasedData['gender']) && is_array($deceasedData['gender'])) {
+        $deceasedData['gender'] = $deceasedData['gender']['value'];  // Extract the value
     }
+
+    // Create the Applicant
+    $applicant = Applicant::create($applicantData);
+
+    // Generate the Application Number (only once)
+    $applicationNumber = $this->generateApplicationNumber();
+
+    // Create the Application record
+    $application = Application::create([
+        'applicant_id' => $applicant->id,
+        'status' => 'Pending',
+        'application_no' => $applicationNumber,
+    ]);
+
+    // Create the Deceased record
+    $deceased = Deceased::create(array_merge($deceasedData, ['application_id' => $application->id]));
+
+    // Create the Transport record
+    Transport::create(array_merge($transportData, [
+        'deceased_id' => $deceased->id,
+        'source_district' => $transportData['source_district']['value'],
+    ]));
+
+    // Clear session data
+    session()->forget(['deceased', 'transport', 'applicant', 'otp']);
+
+    // Pass the application number to the FormComplete page
+    return Inertia::render('Form/FormComplete', [
+        'application_no' => $applicationNumber,  // Use the same application number
+    ]);
+}
+
+private function generateApplicationNumber()
+{
+    // Generate a shorter unique ID with 6 characters
+    $randomString = strtoupper(substr(uniqid(), -6));
+    return 'RNG-' . $randomString;
+}
+
 }

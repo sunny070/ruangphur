@@ -1,6 +1,6 @@
 <template>
-    <q-layout>
-        <q-page-container>
+
+        
             <q-page padding>
                 <div class="flex flex-col justify-center items-center gap-6">
                     <div
@@ -76,9 +76,12 @@
                                     A phone number
                                 </div>
                                 <q-input outlined placeholder="Mitthi phone number" dense class="custom-input"
+                                    v-model="form.mobile"   
+    />
+                                <!-- <q-input outlined placeholder="Mitthi phone number" dense class="custom-input"
                                     v-model="form.mobile" maxlength="10"  :rules="[
         (val) => /^[0-9]{10}$/.test(val) || 'Mobile number must be 10 digits'
-    ]" />
+    ]" /> -->
                             </div>
 
                             <div>
@@ -136,8 +139,8 @@
                     </div>
                 </div>
             </q-page>
-        </q-page-container>
-    </q-layout>
+   
+
 </template>
 
 <script setup>

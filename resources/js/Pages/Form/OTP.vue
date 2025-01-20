@@ -29,13 +29,13 @@
                                     />
                                 </div>
                             </div>
+                            <q-btn
+                                    label="Verify"
+                                    color="black"
+                                    type="submit"
+                                />
                         </div>
                         <!-- <q-btn label="Submit" color="primary" type="submit" /> -->
-                        <q-btn
-                                label="Verify"
-                                color="black"
-                                type="submit"
-                            />
                     </q-form>
                 </div>
             </q-page>

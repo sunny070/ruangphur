@@ -17,3 +17,4 @@ class Applicant extends Model
         return $this->hasMany(Application::class);
     }
 }
+
