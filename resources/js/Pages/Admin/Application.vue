@@ -45,23 +45,23 @@
         </thead>
         <tbody>
           <tr v-for="application in filteredApplications" :key="application.id">
-            <td>{{ application.application_no }}</td>
-            <td>{{ application.deceased.name }}</td>
-            <td>{{ application.deceased.district }}</td>
-            <td>{{ application.transport.distance }}</td>
-            <td>{{ application.transport.transport_cost }}</td>
-            <td>{{ application.applicant.name }}</td>
-            <td>{{ application.applicant.mobile }}</td>
+            <td>{{ application?.application_no }}</td>
+            <td>{{ application?.deceased?.name }}</td>
+            <td>{{ application?.deceased?.district?.name }}</td>
+            <td>{{ application?.transport?.distance  }}</td>
+            <td>{{ application?.transport?.transport_cost }}</td>
+            <td>{{ application?.applicant?.name }}</td>
+            <td>{{ application?.applicant?.mobile }}</td>
             <td>
               <div :class="{
-                'status-incoming': application.status === 'Pending',
-                'status-rejected': application.status === 'Rejected',
-                'status-approved': application.status === 'Approved',
+                'status-incoming': application?.status === 'Pending',
+                'status-rejected': application?.status === 'Rejected',
+                'status-approved': application?.status === 'Approved',
               }" class="status-badge">
-                {{ application.status }}
+                {{ application?.status }}
               </div>
             </td>
-            <td>{{ application.created_at }}</td>
+            <td>{{ application?.created_at }}</td>
             <td>
 
 

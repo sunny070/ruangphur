@@ -35,9 +35,8 @@ class FormController extends Controller
             'relative_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
             'dob' => 'required|date',
             'gender' => 'required',
-            // 'mobile' => ['required', 'string', 'regex:/^[0-9]{10}$/'], // 10 digits only
-            'mobile' => ['required', 'string'], // 10 digits only
-            'district' => 'required|string',
+           
+            'district' => 'required',
             'locality' => 'required|string',
             'time_of_death' => 'required|string',
             'place_of_death' => 'required|string',
@@ -93,6 +92,7 @@ class FormController extends Controller
 
     public function storeStep3(Request $request)
     {
+       
         $validated = $request->validate([
             'name' => 'required|string',
             'mobile' => 'required|string',
@@ -110,16 +110,21 @@ class FormController extends Controller
         // Handle file uploads
         if ($request->hasFile('id_proof')) {
             $validated['id_proof'] = $request->file('id_proof')->store('documents', 'public');
+            \Log::info("ID Proof saved at: " . $validated['id_proof']);
         }
         if ($request->hasFile('receipt')) {
             $validated['receipt'] = $request->file('receipt')->store('documents', 'public');
+            \Log::info("Receipt saved at: " . $validated['receipt']);
         }
         if ($request->hasFile('death_certificate')) {
             $validated['death_certificate'] = $request->file('death_certificate')->store('documents', 'public');
+            \Log::info("Death Certificate saved at: " . $validated['death_certificate']);
         }
         if ($request->hasFile('additional_document')) {
             $validated['additional_document'] = $request->file('additional_document')->store('documents', 'public');
+            \Log::info("Additional Document saved at: " . $validated['additional_document']);
         }
+        
     
         session()->put('applicant', $validated);
     
@@ -179,7 +184,10 @@ class FormController extends Controller
     ]);
 
     // Create the Deceased record
-    $deceased = Deceased::create(array_merge($deceasedData, ['application_id' => $application->id]));
+    $deceased = Deceased::create(array_merge($deceasedData, [
+        'application_id' => $application->id,
+        'district' => $deceasedData['district']['value'],
+    ]));
 
     // Create the Transport record
     Transport::create(array_merge($transportData, [

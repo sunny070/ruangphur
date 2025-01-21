@@ -22,7 +22,7 @@
 
                         <div class="flex gap-3 pt-6" >
                             <q-btn class="text-black" label="View" color="white"
-                                @click="viewApplication" />
+                                @click="viewApplication(applicationId)" />
                             <q-btn class="w-3" label="Track Now" color="black" @click="fetchApplication"
                                 :loading="loading" />
                         </div>
@@ -78,6 +78,7 @@
 import { ref, computed } from 'vue';
 import { useQuasar } from 'quasar';
 import axios from 'axios';
+import { router } from '@inertiajs/vue3';
 import WebLayout from "@/Layouts/WebLayout.vue";
 
 defineOptions({
@@ -90,7 +91,7 @@ const applicationId = ref('');
 const application = ref(null);
 const loading = ref(false);
 
-const viewApplication = () => {
+const viewApplication = (item) => {
     if (!applicationId.value) {
         $q.notify({
             color: 'negative',
@@ -101,8 +102,9 @@ const viewApplication = () => {
 
     loading.value = true;
     try {
+        router.get(route('application.view',applicationId.value ))
         // Redirect to Inertia View page
-        window.location.href = `/application/${applicationId.value}/view`;
+        // window.location.href = `/application/${applicationId.value}/view`;
     } catch (error) {
         $q.notify({
             color: 'negative',

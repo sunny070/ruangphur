@@ -63,4 +63,8 @@ class ApplicationController extends Controller
         'application' => $application,
     ]);
     }
+
+    public function faqs(){
+        return Inertia::render('Faqs');
+    }
 }

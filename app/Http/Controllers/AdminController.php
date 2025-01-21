@@ -10,7 +10,7 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $applications = Application::with('applicant', 'deceased', 'transport') // Eager load related models
+        $applications = Application::with(['applicant', 'deceased.district', 'transport']) // Eager load related models
             ->where('status', 'Pending')
             ->get();
 
@@ -61,11 +61,11 @@ class AdminController extends Controller
         return redirect()->route('application')->with('error', 'Application is already processed or invalid.');
     }
 
-    public function show(Application $application)
+    public function show(Application $application )
 {
     // Eager load related models to avoid N+1 query problem
     return Inertia::render('Admin/ApplicationDetails', [
-        'application' => $application->load('applicant', 'deceased', 'transport'),
+        'application' => $application->load(['applicant', 'deceased.district', 'transport']),
     ]);
 }
 

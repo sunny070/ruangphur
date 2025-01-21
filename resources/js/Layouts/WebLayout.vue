@@ -7,7 +7,7 @@
                 <div class="md:pl-[223px] md:pr-[55px]">
                     <img
                         id="background"
-                        class="w-[140.7px] h-[45px]"
+                        class="w-[194px] h-[72px]"
                         src="image/Group 1321315097.png"
                     />
                     <!-- <img
@@ -33,16 +33,16 @@
 
                         <Link :href="route('track')"
                             ><q-tab
-                                name="alarms"
+                                name="Bill Chuina"
                                 label="Bill Chuina"
                                 :to="{ name: 'track' }"
                             />
                         </Link>
-                        <Link :href="route('track')"
+                        <Link :href="route('application.faqs')"
                             ><q-tab
-                                name="alarms"
+                                name="fAQs"
                                 label="fAQs"
-                                :to="{ name: 'track' }"
+                                :to="{ name: 'application.faqs' }"
                             />
                         </Link>
                         <Link :href="route('track')"

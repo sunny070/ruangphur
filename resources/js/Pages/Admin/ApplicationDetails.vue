@@ -79,7 +79,7 @@
                 </div>
                 <div class="leading-[2px] pt-4">
                     <p class="text-[#61646B]">District</p>
-                    <p>{{ application.deceased.district }}</p>
+                    <p>{{ application.deceased.district.name }}</p>
                 </div>
                 <div class="leading-[2px] pt-4">
                     <p class="text-[#61646B]">Veng/Khua</p>

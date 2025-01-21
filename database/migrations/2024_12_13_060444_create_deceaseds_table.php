@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('relative_name');
             $table->date('dob');
             $table->string('gender');
-            $table->string('mobile');
             $table->string('district');
             $table->string('locality');
             $table->string('constituency')->nullable();
