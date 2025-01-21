@@ -32,9 +32,11 @@ Route::get('/dashboard', function () {
 
 // Amin login
 Route::middleware('auth')->group(function () {
-    Route::get('application', [AdminController::class, 'index'])->name('application');
+    Route::get('/admin/application', [AdminController::class, 'index'])->name('application');
     Route::post('/admin/application/{application}/approve', [AdminController::class, 'approve'])->name('admin.application.approve');
     Route::post('/admin/application/{application}/reject', [AdminController::class, 'reject'])->name('admin.application.reject');
+    Route::get('/admin/application/{application}', [AdminController::class, 'show'])->name('applications.show');
+    Route::get('/admin/application/{id}/view', [ApplicationController::class, 'view'])->name('application.view');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -81,7 +83,7 @@ Route::get('/track/{id}', [ApplicationController::class, 'trackApplication']);
 //Form View
 // Route::get('/deceased-tracking', [ApplicationController::class, 'view'])->name('view');
 // Route::get('/view-form/{id}', [ApplicationController::class, 'viewApplication']);
-Route::get('/application/{id}/view', [ApplicationController::class, 'view'])->name('application.view');
+
 
 
 require __DIR__ . '/auth.php';

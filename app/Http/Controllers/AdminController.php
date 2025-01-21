@@ -60,4 +60,33 @@ class AdminController extends Controller
 
         return redirect()->route('application')->with('error', 'Application is already processed or invalid.');
     }
+
+    public function show(Application $application)
+{
+    // Eager load related models to avoid N+1 query problem
+    return Inertia::render('Admin/ApplicationDetails', [
+        'application' => $application->load('applicant', 'deceased', 'transport'),
+    ]);
+}
+
+
+public function edit(Application $application)
+{
+    return Inertia::render('Admin/EditApplication', [
+        'application' => $application->load('applicant', 'deceased', 'transport'),
+    ]);
+}
+
+public function update(Request $request, Application $application)
+{
+    $validated = $request->validate([
+        'status' => 'required|string',
+        // Add other fields as needed
+    ]);
+
+    $application->update($validated);
+
+    return redirect()->route('admin.applications')->with('success', 'Application updated successfully.');
+}
+
 }

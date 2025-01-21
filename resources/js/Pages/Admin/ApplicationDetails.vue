@@ -1,9 +1,7 @@
 <template>
     <q-page padding>
         <div class="flex items-center flex-col">
-            <div
-                class="w-[845px] h-[263px] flex-shrink-0 rounded-[10px] border border-[#EEE] bg-[#E9F4FF] p-5 mt-6"
-            >
+            <div class="w-[845px] h-[263px] flex-shrink-0 rounded-[10px] border border-[#EEE] bg-[#E9F4FF] p-5 mt-6">
                 <div class="flex flex-col text-center">
                     <h5 class="text-2xl">
                         {{ application.applicant.name }}
@@ -33,15 +31,26 @@
                             <p class="text-[#5B656F]">Amount (Rs)</p>
                         </div>
                     </div>
+                    <div class="flex justify-center items-center gap-20">
+
+                        <q-btn v-if="props.application && props.application.status === 'Pending'"
+                        @click="approveApplication(props.application.id)" label="Approve" size="sm"
+                        style=" color:#fff; width: 144px; height: 40px; flex-shrink: 0; border-radius: 8px; border: 1px solid #5B656F; background: #000;" />
+                        
+                        <q-btn v-if="props.application && props.application.status === 'Pending'"
+                        @click="rejectApplication(props.application.id)"  label="Reject" size="sm"
+                        style="color: #000; width: 144px; height: 40px; flex-shrink: 0; border-radius: 8px; border: 1px solid #5B656F; background: transparent;" />
+                    </div>
+
                 </div>
             </div>
         </div>
 
+        <!-- Applicant and Deceased Information -->
         <div class="grid md:grid-cols-2 md:ml-[218px] md:mr-[218px]">
+            <!-- Deceased Details -->
             <div class="border-2 w-[413px] h-[641px] p-14 rounded-md">
-                <p
-                    class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
-                >
+                <p class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8">
                     Mitthi Chungchang
                 </p>
                 <div class="leading-[2px]">
@@ -82,11 +91,10 @@
                 </div>
             </div>
 
+            <!-- Applicant Details -->
             <div class="grid gap-3">
                 <div class="border-2 w-[413px] h-[337px] p-14 rounded-md">
-                    <p
-                        class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
-                    >
+                    <p class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8">
                         Ruang Phurh Diltu
                     </p>
                     <div class="leading-[2px]">
@@ -106,10 +114,10 @@
                         <p>{{ application.applicant.mobile }}</p>
                     </div>
                 </div>
+
+                <!-- Bank Details -->
                 <div class="border-2 rounded-md w-[413px] h-[337px] p-14">
-                    <p
-                        class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
-                    >
+                    <p class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8">
                         Bank Details
                     </p>
                     <div class="leading-[2px]">
@@ -128,11 +136,11 @@
             </div>
         </div>
 
+        <!-- Transport and Document Details -->
         <div class="grid md:grid-cols-2 md:ml-[218px] md:mr-[218px]">
+            <!-- Transport Details -->
             <div class="border-2 w-[413px] h-[836px] p-14 rounded-md">
-                <p
-                    class="text-center w-[242px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
-                >
+                <p class="text-center w-[242px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8">
                     Ruang Phurh leh Motor Chungchang
                 </p>
                 <p class="mb-8">Ruang phurh tanna</p>
@@ -147,15 +155,11 @@
                 <p class="mb-8 mt-8">Ruang dahna tur hmun</p>
                 <div class="leading-[2px] pt-4">
                     <p class="text-[#61646B]">District</p>
-                    <p>
-                        {{ application.transport.destination_district }}
-                    </p>
+                    <p>{{ application.transport.destination_district }}</p>
                 </div>
                 <div class="leading-[2px] pt-4">
                     <p class="text-[#61646B]">Veng/Khua</p>
-                    <p>
-                        {{ application.transport.destination_locality }}
-                    </p>
+                    <p>{{ application.transport.destination_locality }}</p>
                 </div>
 
                 <div class="leading-[2px] pt-4">
@@ -177,168 +181,50 @@
                     <p>{{ application.transport.driver_name }}</p>
                 </div>
                 <div class="leading-[2px] pt-4">
-                    <p class="text-[#61646B]">
-                        Motor neitu/khalhtu phone number
-                    </p>
+                    <p class="text-[#61646B]">Phone Number</p>
                     <p>{{ application.transport.driver_phone }}</p>
                 </div>
                 <div class="leading-[2px] pt-4">
-                    <p class="text-[#61646B]">Motor hman man (Rs)</p>
+                    <p class="text-[#61646B]">Motor saung (Rs.)</p>
                     <p>{{ application.transport.transport_cost }}</p>
                 </div>
             </div>
-            <div class="grid gap-3">
-                <div class="border-2 rounded-md w-[413px] h-[337px] p-14">
-                    <p
-                        class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
-                    >
-                        Document Thiltel te
-                    </p>
-                    <div class="leading-[2px]">
-                        <!-- <img class="w-[412px] h-[473px]" id="background" src="/public/image/tick.png" /> -->
-                        <p>Mitthi Aadhar card/Voter ID</p>
-                    </div>
-                    <div class="leading-[2px] pt-4">
-                        <p class="text-[#61646B]">District</p>
-                        <p>Motor hman man Voucher/Receipt</p>
-                    </div>
-                    <div class="leading-[2px] pt-4">
-                        <p class="text-[#61646B]">Veng/Khua</p>
-                        <p>Death Certificate</p>
-                    </div>
-                    <div class="leading-[2px] pt-4">
-                        <p class="text-[#61646B]">Phone Number</p>
-                        <p>Diltu Aadhar card/voter ID</p>
-                    </div>
-                </div>
-
-                <div class="border-2 rounded-md w-[413px] h-[590px] p-8">
-                    <p
-                        class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
-                    >
-                        Track Application
-                    </p>
-                    <div>
-                        <q-timeline class="q-mt-lg">
-                            <q-timeline-entry
-                                v-for="(status, key) in statusMessages"
-                                :key="key"
-                                :title="status.title"
-                                :subtitle="status.description"
-                                :color="status.completed ? 'green' : 'grey'"
-                            >
-                                <template v-if="status.timestamp">
-                                    <q-icon
-                                        name="schedule"
-                                        size="xs"
-                                        class="q-mr-sm"
-                                    />
-                                    <span>{{ status.timestamp }}</span>
-                                </template>
-                            </q-timeline-entry>
-                        </q-timeline>
-                    </div>
-                </div>
-            </div>
-            <q-btn
-                class="bg-black text-white rounded-md q-py-sm q-px-md"
-                style="width: 192px; height: 48px"
-                @click="goToTrackPage"
-            >
-                Back to Track
-            </q-btn>
         </div>
     </q-page>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
-import { usePage } from "@inertiajs/vue3";
-import WebLayout from "@/Layouts/WebLayout.vue";
-import { Inertia } from "@inertiajs/inertia";
+import { computed } from 'vue';
+import AdminLayout from "@/Layouts/AdminLayout.vue";
+import { router as $inertia } from '@inertiajs/vue3';
 
 defineOptions({
-    layout: WebLayout,
+    layout: AdminLayout,
 });
 
-const application = ref(usePage().props.application);
+// Props passed from the parent component (Inertia)
+const props = defineProps({
+    application: Object,
+});
 
-const goToTrackPage = () => {
-    Inertia.visit(route("track"));
+const approveApplication = async (applicationId) => {
+    if (confirm('Are you sure you want to approve this application?')) {
+        try {
+            await $inertia.post(`/admin/application/${applicationId}/approve`);
+        } catch (error) {
+            console.error(error);
+        }
+    }
 };
 
-const statusMessages = computed(() => {
-    if (!application.value)
-        return {
-            Pending: {
-                status: null,
-                title: "No Data",
-                description: "No application data found.",
-                timestamp: null,
-                completed: false,
-            },
-        };
-
-    const currentStatus = application.value.status;
-
-    return {
-        Pending: {
-            status: currentStatus,
-            title: "Form Submitted",
-            description:
-                "I ruang phurh dilna chu thehluah fel a ni tawh e, District lama thuneitu ten verify turin a thang mek.",
-            timestamp: application.value.created_at
-                ? new Date(application.value.created_at).toLocaleString()
-                : null,
-            completed:
-                currentStatus === "Pending" ||
-                currentStatus === "Verified" ||
-                currentStatus === "Approved" ||
-                currentStatus === "Payment",
-        },
-        Verified: {
-            status: currentStatus,
-            title: "Verified",
-            description:
-                "District thuneitu te atangin verify a ni a, Directorate lamah thawn a ni.",
-            timestamp: application.value.verified_at
-                ? new Date(application.value.verified_at).toLocaleString()
-                : null,
-            completed:
-                currentStatus === "Verified" ||
-                currentStatus === "Approved" ||
-                currentStatus === "Payment",
-        },
-        Approved: {
-            status: currentStatus,
-            title: "Application under process",
-            description:
-                "Directorate kutah a awm mek a, bank lama deposit turin file tih kal a ni.",
-            timestamp: application.value.approved_at
-                ? new Date(application.value.approved_at).toLocaleString()
-                : null,
-            completed:
-                currentStatus === "Approved" || currentStatus === "Payment",
-        },
-        Payment: {
-            status: currentStatus,
-            title: "Bill Process",
-            description: "I ruang phurh dilna chu bank lamah process mek a ni.",
-            timestamp: application.value.processed_at
-                ? new Date(application.value.processed_at).toLocaleString()
-                : null,
-            completed: currentStatus === "Payment",
-        },
-    };
-});
-
-
-// Mock `application` object for demonstration; replace with your actual data.
-const diseasedAge = {
-    deceased: {
-        dob: application.value?.deceased?.dob || null,
-        time_of_death: application.value?.deceased?.time_of_death || null,
-    },
+const rejectApplication = async (applicationId) => {
+    if (confirm('Are you sure you want to reject this application?')) {
+        try {
+            await $inertia.post(`/admin/application/${applicationId}/reject`);
+        } catch (error) {
+            console.error(error);
+        }
+    }
 };
 
 // Function to calculate the age at death
@@ -358,8 +244,8 @@ const calculateAgeAtDeath = (dob, deathDate) => {
 // Calculating age using a computed property
 const ageAtDeath = computed(() =>
     calculateAgeAtDeath(
-        diseasedAge.deceased.dob,
-        diseasedAge.deceased.time_of_death
+        props.application.deceased.dob,
+        props.application.deceased.time_of_death
     )
 );
 </script>
