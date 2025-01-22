@@ -15,17 +15,38 @@
     </div>
 
     <!-- Status Filters -->
-    <div class="q-my-md flex gap-16">
-      <q-btn label="All" flat :class="currentFilter === 'All' ? 'active-button' : 'inactive-button'"
-        @click="setFilter('All')" />
-      <q-btn label="Incoming" flat :class="currentFilter === 'Incoming' ? 'active-button' : 'inactive-button'"
-        @click="setFilter('Incoming')" />
-      <q-btn label="Approved" flat :class="currentFilter === 'Approved' ? 'active-button' : 'inactive-button'"
-        @click="setFilter('Approved')" />
-      <q-btn label="Rejected" flat :class="currentFilter === 'Rejected' ? 'active-button' : 'inactive-button'"
-        @click="setFilter('Rejected')" />
+    <div class="flex gap-20 ">
+      <div class="q-my-md flex gap-16">
+        <q-btn label="All" flat :class="currentFilter === 'All' ? 'active-button' : 'inactive-button'"
+          @click="setFilter('All')" />
+        <q-btn label="Incoming" flat :class="currentFilter === 'Incoming' ? 'active-button' : 'inactive-button'"
+          @click="setFilter('Incoming')" />
+        <q-btn label="Approved" flat :class="currentFilter === 'Approved' ? 'active-button' : 'inactive-button'"
+          @click="setFilter('Approved')" />
+        <q-btn label="Rejected" flat :class="currentFilter === 'Rejected' ? 'active-button' : 'inactive-button'"
+          @click="setFilter('Rejected')" />
+      </div>
+      <div class="flex justify-end items-center">
+        <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center"
+          style="color: #000; width: 100px; height: 40px; flex-shrink: 0; border-radius: 8px; border: 1px solid #5B656F; background: transparent;">
+          <q-icon name="ios_share" size="16px" class="q-mr-xs" />
+          <span>Export</span>
+        </q-btn>
+        <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center"
+          style="color: #000; width: 100px; height: 40px; flex-shrink: 0; border-radius: 8px; border: 1px solid #5B656F; background: transparent;">
+          <q-icon name="print" size="16px" class="q-mr-xs" />
+          <span>Print</span>
+        </q-btn>
+        <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center"
+          style="color: #fff; width: 144px; height: 40px; flex-shrink: 0; border-radius: 8px; border: 1px solid #5B656F; background: #000;">
+          <q-icon name="add" size="16px" class="q-mr-xs" />
+          <span>Apply New</span>
+        </q-btn>
+        
+        
+        
+      </div>
     </div>
-
     <!-- Applications Table -->
     <div class="table-responsive">
       <table class="q-table q-table__grid q-mb-lg ">
@@ -48,7 +69,7 @@
             <td>{{ application?.application_no }}</td>
             <td>{{ application?.deceased?.name }}</td>
             <td>{{ application?.deceased?.district?.name }}</td>
-            <td>{{ application?.transport?.distance  }}</td>
+            <td>{{ application?.transport?.distance }}</td>
             <td>{{ application?.transport?.transport_cost }}</td>
             <td>{{ application?.applicant?.name }}</td>
             <td>{{ application?.applicant?.mobile }}</td>
@@ -65,7 +86,7 @@
             <td>
 
 
-              
+
               <q-btn icon="more_vert" :style="buttonStyle" />
               <q-menu>
                 <q-list>
@@ -243,5 +264,12 @@ th {
   background: #DCFAEE;
   color: #4CAF50;
   /* Adjusted to a green shade for "Approved" */
+}
+
+
+.custom-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
