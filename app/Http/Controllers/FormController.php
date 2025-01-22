@@ -66,12 +66,12 @@ class FormController extends Controller
         // dd($request);
         $validated = $request->validate([
             'source_district' => 'required|max:255',
-            'source_locality' => 'required|string|max:255',
-            'destination_district' => 'required|string|max:255',
-            'destination_locality' => 'required|string|max:255',
+            'source_locality' => 'required|max:255',
+            'destination_district' => 'required|max:255',
+            'destination_locality' => 'required|max:255',
             'distance' => 'required|numeric|min:1', // Distance must be a positive number
             'vehicle_number' => 'required|string|max:20',
-            'vehicle_name' => 'required|string|max:255',
+            // 'vehicle_name' => 'required|string|max:255',
             'driver_name' => 'required|string|max:255',
             'driver_phone' => 'required|string|regex:/^[0-9]{10}$/', // Only 10-digit phone numbers
             'transport_cost' => 'required|numeric|min:0', // Transport cost must be a positive number
@@ -87,7 +87,10 @@ class FormController extends Controller
     public function step3()
     {
         $applicantData = session('applicant', []);
-        return Inertia::render('Form/FormStep3', ['form' => $applicantData]);
+        return Inertia::render('Form/FormStep3', [
+            'form' => $applicantData,
+            'districts' => District::query()->get(['id as value', 'name as label']),
+    ]);
     }
 
     public function storeStep3(Request $request)
@@ -96,7 +99,7 @@ class FormController extends Controller
         $validated = $request->validate([
             'name' => 'required|string',
             'mobile' => 'required|string',
-            'district' => 'required|string',
+            'district' => 'required',
             'locality' => 'required|string',
             'bank_name' => 'required|string',
             'account_no' => 'required|string',

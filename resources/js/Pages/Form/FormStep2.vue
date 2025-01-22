@@ -43,6 +43,12 @@
                                         label="Select Source District"
                                         :options="district"
                                         behavior="menu"
+                                        :error="form.errors.source_district"
+                                        :error-message="
+                                            form.errors.source_district
+                                                ? form.errors.source_district[0]
+                                                : 'Source District is Required'
+                                        "
                                     />
                                 </div>
                             </div>
@@ -60,6 +66,10 @@
                                         dense
                                         class="custom-input"
                                         v-model="form.source_locality"
+                                        :error="form.errors.source_locality"
+                                        :error-message="
+                                            form.errors.source_locality || ''
+                                        "
                                     />
                                 </div>
                             </div>
@@ -81,6 +91,13 @@
                                         label="Select Source District"
                                         :options="district"
                                         behavior="menu"
+                                        :error="
+                                            form.errors.destination_district
+                                        "
+                                        :error-message="
+                                            form.errors.destination_district ||
+                                            ''
+                                        "
                                     />
                                 </div>
                             </div>
@@ -95,13 +112,12 @@
                                     dense
                                     class="custom-input"
                                     v-model="form.destination_locality"
+                                    :error="form.errors.destination_locality"
+                                    :error-message="
+                                        form.errors.destination_locality || ''
+                                    "
                                 />
                             </div>
-
-                            <!-- <q-input filled v-model="form.source_district" label="Source District" required /> -->
-                            <!-- <q-input filled v-model="form.source_locality" label="Source Locality" required /> -->
-                            <!-- <q-input filled v-model="form.destination_district" label="Destination District" required /> -->
-                            <!-- <q-input filled v-model="form.destination_locality" label="Destination Locality" required /> -->
 
                             <div class="pt-5">
                                 <p
@@ -115,7 +131,12 @@
                                     dense
                                     v-model="form.distance"
                                     label="Distance (in km)"
-                                    required
+                                    :error="form.errors.distance"
+                                    :error-message="
+                                        form.errors.distance
+                                            ? form.errors.distance
+                                            : ''
+                                    "
                                 />
                             </div>
 
@@ -132,6 +153,10 @@
                                     dense
                                     class="custom-input"
                                     v-model="form.transport_cost"
+                                    :error="form.errors.transport_cost"
+                                    :error-message="
+                                        form.errors.transport_cost || ''
+                                    "
                                 />
                             </div>
 
@@ -160,9 +185,13 @@
                                     dense
                                     class="custom-input"
                                     v-model="form.driver_name"
+                                    :error="form.errors.driver_name"
+                                    :error-message="
+                                        form.errors.driver_name || ''
+                                    "
                                 />
                             </div>
-                            
+
                             <div>
                                 <div class="text-sm font-medium text-black">
                                     Motor neitu/khalhtu phone number
@@ -174,6 +203,11 @@
                                     class="custom-input"
                                     v-model="form.driver_phone"
                                     maxlength="10"
+                                    :error="form.errors.driver_phone"
+                                    :error-message="
+                                        form.errors.driver_phone ||
+                                        'Mobile number must be 10 digits'
+                                    "
                                     :rules="[
                                         (val) =>
                                             /^[0-9]{10}$/.test(val) ||
@@ -181,7 +215,7 @@
                                     ]"
                                 />
                             </div>
-                            
+
                             <div>
                                 <div class="text-sm font-medium text-black">
                                     Motor registration number
@@ -192,20 +226,112 @@
                                     dense
                                     class="custom-input"
                                     v-model="form.vehicle_number"
+                                    :error="form.errors.vehicle_number"
+                                    :error-message="
+                                        form.errors.vehicle_number || ''
+                                    "
                                 />
                             </div>
-                            
 
                             <q-btn
                                 class="text-black"
                                 label="Preview"
                                 color="white"
-                                @click="backToStep1"
+                                @click="preview = true"
                             />
                             <q-btn label="Next" color="black" type="submit" />
                         </q-form>
                     </div>
                 </div>
+
+                <!-- dialogue -->
+                <q-dialog v-model="preview">
+                    <div>
+                        <hr class="my-4 border-border" />
+                        <q-card class="w-[411px] h-[941px] rounded-md">
+                            <q-card-section class="">
+                                <p
+                                    class="text-center w-[242px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
+                                >
+                                    Ruang Phurh leh Motor Chungchang
+                                </p>
+                                <p class="mb-8">Ruang phurh tanna</p>
+                                <div class="leading-[2px] pl-5">
+                                    <p class="text-[#61646B]">District</p>
+                                    <p>{{ form.source_district["label"] }}</p>
+                                </div>
+                                <div class="leading-[2px] pt-4 pl-5">
+                                    <p class="text-[#61646B]">Veng/Khua</p>
+                                    <p>{{ form.source_locality }}</p>
+                                </div>
+                                <hr class="my-4 border-border" />
+                                <p class="mb-8 mt-8 text-[#363636]">Ruang dahna tur hmun</p>
+                                <div class="leading-[2px] pt-4 pl-5">
+                                    <p class="text-[#61646B]">District</p>
+                                    <p>
+                                        {{ form.destination_district["label"] }}
+                                    </p>
+                                </div>
+                                <div class="leading-[2px] pt-4 pl-5">
+                                    <p class="text-[#61646B]">Veng/Khua</p>
+                                    <p>
+                                        {{ form.destination_locality }}
+                                    </p>
+                                </div>
+                                <hr class="my-4 border-border" />
+
+                                <div class="leading-[2px] pt-4">
+                                    <p class="text-[#61646B]">Kilometer</p>
+                                    <p>{{ form.distance }}</p>
+                                </div>
+                                <hr class="my-4 border-border" />
+                                <p class="mb-8 mt-8">Ruang phurhna motor</p>
+                                <div class="leading-[2px] pt-4">
+                                    <p class="text-[#61646B]">
+                                        Motor registration number
+                                    </p>
+                                    <p>{{ form.vehicle_number }}</p>
+                                </div>
+                                <div class="leading-[2px] pt-4">
+                                    <p class="text-[#61646B]">Motor hming</p>
+                                    <p>{{ form.vehicle_name }}</p>
+                                </div>
+                                <div class="leading-[2px] pt-4">
+                                    <p class="text-[#61646B]">
+                                        Motor neitu/khalhtu hming
+                                    </p>
+                                    <p>{{ form.driver_name }}</p>
+                                </div>
+                                <div class="leading-[2px] pt-4">
+                                    <p class="text-[#61646B]">
+                                        Motor neitu/khalhtu phone number
+                                    </p>
+                                    <p>{{ form.driver_phone }}</p>
+                                </div>
+                                <div class="leading-[2px] pt-4">
+                                    <p class="text-[#61646B]">
+                                        Motor hman man (Rs)
+                                    </p>
+                                    <p>{{ form.transport_cost }}</p>
+                                </div>
+                            </q-card-section>
+
+                            <q-card-actions align="right">
+                                <q-btn
+                                    class="text-black"
+                                    color="white"
+                                    label="Edit"
+                                    v-close-popup
+                                />
+                                <q-btn
+                                    label="Approve & Next"
+                                    color="black"
+                                    @click="submitForm"
+                                />
+                            </q-card-actions>
+                        </q-card>
+                    </div>
+                </q-dialog>
             </q-page>
         </q-page-container>
     </q-layout>
@@ -221,6 +347,7 @@ defineOptions({
     layout: WebLayout,
 });
 
+const preview = ref(false);
 const props = defineProps(["form", "districts"]);
 console.log(props.districts);
 
@@ -239,6 +366,15 @@ const form = useForm({
 // const district = props.districts;
 const district = ref(props.districts || []);
 
-const submitForm = () => form.post(route("form.storeStep2"));
+const submitForm = () => {
+    form.post(route("form.storeStep2"), {
+        onError: (errors) => {
+            console.log(errors); // Log errors to check the format
+            form.errors = errors; // Assign errors to form.errors
+        },
+    });
+};
+// const submitForm = () => form.post(route("form.storeStep2")
+// );
 const backToStep1 = () => window.history.back(); // Navigate back
 </script>

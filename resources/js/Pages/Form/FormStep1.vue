@@ -4,7 +4,6 @@
             <div
                 class="border-2 border-gray-200 bg-[#E9F4FF] flex-shrink-0 rounded-[10px] text-center"
             >
-                
                 <!-- <h5>Step 1: Mitthi Chhungchang</h5> -->
                 <img
                     id="background"
@@ -222,11 +221,87 @@
                         />
                     </div>
 
-                    <q-btn label="Preview" color="black" type="submit" />
-                    <q-btn label="Next" color="black" type="submit" />
+                    <q-btn
+                        class="text-black"
+                        label="Preview"
+                        color="white"
+                        @click="preview = true"
+                    />
+                    <q-btn label="Next" color="black" @click="submitForm" />
                 </q-form>
             </div>
         </div>
+        <q-dialog v-model="preview">
+            <div>
+                <q-card class="w-[412px] h-[891px] rounded-md">
+                    <q-card-section class="flex flex-col items-center">
+                        <p class="text-[12px]">Mitthi Chungchang</p>
+                        <img
+                            class="w-[17px] h-[30px]"
+                            src="image/ruang.png"
+                            alt=""
+                        />
+                        <h5 class="text-2xl">
+                            {{ form.name }}
+                        </h5>
+                    </q-card-section>
+
+                    <q-card-section class="q-pt-none">
+                        <hr class="my-4 border-border" />
+                        <div class="leading-[2px]">
+                            <p class="text-[#61646B]">Mitthi pianni leh thla</p>
+                            <p>{{ form.dob }}</p>
+                        </div>
+                        <div class="leading-[2px] pt-4">
+                            <p class="text-[#61646B]">Kum</p>
+                            <p>{{ ageAtDeath }} years</p>
+                        </div>
+                        <div class="leading-[2px] pt-4">
+                            <p class="text-[#61646B]">Gender</p>
+                            <p>{{ form.gender['value'] }}</p>
+                        </div>
+                        <div class="leading-[2px] pt-4">
+                            <p class="text-[#61646B]">Phone Number</p>
+                            <p>{{ form.mobile }}</p>
+                        </div>
+                        <div class="leading-[2px] pt-4">
+                            <p class="text-[#61646B]">Thih ni leh darkar</p>
+                            <p>{{ form.time_of_death }}</p>
+                        </div>
+                        <div class="leading-[2px] pt-4">
+                            <p class="text-[#61646B]">Thihna hmun</p>
+                            <p>{{ form.place_of_death }}</p>
+                        </div>
+                        <div class="leading-[2px] pt-4">
+                            <p class="text-[#61646B]">District</p>
+                            <p>{{ form.district['label'] }}</p>
+                        </div>
+                        <div class="leading-[2px] pt-4">
+                            <p class="text-[#61646B]">Veng/Khua</p>
+                            <p>{{ form.locality }}</p>
+                        </div>
+                        <div class="leading-[2px] pt-4">
+                            <p class="text-[#61646B]">Assembly Constituency</p>
+                            <p>{{ form.constituency }}</p>
+                        </div>
+                    </q-card-section>
+
+                    <q-card-actions align="right">
+                        <q-btn
+                            class="text-black"
+                            color="white"
+                            label="Edit"
+                            v-close-popup
+                        />
+                        <q-btn
+                            label="Approve & Next"
+                            color="black"
+                            @click="submitForm"
+                        />
+                    </q-card-actions>
+                </q-card>
+            </div>
+        </q-dialog>
     </q-page>
 </template>
 
@@ -240,6 +315,8 @@ defineOptions({
 });
 
 const props = defineProps(["form", "districts"]); // Prefill from server
+
+const preview = ref(false);
 
 const district = ref(props.districts || []);
 const genderOptions = [

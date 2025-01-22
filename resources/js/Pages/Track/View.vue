@@ -37,52 +37,119 @@
             </div>
         </div>
 
-        <div class="grid md:grid-cols-2 md:ml-[218px] md:mr-[218px]">
-            <div class="border-2 w-[413px] h-[641px] p-14 rounded-md">
-                <p
-                    class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
-                >
-                    Mitthi Chungchang
-                </p>
-                <div class="leading-[2px]">
-                    <p class="text-[#61646B]">Mitthi pianni leh thla</p>
-                    <p>{{ application.deceased.dob }}</p>
+        <div class="grid grid-cols-2 md:ml-[218px] md:mr-[218px] lg:ml-[500px] lg:mr-[500px]">
+            <div class="flex flex-col gap-3">
+                <div class="border-2 w-[413px] h-[641px] p-14 rounded-md">
+                    <p
+                        class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
+                    >
+                        Mitthi Chungchang
+                    </p>
+                    <div class="leading-[2px]">
+                        <p class="text-[#61646B]">Mitthi pianni leh thla</p>
+                        <p>{{ application.deceased.dob }}</p>
+                    </div>
+                    <div class="leading-[2px] pt-4">
+                        <p class="text-[#61646B]">Kum</p>
+                        <p>{{ ageAtDeath }} years</p>
+                    </div>
+                    <div class="leading-[2px] pt-4">
+                        <p class="text-[#61646B]">Gender</p>
+                        <p>{{ application.deceased.gender }}</p>
+                    </div>
+                    <div class="leading-[2px] pt-4">
+                        <p class="text-[#61646B]">Phone Number</p>
+                        <p>{{ application.deceased.mobile }}</p>
+                    </div>
+                    <div class="leading-[2px] pt-4">
+                        <p class="text-[#61646B]">Thih ni leh darkar</p>
+                        <p>{{ application.deceased.time_of_death }}</p>
+                    </div>
+                    <div class="leading-[2px] pt-4">
+                        <p class="text-[#61646B]">Thihna hmun</p>
+                        <p>{{ application.deceased.place_of_death }}</p>
+                    </div>
+                    <div class="leading-[2px] pt-4">
+                        <p class="text-[#61646B]">District</p>
+                        <p>{{ application.deceased.district }}</p>
+                    </div>
+                    <div class="leading-[2px] pt-4">
+                        <p class="text-[#61646B]">Veng/Khua</p>
+                        <p>{{ application.deceased.locality }}</p>
+                    </div>
+                    <div class="leading-[2px] pt-4">
+                        <p class="text-[#61646B]">Assembly Constituency</p>
+                        <p>{{ application.deceased.constituency }}</p>
+                    </div>
                 </div>
-                <div class="leading-[2px] pt-4">
-                    <p class="text-[#61646B]">Kum</p>
-                    <p>{{ ageAtDeath }} years</p>
-                </div>
-                <div class="leading-[2px] pt-4">
-                    <p class="text-[#61646B]">Gender</p>
-                    <p>{{ application.deceased.gender }}</p>
-                </div>
-                <div class="leading-[2px] pt-4">
-                    <p class="text-[#61646B]">Phone Number</p>
-                    <p>{{ application.deceased.mobile }}</p>
-                </div>
-                <div class="leading-[2px] pt-4">
-                    <p class="text-[#61646B]">Thih ni leh darkar</p>
-                    <p>{{ application.deceased.time_of_death }}</p>
-                </div>
-                <div class="leading-[2px] pt-4">
-                    <p class="text-[#61646B]">Thihna hmun</p>
-                    <p>{{ application.deceased.place_of_death }}</p>
-                </div>
-                <div class="leading-[2px] pt-4">
-                    <p class="text-[#61646B]">District</p>
-                    <p>{{ application.deceased.district }}</p>
-                </div>
-                <div class="leading-[2px] pt-4">
-                    <p class="text-[#61646B]">Veng/Khua</p>
-                    <p>{{ application.deceased.locality }}</p>
-                </div>
-                <div class="leading-[2px] pt-4">
-                    <p class="text-[#61646B]">Assembly Constituency</p>
-                    <p>{{ application.deceased.constituency }}</p>
-                </div>
-            </div>
 
-            <div class="grid gap-3">
+                <div class="border-2 w-[413px] h-[836px] p-14 rounded-md">
+                    <p
+                        class="text-center w-[242px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
+                    >
+                        Ruang Phurh leh Motor Chungchang
+                    </p>
+                    <p class="mb-8">Ruang phurh tanna</p>
+                    <div class="leading-[2px]">
+                        <p class="text-[#61646B]">District</p>
+                        <p>{{ application.transport.source_district }}</p>
+                    </div>
+                    <div class="leading-[2px] pt-4">
+                        <p class="text-[#61646B]">Veng/Khua</p>
+                        <p>{{ application.transport.source_locality }}</p>
+                    </div>
+                    <p class="mb-8 mt-8">Ruang dahna tur hmun</p>
+                    <div class="leading-[2px] pt-4">
+                        <p class="text-[#61646B]">District</p>
+                        <p>
+                            {{ application.transport.destination_district }}
+                        </p>
+                    </div>
+                    <div class="leading-[2px] pt-4">
+                        <p class="text-[#61646B]">Veng/Khua</p>
+                        <p>
+                            {{ application.transport.destination_locality }}
+                        </p>
+                    </div>
+
+                    <div class="leading-[2px] pt-4">
+                        <p class="text-[#61646B]">Kilometer</p>
+                        <p>{{ application.transport.distance }}</p>
+                    </div>
+
+                    <p class="mb-8 mt-8">Ruang phurhna motor</p>
+                    <div class="leading-[2px] pt-4">
+                        <p class="text-[#61646B]">Motor registration number</p>
+                        <p>{{ application.transport.vehicle_number }}</p>
+                    </div>
+                    <div class="leading-[2px] pt-4">
+                        <p class="text-[#61646B]">Motor hming</p>
+                        <p>{{ application.transport.vehicle_name }}</p>
+                    </div>
+                    <div class="leading-[2px] pt-4">
+                        <p class="text-[#61646B]">Motor neitu/khalhtu hming</p>
+                        <p>{{ application.transport.driver_name }}</p>
+                    </div>
+                    <div class="leading-[2px] pt-4">
+                        <p class="text-[#61646B]">
+                            Motor neitu/khalhtu phone number
+                        </p>
+                        <p>{{ application.transport.driver_phone }}</p>
+                    </div>
+                    <div class="leading-[2px] pt-4">
+                        <p class="text-[#61646B]">Motor hman man (Rs)</p>
+                        <p>{{ application.transport.transport_cost }}</p>
+                    </div>
+                </div>
+                <q-btn
+                    class="bg-black text-white rounded-md q-py-sm q-px-md mt-24"
+                    style="width: 192px; height: 48px"
+                    @click="goToTrackPage"
+                >
+                    Back to Track
+                </q-btn>
+            </div>
+            <div class="flex flex-col gap-3">
                 <div class="border-2 w-[413px] h-[337px] p-14 rounded-md">
                     <p
                         class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
@@ -125,69 +192,6 @@
                         <p>{{ application.applicant.ifsc_code }}</p>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="grid md:grid-cols-2 md:ml-[218px] md:mr-[218px]">
-            <div class="border-2 w-[413px] h-[836px] p-14 rounded-md">
-                <p
-                    class="text-center w-[242px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
-                >
-                    Ruang Phurh leh Motor Chungchang
-                </p>
-                <p class="mb-8">Ruang phurh tanna</p>
-                <div class="leading-[2px]">
-                    <p class="text-[#61646B]">District</p>
-                    <p>{{ application.transport.source_district }}</p>
-                </div>
-                <div class="leading-[2px] pt-4">
-                    <p class="text-[#61646B]">Veng/Khua</p>
-                    <p>{{ application.transport.source_locality }}</p>
-                </div>
-                <p class="mb-8 mt-8">Ruang dahna tur hmun</p>
-                <div class="leading-[2px] pt-4">
-                    <p class="text-[#61646B]">District</p>
-                    <p>
-                        {{ application.transport.destination_district }}
-                    </p>
-                </div>
-                <div class="leading-[2px] pt-4">
-                    <p class="text-[#61646B]">Veng/Khua</p>
-                    <p>
-                        {{ application.transport.destination_locality }}
-                    </p>
-                </div>
-
-                <div class="leading-[2px] pt-4">
-                    <p class="text-[#61646B]">Kilometer</p>
-                    <p>{{ application.transport.distance }}</p>
-                </div>
-
-                <p class="mb-8 mt-8">Ruang phurhna motor</p>
-                <div class="leading-[2px] pt-4">
-                    <p class="text-[#61646B]">Motor registration number</p>
-                    <p>{{ application.transport.vehicle_number }}</p>
-                </div>
-                <div class="leading-[2px] pt-4">
-                    <p class="text-[#61646B]">Motor hming</p>
-                    <p>{{ application.transport.vehicle_name }}</p>
-                </div>
-                <div class="leading-[2px] pt-4">
-                    <p class="text-[#61646B]">Motor neitu/khalhtu hming</p>
-                    <p>{{ application.transport.driver_name }}</p>
-                </div>
-                <div class="leading-[2px] pt-4">
-                    <p class="text-[#61646B]">
-                        Motor neitu/khalhtu phone number
-                    </p>
-                    <p>{{ application.transport.driver_phone }}</p>
-                </div>
-                <div class="leading-[2px] pt-4">
-                    <p class="text-[#61646B]">Motor hman man (Rs)</p>
-                    <p>{{ application.transport.transport_cost }}</p>
-                </div>
-            </div>
-            <div class="grid gap-3">
                 <div class="border-2 rounded-md w-[413px] h-[337px] p-14">
                     <p
                         class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
@@ -211,7 +215,6 @@
                         <p>Diltu Aadhar card/voter ID</p>
                     </div>
                 </div>
-
                 <div class="border-2 rounded-md w-[413px] h-[590px] p-8">
                     <p
                         class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
@@ -240,13 +243,6 @@
                     </div>
                 </div>
             </div>
-            <q-btn
-                class="bg-black text-white rounded-md q-py-sm q-px-md"
-                style="width: 192px; height: 48px"
-                @click="goToTrackPage"
-            >
-                Back to Track
-            </q-btn>
         </div>
     </q-page>
 </template>
@@ -331,7 +327,6 @@ const statusMessages = computed(() => {
         },
     };
 });
-
 
 // Mock `application` object for demonstration; replace with your actual data.
 const diseasedAge = {
