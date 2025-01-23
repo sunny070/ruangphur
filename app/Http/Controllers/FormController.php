@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\OTPMail;
 use App\Models\Applicant;
 use App\Models\Application;
+use App\Models\Constituency;
 use App\Models\Deceased;
 use App\Models\District;
 use App\Models\Transport;
@@ -19,11 +20,14 @@ class FormController extends Controller
     public function step1()
     {
         $deceasedData = session('deceased', []); // Retrieve session data or empty array
+        // dd(Constituency::query()->get(['id as value', 'name as label', 'district_id as district']));
         return Inertia::render('Form/FormStep1', [
 
             'form' => $deceasedData,
             'districts' => District::query()->get(['id as value', 'name as label']),
+            'constituency' => Constituency::query()->get(['id as value', 'name as label', 'district_id as district'])
         ]);
+      
     }
 
     public function storeStep1(Request $request)
@@ -38,6 +42,7 @@ class FormController extends Controller
            
             'district' => 'required',
             'locality' => 'required|string',
+            'constituency' => 'required',
             'time_of_death' => 'required|string',
             'place_of_death' => 'required|string',
 
@@ -174,7 +179,9 @@ class FormController extends Controller
     }
 
     // Create the Applicant
-    $applicant = Applicant::create($applicantData);
+    $applicant = Applicant::create(array_merge($applicantData,[
+        'district' => $applicantData['district']['value'],
+    ]));
 
     // Generate the Application Number (only once)
     $applicationNumber = $this->generateApplicationNumber();
@@ -190,12 +197,14 @@ class FormController extends Controller
     $deceased = Deceased::create(array_merge($deceasedData, [
         'application_id' => $application->id,
         'district' => $deceasedData['district']['value'],
+        'constituency' =>$deceasedData['constituency']['value']
     ]));
 
     // Create the Transport record
     Transport::create(array_merge($transportData, [
         'deceased_id' => $deceased->id,
         'source_district' => $transportData['source_district']['value'],
+        'destination_district' => $transportData['destination_district']['value']
     ]));
 
     // Clear session data

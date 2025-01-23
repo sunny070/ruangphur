@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Transport extends Model
 {
@@ -20,5 +21,20 @@ class Transport extends Model
     public function deceased()
     {
         return $this->belongsTo(Deceased::class);
+    }
+
+    // public function district(): BelongsTo
+    // {
+    //    return $this->belongsTo(District::class);
+    // }
+    public function sourceDistrict(): BelongsTo
+    {
+        return $this->belongsTo(District::class, 'source_district');
+    }
+
+    // Relationship for destination district
+    public function destinationDistrict(): BelongsTo
+    {
+        return $this->belongsTo(District::class, 'destination_district');
     }
 }

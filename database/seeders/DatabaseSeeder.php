@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AssemblyConstituency;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -21,6 +22,7 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call(RoleTableSeeder::class);
         $this->call(UserSeeder::class);
-        $this->call(DistrictSeeder::class);
+        // $this->call(DistrictSeeder::class);
+        $this->call(AssemblyConstituencySeeder::class);
     }
 }

@@ -19,4 +19,5 @@ class Deceased extends Model
     {
        return $this->belongsTo(District::class,'district');
     }
+    
 }

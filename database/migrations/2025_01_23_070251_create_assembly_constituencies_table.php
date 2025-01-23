@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('constituencies', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->unsignedBigInteger('district_id'); // Foreign key to districts table
+            $table->string('type')->default('ST'); // Default type as 'ST'
             $table->timestamps();
+
+            
         });
     }
 

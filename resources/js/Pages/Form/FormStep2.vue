@@ -50,6 +50,14 @@
                                                 : 'Source District is Required'
                                         "
                                     />
+                                    <div
+                                        v-if="
+                                            $page.props.errors.source_district
+                                        "
+                                        class="text-red"
+                                    >
+                                        {{ $page.props.errors.source_district }}
+                                    </div>
                                 </div>
                             </div>
 
@@ -71,6 +79,12 @@
                                             form.errors.source_locality || ''
                                         "
                                     />
+                                </div>
+                                <div
+                                    v-if="$page.props.errors.source_locality"
+                                    class="text-red"
+                                >
+                                    {{ $page.props.errors.source_locality }}
                                 </div>
                             </div>
 
@@ -99,6 +113,18 @@
                                             ''
                                         "
                                     />
+                                    <div
+                                        v-if="
+                                            $page.props.errors
+                                                .destination_district
+                                        "
+                                        class="text-red"
+                                    >
+                                        {{
+                                            $page.props.errors
+                                                .destination_district
+                                        }}
+                                    </div>
                                 </div>
                             </div>
 
@@ -117,6 +143,16 @@
                                         form.errors.destination_locality || ''
                                     "
                                 />
+                                <div
+                                    v-if="
+                                        $page.props.errors.destination_locality
+                                    "
+                                    class="text-red"
+                                >
+                                    {{
+                                        $page.props.errors.destination_locality
+                                    }}
+                                </div>
                             </div>
 
                             <div class="pt-5">
@@ -138,6 +174,12 @@
                                             : ''
                                     "
                                 />
+                                <div
+                                    v-if="$page.props.errors.distance"
+                                    class="text-red"
+                                >
+                                    {{ $page.props.errors.distance }}
+                                </div>
                             </div>
 
                             <div class="pt-5">
@@ -158,6 +200,12 @@
                                         form.errors.transport_cost || ''
                                     "
                                 />
+                                <div
+                                    v-if="$page.props.errors.transport_cost"
+                                    class="text-red"
+                                >
+                                    {{ $page.props.errors.transport_cost }}
+                                </div>
                             </div>
 
                             <!-- <div>
@@ -190,6 +238,12 @@
                                         form.errors.driver_name || ''
                                     "
                                 />
+                                <div
+                                    v-if="$page.props.errors.driver_name"
+                                    class="text-red"
+                                >
+                                    {{ $page.props.errors.driver_name }}
+                                </div>
                             </div>
 
                             <div>
@@ -214,6 +268,12 @@
                                             'Mobile number must be 10 digits',
                                     ]"
                                 />
+                                <div
+                                    v-if="$page.props.errors.driver_phone"
+                                    class="text-red"
+                                >
+                                    {{ $page.props.errors.driver_phone }}
+                                </div>
                             </div>
 
                             <div>
@@ -231,6 +291,12 @@
                                         form.errors.vehicle_number || ''
                                     "
                                 />
+                                <div
+                                    v-if="$page.props.errors.vehicle_number"
+                                    class="text-red"
+                                >
+                                    {{ $page.props.errors.vehicle_number }}
+                                </div>
                             </div>
 
                             <q-btn
@@ -247,8 +313,8 @@
                 <!-- dialogue -->
                 <q-dialog v-model="preview">
                     <div>
-                        <hr class="my-4 border-border" />
-                        <q-card class="w-[411px] h-[941px] rounded-md">
+                        <!-- <hr class="my-4 border-border" /> -->
+                        <q-card class="w-[411px] h-[822px] rounded-md">
                             <q-card-section class="">
                                 <p
                                     class="text-center w-[242px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
@@ -265,7 +331,9 @@
                                     <p>{{ form.source_locality }}</p>
                                 </div>
                                 <hr class="my-4 border-border" />
-                                <p class="mb-8 mt-8 text-[#363636]">Ruang dahna tur hmun</p>
+                                <p class="mb-8 mt-8 text-[#363636]">
+                                    Ruang dahna tur hmun
+                                </p>
                                 <div class="leading-[2px] pt-4 pl-5">
                                     <p class="text-[#61646B]">District</p>
                                     <p>
@@ -342,11 +410,12 @@ import { useForm } from "@inertiajs/vue3";
 import WebLayout from "@/Layouts/WebLayout.vue";
 import { ref } from "vue";
 import { computed } from "vue";
+import { useQuasar } from "quasar";
 
 defineOptions({
     layout: WebLayout,
 });
-
+const $q = useQuasar();
 const preview = ref(false);
 const props = defineProps(["form", "districts"]);
 console.log(props.districts);
@@ -371,7 +440,18 @@ const submitForm = () => {
         onError: (errors) => {
             console.log(errors); // Log errors to check the format
             form.errors = errors; // Assign errors to form.errors
+            preview.value = false;
         },
+        onSuccess: () =>{
+            preview.value = false; // Close the preview dialog if open
+            
+            // Optional: Display a success notification
+            $q.notify({
+                type: "positive",
+                message: "Form 2 submitted successfully!",
+                position: "top-right",
+            });
+        }
     });
 };
 // const submitForm = () => form.post(route("form.storeStep2")

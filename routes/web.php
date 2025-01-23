@@ -86,6 +86,7 @@ Route::get('/application/{id}/view', [ApplicationController::class, 'view'])->na
 
 // FAQs
 Route::get('/application/faqs', [ApplicationController::class, 'faqs'])->name('application.faqs');
+Route::get('/application/download', [ApplicationController::class, 'download'])->name('application.download');
 
 
 require __DIR__ . '/auth.php';

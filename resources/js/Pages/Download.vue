@@ -1,6 +1,6 @@
 <template>
     <q-page>
-        <h5>FAQs</h5>
+        <h5>Download</h5>
     </q-page>
 </template>
 

@@ -15,9 +15,23 @@ class ApplicationController extends Controller
     }
     public function view($id)
 {
+    // $application = Application::where('application_no', $id)
+    //     ->with(['applicant.district', 'deceased.district',  'transport.sourceDistrict', 
+    //     'transport.destinationDistrict'])
+    //     ->first();
+   
     $application = Application::where('application_no', $id)
-        ->with(['applicant', 'deceased', 'transport'])
-        ->first();
+    ->with([
+        'applicant.district.constituency',
+        'deceased.district.constituency',
+        'transport.sourceDistrict',
+        'transport.destinationDistrict'
+    ])
+    ->first();
+
+    // dd($application);
+
+ 
 
     if (!$application) {
         return redirect()->back()->with('error', 'Application not found.');
@@ -67,4 +81,8 @@ class ApplicationController extends Controller
     public function faqs(){
         return Inertia::render('Faqs');
     }
+    public function download(){
+        return Inertia::render('Download');
+    }
+    
 }

@@ -8,7 +8,7 @@
                     <img
                         id="background"
                         class="w-[194px] h-[72px]"
-                        src="image/Group 1321315097.png"
+                        src="/image/Group 1321315097.png"
                     />
                     <!-- <img
                             id="background"
@@ -45,11 +45,11 @@
                                 :to="{ name: 'application.faqs' }"
                             />
                         </Link>
-                        <Link :href="route('track')"
+                        <Link :href="route('application.download')"
                             ><q-tab
-                                name="alarms"
+                                name="Downloads"
                                 label="Downloads"
-                                :to="{ name: 'track' }"
+                                :to="{ name: 'application.download' }"
                             />
                         </Link>
 
@@ -101,7 +101,7 @@
                 class="py-16 text-center text-sm text-black dark:text-white/70"
             >
                 <div class="flex justify-center items-center flex-col">
-                    <img id="background" class="" src="image/Group.png" />
+                    <img id="background" class="w-[95px] h-[52px]" src="image/Group.png" />
                     <p
                         class="text-[#5B656F] text-center font-[Noto Sans] text-[12px] font-medium leading-[18px] w-[403px] h-[36px]"
                     >

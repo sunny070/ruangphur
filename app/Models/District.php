@@ -15,13 +15,27 @@ class District extends Model
       'name',
     ];
   
+    // public function constituency()
+    // {
+    //   return $this->hasMany(Constituency::class);
+    // }
+
+    // public function deceased():HasMany
+    // {
+    //   return $this->hasMany(Deceased::class);
+    // }
+
     public function constituency()
     {
-      return $this->belongsTo(Constituency::class);
+        return $this->hasMany(Constituency::class, 'district_id');
     }
 
-    public function deceased():HasMany
+    public function deceased(): HasMany
     {
-      return $this->hasMany(Deceased::class);
+        return $this->hasMany(Deceased::class, 'district');
     }
+
+    
+
+    
 }

@@ -36,8 +36,10 @@
                 </div>
             </div>
         </div>
-
-        <div class="grid grid-cols-2 md:ml-[218px] md:mr-[218px] lg:ml-[500px] lg:mr-[500px]">
+        <!-- {{ application.deceased.district?.constituency }} -->
+        <div
+            class="grid grid-cols-2 md:ml-[218px] md:mr-[218px] lg:ml-[500px] lg:mr-[500px]"
+        >
             <div class="flex flex-col gap-3">
                 <div class="border-2 w-[413px] h-[641px] p-14 rounded-md">
                     <p
@@ -57,10 +59,7 @@
                         <p class="text-[#61646B]">Gender</p>
                         <p>{{ application.deceased.gender }}</p>
                     </div>
-                    <div class="leading-[2px] pt-4">
-                        <p class="text-[#61646B]">Phone Number</p>
-                        <p>{{ application.deceased.mobile }}</p>
-                    </div>
+                    
                     <div class="leading-[2px] pt-4">
                         <p class="text-[#61646B]">Thih ni leh darkar</p>
                         <p>{{ application.deceased.time_of_death }}</p>
@@ -71,7 +70,7 @@
                     </div>
                     <div class="leading-[2px] pt-4">
                         <p class="text-[#61646B]">District</p>
-                        <p>{{ application.deceased.district }}</p>
+                        <p>{{ application.deceased.district.name }}</p>
                     </div>
                     <div class="leading-[2px] pt-4">
                         <p class="text-[#61646B]">Veng/Khua</p>
@@ -79,7 +78,11 @@
                     </div>
                     <div class="leading-[2px] pt-4">
                         <p class="text-[#61646B]">Assembly Constituency</p>
-                        <p>{{ application.deceased.constituency }}</p>
+                        <p>
+                            {{
+                                application.deceased.district.constituency?.name
+                            }}
+                        </p>
                     </div>
                 </div>
 
@@ -92,7 +95,7 @@
                     <p class="mb-8">Ruang phurh tanna</p>
                     <div class="leading-[2px]">
                         <p class="text-[#61646B]">District</p>
-                        <p>{{ application.transport.source_district }}</p>
+                        <p>{{ application.transport.source_district.name }}</p>
                     </div>
                     <div class="leading-[2px] pt-4">
                         <p class="text-[#61646B]">Veng/Khua</p>
@@ -102,7 +105,9 @@
                     <div class="leading-[2px] pt-4">
                         <p class="text-[#61646B]">District</p>
                         <p>
-                            {{ application.transport.destination_district }}
+                            {{
+                                application.transport.destination_district.name
+                            }}
                         </p>
                     </div>
                     <div class="leading-[2px] pt-4">
@@ -158,15 +163,15 @@
                     </p>
                     <div class="leading-[2px]">
                         <p class="text-[#61646B]">Hming</p>
-                        <p>{{ application.applicant.name }}</p>
+                        <p>{{ application?.applicant?.name }}</p>
                     </div>
                     <div class="leading-[2px] pt-4">
                         <p class="text-[#61646B]">District</p>
-                        <p>{{ application.applicant.district }}</p>
+                        <p>{{ application?.applicant?.district?.name }}</p>
                     </div>
                     <div class="leading-[2px] pt-4">
                         <p class="text-[#61646B]">Veng/Khua</p>
-                        <p>{{ application.applicant.locality }}</p>
+                        <p>{{ application.applicant?.locality }}</p>
                     </div>
                     <div class="leading-[2px] pt-4">
                         <p class="text-[#61646B]">Phone Number</p>
@@ -198,22 +203,56 @@
                     >
                         Document Thiltel te
                     </p>
-                    <div class="leading-[2px]">
-                        <!-- <img class="w-[412px] h-[473px]" id="background" src="/public/image/tick.png" /> -->
-                        <p>Mitthi Aadhar card/Voter ID</p>
-                    </div>
-                    <div class="leading-[2px] pt-4">
-                        <p class="text-[#61646B]">District</p>
-                        <p>Motor hman man Voucher/Receipt</p>
-                    </div>
-                    <div class="leading-[2px] pt-4">
-                        <p class="text-[#61646B]">Veng/Khua</p>
-                        <p>Death Certificate</p>
-                    </div>
-                    <div class="leading-[2px] pt-4">
-                        <p class="text-[#61646B]">Phone Number</p>
-                        <p>Diltu Aadhar card/voter ID</p>
-                    </div>
+
+                    
+
+                    
+                        
+                        <q-chip dense class="transparent text-black"
+                            icon="check_circle"
+                            clickable
+
+                            @click="
+                                handleOpenApplicant(
+                                    application.applicant?.id_proof
+                                )
+                            "
+                            >Motor hman man Voucher/Receipt</q-chip
+                        >
+                        <q-chip dense class="transparent text-black"
+                            icon="check_circle"
+                            clickable
+
+                            @click="
+                                handleOpenApplicant(
+                                    application.applicant?.receipt
+                                )
+                            "
+                            >Motor hman man Voucher/Receipt</q-chip
+                        >
+                        <q-chip dense class="transparent text-black"
+                            icon="check_circle"
+                            clickable
+                            @click="
+                                handleOpenApplicant(
+                                    application.applicant?.death_certificate
+                                )
+                            "
+                            >Death Certificate</q-chip
+                        >
+                        <q-chip dense class="transparent text-black"
+                            icon="check_circle"
+                            clickable
+                            @click="
+                                handleOpenApplicant(
+                                    application.applicant?.additional_document
+                                )
+                            "
+                            >Diltu Aadhar card/voter ID</q-chip
+                        >
+                        
+                    
+                    
                 </div>
                 <div class="border-2 rounded-md w-[413px] h-[590px] p-8">
                     <p
@@ -357,4 +396,11 @@ const ageAtDeath = computed(() =>
         diseasedAge.deceased.time_of_death
     )
 );
+
+const handleOpenApplicant = (item) => {
+    let a = document.createElement("a");
+    a.target = "_blank";
+    a.href = `/storage/${item}`;
+    a.click();
+};
 </script>

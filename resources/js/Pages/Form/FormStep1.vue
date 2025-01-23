@@ -39,6 +39,7 @@
                                     'Only alphabets are allowed for Name',
                             ]"
                         />
+                        <div v-if="$page.props.errors.name" class="text-red">{{ $page.props.errors.name }}</div>
                     </div>
                     <!-- <q-input filled v-model="form.name" label="Mitthi hming" required /> -->
 
@@ -66,6 +67,7 @@
                                 ]"
                                 :options="['Pa', 'Nu', 'Others']"
                             />
+                            <div v-if="$page.props.errors.relative" class="text-red">{{ $page.props.errors.relative }}</div>
                             <q-input
                                 outlined
                                 dense
@@ -84,6 +86,7 @@
                                         'Only alphabets are allowed for Relative Name',
                                 ]"
                             />
+                            <div v-if="$page.props.errors.relative_name" class="text-red">{{ $page.props.errors.relative_name }}</div>
                         </div>
                     </div>
 
@@ -103,6 +106,7 @@
                                 form.errors.dob ? form.errors.dob : ''
                             "
                         />
+                        <div v-if="$page.props.errors.dob" class="text-red">{{ $page.props.errors.dob }}</div>
                     </div>
                     <div>
                         <div class="text-sm font-medium text-black q-mb-xs">
@@ -121,6 +125,7 @@
                             required
                         />
                     </div>
+                    <div v-if="$page.props.errors.gender" class="text-red">{{ $page.props.errors.gender }}</div>
 
                     <div>
                         <div class="text-sm font-medium text-black q-mb-xs">
@@ -139,6 +144,8 @@
                             "
                             required
                         />
+                        <div v-if="$page.props.errors.district" class="text-red">{{ $page.props.errors.district }}</div>
+
                     </div>
 
                     <div>
@@ -156,6 +163,7 @@
                                 form.errors.locality ? form.errors.locality : ''
                             "
                         />
+                        <div v-if="$page.props.errors.locality" class="text-red">{{ $page.props.errors.locality }}</div>
                     </div>
 
                     <div>
@@ -168,7 +176,7 @@
                             label="Mitthi te awmna assembly constituency"
                             v-model="form.constituency"
                             lazy-rules
-                            :options="['A', 'B', 'Others']"
+                            :options="filteredConstituencies"
                             :rules="[
                                 (val) =>
                                     (val && val.length > 0) ||
@@ -181,6 +189,7 @@
                                     : ''
                             "
                         />
+                        <div v-if="$page.props.errors.constituency" class="text-red">{{ $page.props.errors.constituency }}</div>
                     </div>
 
                     <div>
@@ -188,7 +197,7 @@
                             Thih ni leh darkar
                         </div>
                         <q-input
-                            type="date"
+                            type="datetime-local"
                             outlined
                             placeholder="Mitthi thih ni leh darkar"
                             dense
@@ -201,6 +210,7 @@
                                     : ''
                             "
                         />
+                        <div v-if="$page.props.errors.time_of_death" class="text-red">{{ $page.props.errors.time_of_death }}</div>
                     </div>
                     <div>
                         <div class="text-sm font-medium text-black q-mb-xs">
@@ -219,6 +229,7 @@
                                     : ''
                             "
                         />
+                        <div v-if="$page.props.errors.place_of_death" class="text-red">{{ $page.props.errors.place_of_death }}</div>
                     </div>
 
                     <q-btn
@@ -233,7 +244,7 @@
         </div>
         <q-dialog v-model="preview">
             <div>
-                <q-card class="w-[412px] h-[891px] rounded-md">
+                <q-card class="w-[412px] h-[791px] rounded-t-lg">
                     <q-card-section class="flex flex-col items-center">
                         <p class="text-[12px]">Mitthi Chungchang</p>
                         <img
@@ -260,13 +271,10 @@
                             <p class="text-[#61646B]">Gender</p>
                             <p>{{ form.gender['value'] }}</p>
                         </div>
-                        <div class="leading-[2px] pt-4">
-                            <p class="text-[#61646B]">Phone Number</p>
-                            <p>{{ form.mobile }}</p>
-                        </div>
+                        
                         <div class="leading-[2px] pt-4">
                             <p class="text-[#61646B]">Thih ni leh darkar</p>
-                            <p>{{ form.time_of_death }}</p>
+                            <p>{{ formatDateTime(form.time_of_death) }}</p>
                         </div>
                         <div class="leading-[2px] pt-4">
                             <p class="text-[#61646B]">Thihna hmun</p>
@@ -282,7 +290,7 @@
                         </div>
                         <div class="leading-[2px] pt-4">
                             <p class="text-[#61646B]">Assembly Constituency</p>
-                            <p>{{ form.constituency }}</p>
+                            <p>{{ form.constituency['label'] }}</p>
                         </div>
                     </q-card-section>
 
@@ -308,17 +316,30 @@
 <script setup>
 import { useForm } from "@inertiajs/vue3";
 import WebLayout from "@/Layouts/WebLayout.vue";
-import { ref } from "vue";
+import { ref,computed } from "vue";
+import { useQuasar } from "quasar";
 
 defineOptions({
     layout: WebLayout,
 });
 
-const props = defineProps(["form", "districts"]); // Prefill from server
+const props = defineProps(["form", "districts" ,'constituency']); // Prefill from server
 
 const preview = ref(false);
 
+const $q = useQuasar();
+
 const district = ref(props.districts || []);
+const constituencies = ref(props.constituency || []);
+
+// Reactive variable for filtered constituencies
+const filteredConstituencies = computed(() => {
+    if (!form.district) return [];
+    return constituencies.value.filter(
+        (item) => item.district === form.district.value
+    );
+});
+
 const genderOptions = [
     { label: "Male", value: "male" },
     { label: "Female", value: "female" },
@@ -338,10 +359,59 @@ const form = useForm({
     place_of_death: props.form.place_of_death || "",
 });
 
+const formatDateTime = (datetime) => {
+    if (!datetime) return "";
+
+    const dateObj = new Date(datetime);
+    if (isNaN(dateObj)) return datetime; // Return as is if invalid
+
+    const options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+    };
+
+    return dateObj.toLocaleString("en-IN", options);
+};
+
+// Compute the age at death
+const ageAtDeath = computed(() => {
+  if (!form.dob || !form.time_of_death) return "N/A";
+
+  const dob = new Date(form.dob);
+  const timeOfDeath = new Date(form.time_of_death);
+
+  if (isNaN(dob.getTime()) || isNaN(timeOfDeath.getTime())) return "N/A";
+
+  let age = timeOfDeath.getFullYear() - dob.getFullYear();
+  const hasHadBirthday = timeOfDeath.getMonth() > dob.getMonth() ||
+    (timeOfDeath.getMonth() === dob.getMonth() &&
+      timeOfDeath.getDate() >= dob.getDate());
+
+  if (!hasHadBirthday) age -= 1;
+
+  return age >= 0 ? age : "N/A"; // Ensure age is valid
+});
+
 const submitForm = () => {
     form.post(route("form.storeStep1"), {
         onError: (errors) => {
             console.log(errors); // Check errors returned from backend
+            preview.value = false;
+        },
+        onSuccess: () => {
+            console.log("Form 1 submitted"); // Log success message
+            preview.value = false; // Close the preview dialog if open
+            
+            // Optional: Display a success notification
+            $q.notify({
+                type: "positive",
+                message: "Form 1 submitted successfully!",
+                position: "top-right",
+            });
         },
     });
 };

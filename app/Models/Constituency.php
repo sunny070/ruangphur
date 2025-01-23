@@ -14,8 +14,14 @@ class Constituency extends Model
       'name',
     ];
 
+    // public function district()
+    // {
+    //   return $this->hasMany(District::class);
+    // }
     public function district()
     {
-      return $this->hasMany(District::class);
+        return $this->belongsTo(District::class, 'district_id');
     }
+
+    
 }

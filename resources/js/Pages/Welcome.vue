@@ -55,6 +55,7 @@ const faqs = [
                         </Link>
                     </div>
                     <div class="flex gap-3">
+                        
                         <Link
                             :href="route('form.step1')"
                             class="bg-[#202429] w-[171px] shrink-0 h-[167px] p-4 rounded-lg shadow-md hover:bg-[#3a3f45] transition duration-300 flex items-center space-x-4"
@@ -72,7 +73,7 @@ const faqs = [
                             <img
                                 id="background"
                                 class="w-[58px] h-[81px]"
-                                src="image/Layer_1.png"
+                                src="image/Group 1321315146.png"
                             />
                         </Link>
                         <Link
@@ -92,7 +93,7 @@ const faqs = [
                             <img
                                 id="background"
                                 class="w-[58px] h-[81px]"
-                                src="image/fi_2936980.png"
+                                src="/image/Group 1321315147.png"
                             />
                         </Link>
                     </div>
