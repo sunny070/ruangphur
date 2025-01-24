@@ -399,7 +399,13 @@
                             </q-card-actions>
                         </q-card>
                     </div>
+
                 </q-dialog>
+                <!-- Map Component -->
+                <MapComponent
+                    :origin="form.source_locality"
+                    :destination="form.destination_locality"
+                />
             </q-page>
         </q-page-container>
     </q-layout>
@@ -411,6 +417,7 @@ import WebLayout from "@/Layouts/WebLayout.vue";
 import { ref } from "vue";
 import { computed } from "vue";
 import { useQuasar } from "quasar";
+import MapComponent from "@/Components/MapComponent.vue";
 
 defineOptions({
     layout: WebLayout,
