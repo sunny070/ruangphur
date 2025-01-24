@@ -1,16 +1,13 @@
 <template>
     <q-page padding>
         <div class="flex flex-col justify-center items-center gap-6">
-            <div
-                class="border-2 border-gray-200 bg-[#E9F4FF] flex-shrink-0 rounded-[10px] text-center"
-            >
-                <!-- <h5>Step 1: Mitthi Chhungchang</h5> -->
-                <img
-                    id="background"
-                    class="w-[412px] h-[193px"
-                    src="image/Vertical Stepper with numbers.png"
-                />
-            </div>
+            <!-- <h5>Step 1: Mitthi Chhungchang</h5> -->
+            <img
+                id="background"
+                class="w-[412px] h-[193px"
+                src="image/Vertical Stepper with numbers.png"
+            />
+
             <div class="border w-[412px] h-[996px] rounded-[10px] p-[23px]">
                 <q-form @submit.prevent="submitForm" class="q-gutter-md">
                     <div>
@@ -20,26 +17,28 @@
                             ></div>
                             <h5>Mitthi Chhungchang</h5>
                         </div>
-                        <div class="text-sm font-medium text-black q-mb-xs">
-                            Mitthi hming
+                        <div>
+                            <div class="text-sm font-medium text-black q-mb-xs">
+                                Mitthi hming
+                            </div>
+                            <input
+                                type="text"
+                                placeholder="Mitthi hming chhu lut rawh le"
+                                v-model="form.name"
+                                :class="[
+                                    'border p-2 w-full rounded-lg',
+                                    form.errors.name
+                                        ? 'border-red-500'
+                                        : 'border-gray-300',
+                                ]"
+                            />
+                            <div
+                                v-if="form.errors.name"
+                                class="text-red-500 text-sm"
+                            >
+                                {{ form.errors.name }}
+                            </div>
                         </div>
-                        <q-input
-                            outlined
-                            placeholder="Mitthi hming chhu lut rawh le"
-                            dense
-                            class="custom-input"
-                            v-model="form.name"
-                            :error="form.errors.name"
-                            :error-message="
-                                form.errors.name ? form.errors.name : ''
-                            "
-                            :rules="[
-                                (val) =>
-                                    /^[a-zA-Z\s]*$/.test(val) ||
-                                    'Only alphabets are allowed for Name',
-                            ]"
-                        />
-                        <div v-if="$page.props.errors.name" class="text-red">{{ $page.props.errors.name }}</div>
                     </div>
                     <!-- <q-input filled v-model="form.name" label="Mitthi hming" required /> -->
 
@@ -67,30 +66,56 @@
                                 ]"
                                 :options="['Pa', 'Nu', 'Others']"
                             />
-                            <div v-if="$page.props.errors.relative" class="text-red">{{ $page.props.errors.relative }}</div>
-                            <q-input
-                                outlined
-                                dense
+                            <div
+                                v-if="$page.props.errors.relative"
+                                class="text-red"
+                            >
+                                {{ $page.props.errors.relative }}
+                            </div>
+                            <input
+                                type="text"
                                 v-model="form.relative_name"
-                                label="A chhungte hming"
-                                required
-                                :error="form.errors.relative_name"
-                                :error-message="
+                                class="border p-2 w-full rounded-lg"
+                                :class="
                                     form.errors.relative_name
-                                        ? form.errors.relative_name
-                                        : ''
+                                        ? 'border-red-500'
+                                        : 'border-gray-300'
                                 "
-                                :rules="[
-                                    (val) =>
-                                        /^[a-zA-Z\s]*$/.test(val) ||
-                                        'Only alphabets are allowed for Relative Name',
-                                ]"
+                                placeholder="A chhungte hming"
                             />
-                            <div v-if="$page.props.errors.relative_name" class="text-red">{{ $page.props.errors.relative_name }}</div>
+                            <div
+                                v-if="form.errors.relative_name"
+                                class="text-red-500 text-sm"
+                            >
+                                {{ form.errors.relative_name }}
+                            </div>
                         </div>
                     </div>
 
                     <div>
+                        <div class="text-sm font-medium text-black q-mb-xs">
+                            A pianni leh thla
+                        </div>
+                        <input
+                            type="date"
+                            placeholder="Mitthi Pianni leh thla"
+                            v-model="form.dob"
+                            :class="[
+                                'border p-2 w-full rounded-lg',
+                                form.errors.dob
+                                    ? 'border-red-500'
+                                    : 'border-gray-300',
+                            ]"
+                        />
+                        <div
+                            v-if="form.errors.dob"
+                            class="text-red-500 text-sm"
+                        >
+                            {{ form.errors.dob }}
+                        </div>
+                    </div>
+
+                    <!-- <div>
                         <div class="text-sm font-medium text-black q-mb-xs">
                             A pianni leh thla
                         </div>
@@ -106,8 +131,10 @@
                                 form.errors.dob ? form.errors.dob : ''
                             "
                         />
-                        <div v-if="$page.props.errors.dob" class="text-red">{{ $page.props.errors.dob }}</div>
-                    </div>
+                        <div v-if="$page.props.errors.dob" class="text-red">
+                            {{ $page.props.errors.dob }}
+                        </div>
+                    </div> -->
                     <div>
                         <div class="text-sm font-medium text-black q-mb-xs">
                             Gender
@@ -125,7 +152,9 @@
                             required
                         />
                     </div>
-                    <div v-if="$page.props.errors.gender" class="text-red">{{ $page.props.errors.gender }}</div>
+                    <div v-if="$page.props.errors.gender" class="text-red">
+                        {{ $page.props.errors.gender }}
+                    </div>
 
                     <div>
                         <div class="text-sm font-medium text-black q-mb-xs">
@@ -144,11 +173,38 @@
                             "
                             required
                         />
-                        <div v-if="$page.props.errors.district" class="text-red">{{ $page.props.errors.district }}</div>
-
+                        <div
+                            v-if="$page.props.errors.district"
+                            class="text-red"
+                        >
+                            {{ $page.props.errors.district }}
+                        </div>
                     </div>
 
                     <div>
+                        <div class="text-sm font-medium text-black q-mb-xs">
+                            Veng/Khua
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Ruang Zalhna tur veng"
+                            v-model="form.locality"
+                            :class="[
+                                'border p-2 w-full rounded-lg',
+                                form.errors.locality
+                                    ? 'border-red-500'
+                                    : 'border-gray-300',
+                            ]"
+                        />
+                        <div
+                            v-if="form.errors.locality"
+                            class="text-red-500 text-sm"
+                        >
+                            {{ form.errors.locality }}
+                        </div>
+                    </div>
+
+                    <!-- <div>
                         <div class="text-sm font-medium text-black q-mb-xs">
                             Veng/Khua
                         </div>
@@ -163,8 +219,13 @@
                                 form.errors.locality ? form.errors.locality : ''
                             "
                         />
-                        <div v-if="$page.props.errors.locality" class="text-red">{{ $page.props.errors.locality }}</div>
-                    </div>
+                        <div
+                            v-if="$page.props.errors.locality"
+                            class="text-red"
+                        >
+                            {{ $page.props.errors.locality }}
+                        </div>
+                    </div> -->
 
                     <div>
                         <div class="text-sm font-medium text-black q-mb-xs">
@@ -189,10 +250,36 @@
                                     : ''
                             "
                         />
-                        <div v-if="$page.props.errors.constituency" class="text-red">{{ $page.props.errors.constituency }}</div>
+                        <div
+                            v-if="$page.props.errors.constituency"
+                            class="text-red"
+                        >
+                            {{ $page.props.errors.constituency }}
+                        </div>
                     </div>
-
                     <div>
+                        <div class="text-sm font-medium text-black q-mb-xs">
+                            Thih ni leh darkar
+                        </div>
+                        <input
+                            type="datetime-local"
+                            placeholder="Mitthi thih ni leh darkar"
+                            v-model="form.time_of_death"
+                            :class="[
+                                'border p-2 w-full rounded-lg',
+                                form.errors.time_of_death
+                                    ? 'border-red-500'
+                                    : 'border-gray-300',
+                            ]"
+                        />
+                        <div
+                            v-if="form.errors.time_of_death"
+                            class="text-red-500 text-sm"
+                        >
+                            {{ form.errors.time_of_death }}
+                        </div>
+                    </div>
+                    <!-- <div>
                         <div class="text-sm font-medium text-black q-mb-xs">
                             Thih ni leh darkar
                         </div>
@@ -210,9 +297,37 @@
                                     : ''
                             "
                         />
-                        <div v-if="$page.props.errors.time_of_death" class="text-red">{{ $page.props.errors.time_of_death }}</div>
-                    </div>
+                        <div
+                            v-if="$page.props.errors.time_of_death"
+                            class="text-red"
+                        >
+                            {{ $page.props.errors.time_of_death }}
+                        </div>
+                    </div> -->
+
                     <div>
+                        <div class="text-sm font-medium text-black q-mb-xs">
+                            Thihna hmun
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Thihna hmun"
+                            v-model="form.place_of_death"
+                            :class="[
+                                'border p-2 w-full rounded-lg',
+                                form.errors.place_of_death
+                                    ? 'border-red-500'
+                                    : 'border-gray-300',
+                            ]"
+                        />
+                        <div
+                            v-if="form.errors.place_of_death"
+                            class="text-red-500 text-sm"
+                        >
+                            {{ form.errors.place_of_death }}
+                        </div>
+                    </div>
+                    <!-- <div>
                         <div class="text-sm font-medium text-black q-mb-xs">
                             Thihna hmun
                         </div>
@@ -229,16 +344,37 @@
                                     : ''
                             "
                         />
-                        <div v-if="$page.props.errors.place_of_death" class="text-red">{{ $page.props.errors.place_of_death }}</div>
-                    </div>
-
+                        <div
+                            v-if="$page.props.errors.place_of_death"
+                            class="text-red"
+                        >
+                            {{ $page.props.errors.place_of_death }}
+                        </div>
+                    </div> -->
+                    <!-- <q-btn color="white" text-color="black" label="Standard" /> -->
+                    <!-- <Link 
+                        
+                       @click="preview = true"
+                        class="border-2 flex justify-center items-center text-black bg-white"
+                    >
+                        Preview
+                    </Link> -->
                     <q-btn
-                        class="text-black"
+                        style="padding: 10px 24px; border-radius: 12px"
+                        outline
+                        unelevated
+                        text-color="black"
                         label="Preview"
                         color="white"
                         @click="preview = true"
                     />
-                    <q-btn label="Next" color="black" @click="submitForm" />
+                    <q-btn
+                        unelevated
+                        label="Next"
+                        color="black"
+                        @click="submitForm"
+                        style="padding: 10px 95px; border-radius: 12px"
+                    />
                 </q-form>
             </div>
         </div>
@@ -257,9 +393,9 @@
                         </h5>
                     </q-card-section>
 
-                    <q-card-section class="q-pt-none">
+                    <q-card-section class="q-pt-none ml-[42px]">
                         <hr class="my-4 border-border" />
-                        <div class="leading-[2px]">
+                        <div class="leading-[2px] pt-6">
                             <p class="text-[#61646B]">Mitthi pianni leh thla</p>
                             <p>{{ form.dob }}</p>
                         </div>
@@ -269,9 +405,9 @@
                         </div>
                         <div class="leading-[2px] pt-4">
                             <p class="text-[#61646B]">Gender</p>
-                            <p>{{ form.gender['value'] }}</p>
+                            <p>{{ form.gender["value"] }}</p>
                         </div>
-                        
+
                         <div class="leading-[2px] pt-4">
                             <p class="text-[#61646B]">Thih ni leh darkar</p>
                             <p>{{ formatDateTime(form.time_of_death) }}</p>
@@ -282,7 +418,7 @@
                         </div>
                         <div class="leading-[2px] pt-4">
                             <p class="text-[#61646B]">District</p>
-                            <p>{{ form.district['label'] }}</p>
+                            <p>{{ form.district["label"] }}</p>
                         </div>
                         <div class="leading-[2px] pt-4">
                             <p class="text-[#61646B]">Veng/Khua</p>
@@ -290,18 +426,23 @@
                         </div>
                         <div class="leading-[2px] pt-4">
                             <p class="text-[#61646B]">Assembly Constituency</p>
-                            <p>{{ form.constituency['label'] }}</p>
+                            <p>{{ form.constituency["label"] }}</p>
                         </div>
                     </q-card-section>
 
-                    <q-card-actions align="right">
+                    <q-card-actions class="ml-[22px] pt-[35px]">
                         <q-btn
-                            class="text-black"
+                        style="padding: 10px 28px; border-radius: 12px"
+                        outline
+                        unelevated
+                             text-color="black"
                             color="white"
                             label="Edit"
                             v-close-popup
                         />
                         <q-btn
+                        style="padding: 10px 80px; border-radius: 12px"
+                        unelevated
                             label="Approve & Next"
                             color="black"
                             @click="submitForm"
@@ -316,14 +457,14 @@
 <script setup>
 import { useForm } from "@inertiajs/vue3";
 import WebLayout from "@/Layouts/WebLayout.vue";
-import { ref,computed } from "vue";
+import { ref, computed } from "vue";
 import { useQuasar } from "quasar";
 
 defineOptions({
     layout: WebLayout,
 });
 
-const props = defineProps(["form", "districts" ,'constituency']); // Prefill from server
+const props = defineProps(["form", "districts", "constituency"]); // Prefill from server
 
 const preview = ref(false);
 
@@ -379,21 +520,22 @@ const formatDateTime = (datetime) => {
 
 // Compute the age at death
 const ageAtDeath = computed(() => {
-  if (!form.dob || !form.time_of_death) return "N/A";
+    if (!form.dob || !form.time_of_death) return "N/A";
 
-  const dob = new Date(form.dob);
-  const timeOfDeath = new Date(form.time_of_death);
+    const dob = new Date(form.dob);
+    const timeOfDeath = new Date(form.time_of_death);
 
-  if (isNaN(dob.getTime()) || isNaN(timeOfDeath.getTime())) return "N/A";
+    if (isNaN(dob.getTime()) || isNaN(timeOfDeath.getTime())) return "N/A";
 
-  let age = timeOfDeath.getFullYear() - dob.getFullYear();
-  const hasHadBirthday = timeOfDeath.getMonth() > dob.getMonth() ||
-    (timeOfDeath.getMonth() === dob.getMonth() &&
-      timeOfDeath.getDate() >= dob.getDate());
+    let age = timeOfDeath.getFullYear() - dob.getFullYear();
+    const hasHadBirthday =
+        timeOfDeath.getMonth() > dob.getMonth() ||
+        (timeOfDeath.getMonth() === dob.getMonth() &&
+            timeOfDeath.getDate() >= dob.getDate());
 
-  if (!hasHadBirthday) age -= 1;
+    if (!hasHadBirthday) age -= 1;
 
-  return age >= 0 ? age : "N/A"; // Ensure age is valid
+    return age >= 0 ? age : "N/A"; // Ensure age is valid
 });
 
 const submitForm = () => {
@@ -405,7 +547,7 @@ const submitForm = () => {
         onSuccess: () => {
             console.log("Form 1 submitted"); // Log success message
             preview.value = false; // Close the preview dialog if open
-            
+
             // Optional: Display a success notification
             $q.notify({
                 type: "positive",
@@ -416,3 +558,9 @@ const submitForm = () => {
     });
 };
 </script>
+
+<style scoped>
+.custom-rounded-input {
+    --q-input-border-radius: 20px; /* Adjust as needed */
+}
+</style>

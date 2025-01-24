@@ -3,7 +3,9 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        {{-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBma3tkA0KlHgMhTDR5tyrANd29OtxYyJs&libraries=places&callback=initMap" async defer></script> --}}
         <script defer src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBma3tkA0KlHgMhTDR5tyrANd29OtxYyJs" type="text/javascript"></script>
+        
         
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
@@ -20,6 +22,5 @@
     <body class="font-sans antialiased">
         @inertia
     </body>
-    <script src="https://maps.googleapi.com/maps/api/js?key=AIzaSyAw2jjJyl1pEGlZOVBZ-J17h68_EVfQRH8"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAw2jjJyl1pEGlZOVBZ-J17h68_EVfQRH8&libraries=places"></script>
+    
 </html>

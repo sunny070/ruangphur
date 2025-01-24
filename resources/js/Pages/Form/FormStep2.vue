@@ -20,7 +20,10 @@
                             @submit.prevent="submitForm"
                             class="q-gutter-md"
                         >
-                            <div class="pb-3 flex items-center gap-2">
+                        <!-- <input id="from_places" v-model="origin" class="form-control"
+                                    placeholder="Enter Origin" /> -->
+                                        
+                        <div class="pb-3 flex items-center gap-2">
                                 <div
                                     class="w-[3px] h-[19px] flex-shrink-0 bg-black"
                                 ></div>
@@ -68,7 +71,7 @@
                                     >
                                         Veng/Khua
                                     </div>
-                                    <q-input
+                                    <!-- <q-input
                                         outlined
                                         placeholder="Ruang chhuah veng"
                                         dense
@@ -78,7 +81,10 @@
                                         :error-message="
                                             form.errors.source_locality || ''
                                         "
-                                    />
+                                        id="from_places"
+                                    /> -->
+                                    <input id="from_places" v-model="form.source_locality" class="form-control"
+                                    placeholder="Enter Origin" />
                                 </div>
                                 <div
                                     v-if="$page.props.errors.source_locality"
@@ -132,7 +138,7 @@
                                 <!-- <div class="text-sm font-medium text-black q-mb-xs">
                                     Veng/Khua
                                 </div> -->
-                                <q-input
+                                <!-- <q-input
                                     outlined
                                     placeholder="Ruang Zalhna tur veng"
                                     dense
@@ -142,7 +148,10 @@
                                     :error-message="
                                         form.errors.destination_locality || ''
                                     "
-                                />
+                                /> -->
+
+                                <input id="to_places" v-model="form.destination_locality" class="form-control"
+                                    placeholder="Enter Destination" />
                                 <div
                                     v-if="
                                         $page.props.errors.destination_locality
@@ -154,7 +163,11 @@
                                     }}
                                 </div>
                             </div>
-
+                            <q-btn
+                                    label="calculate"
+                                    color="black"
+                                    @click="calculateDistance"
+                                />
                             <div class="pt-5">
                                 <p
                                     class="text-sm font-medium text-black q-mb-xs"
@@ -415,9 +428,12 @@
 import { useForm } from "@inertiajs/vue3";
 import WebLayout from "@/Layouts/WebLayout.vue";
 import { ref } from "vue";
-import { computed } from "vue";
+import { computed, onMounted, watch } from "vue";
 import { useQuasar } from "quasar";
 import MapComponent from "@/Components/MapComponent.vue";
+
+
+
 
 defineOptions({
     layout: WebLayout,
@@ -426,6 +442,72 @@ const $q = useQuasar();
 const preview = ref(false);
 const props = defineProps(["form", "districts"]);
 console.log(props.districts);
+let directionsService = null;
+let directionsDisplay = null;
+onMounted(() => {
+    initMap();
+    setDestination();
+
+});
+
+function initMap() {
+    
+    directionsService = new google.maps.DirectionsService();
+    directionsDisplay = new google.maps.DirectionsRenderer({ draggable: false });
+}
+
+function setDestination() {
+    const fromPlaces = new google.maps.places.Autocomplete(document.getElementById('from_places'));
+    const toPlaces = new google.maps.places.Autocomplete(document.getElementById('to_places'));
+
+    fromPlaces.addListener('place_changed', () => {
+        const fromPlace = fromPlaces.getPlace();
+        if (fromPlace && fromPlace.formatted_address) {
+            form.source_locality = fromPlace.formatted_address;
+        }
+    });
+
+    toPlaces.addListener('place_changed', () => {
+        const toPlace = toPlaces.getPlace();
+        if (toPlace && toPlace.formatted_address) {
+            form.destination_locality = toPlace.formatted_address;
+        }
+    });
+}
+
+function calculateDistance() {
+
+    const distanceMatrixService = new google.maps.DistanceMatrixService();
+    distanceMatrixService.getDistanceMatrix({
+        origins: [form.source_locality],
+        destinations: [form.destination_locality],
+        travelMode: google.maps.TravelMode['DRIVING'],
+        unitSystem: google.maps.UnitSystem.IMPERIAL,
+        avoidHighways: false,
+        avoidTolls: false,
+    },saveResults);
+}
+
+function saveResults(response, status) {
+    if (status !== google.maps.DistanceMatrixStatus.OK) {
+        alert('Error: ' + status);
+    } else {
+        const originAddress = response.originAddresses[0];
+        const destinationAddress = response.destinationAddresses[0];
+        if (response.rows[0].elements[0].status === "ZERO_RESULTS") {
+            alert("Sorry, not available to use this travel mode between " + originAddress + " and " + destinationAddress);
+        } else {
+            const distance = response.rows[0].elements[0].distance;
+            // const duration = response.rows[0].elements[0].duration;
+            // distanceInKilo.value = (distance.value / 1000).toFixed(2);
+            // distanceInMile.value = (distance.value / 1609.34).toFixed(2);
+            form.distance = (distance.value / 1000).toFixed(2);
+            // durationText.value = duration.text;
+        }
+    }
+}
+
+
 
 const form = useForm({
     source_district: props.form.source_district || "",
