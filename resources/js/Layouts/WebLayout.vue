@@ -101,7 +101,7 @@
                 class="py-16 text-center text-sm text-black dark:text-white/70"
             >
                 <div class="flex justify-center items-center flex-col">
-                    <img id="background" class="w-[95px] h-[52px]" src="image/Group.png" />
+                    <img id="background" class="w-[95px] h-[52px]" src="/image/Group.png" />
                     <p
                         class="text-[#5B656F] text-center font-[Noto Sans] text-[12px] font-medium leading-[18px] w-[403px] h-[36px]"
                     >

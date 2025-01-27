@@ -12,7 +12,7 @@ class Transport extends Model
 
     
     protected $fillable = [
-        'deceased_id', 'source_district', 'source_locality', 
+        'deceased_id', 'source_district', 'source_locality','source_lat', 'source_lng','destination_lat','destination_lng',
         'destination_district', 'destination_locality', 'distance', 
         'vehicle_number', 'driver_name', 
         'driver_phone', 'transport_cost',

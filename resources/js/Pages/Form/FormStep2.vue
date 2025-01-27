@@ -4,18 +4,29 @@
             <q-page padding>
                 <div class="flex flex-col justify-center items-center gap-6">
                     <div
-                        class="border-2 border-gray-200 bg-[#E9F4FF] flex-shrink-0 rounded-[10px] text-center items-center">
+                        class="border-2 border-gray-200 bg-[#E9F4FF] flex-shrink-0 rounded-[10px] text-center items-center"
+                    >
                         <!-- <h5>Step 2: Ruang Phurh leh Motor Chungchang</h5> -->
-                        <img id="background" class="w-[412px] h-[193px]"
-                            src="image/Vertical Stepper with numbers2.png" />
+                        <img
+                            id="background"
+                            class="w-[412px] h-[193px]"
+                            src="image/Vertical Stepper with numbers2.png"
+                        />
                     </div>
-                    <div class="border w-[412px] h-[1100px] rounded-[10px] p-[23px]">
-                        <q-form @submit.prevent="submitForm" class="q-gutter-md">
+                    <div
+                        class="border w-[412px] h-[1100px] rounded-[10px] p-[23px]"
+                    >
+                        <q-form
+                            @submit.prevent="submitForm"
+                            class="q-gutter-md"
+                        >
                             <!-- <input id="from_places" v-model="origin" class="form-control"
                                     placeholder="Enter Origin" /> -->
 
                             <div class="pb-3 flex items-center gap-2">
-                                <div class="w-[3px] h-[19px] flex-shrink-0 bg-black"></div>
+                                <div
+                                    class="w-[3px] h-[19px] flex-shrink-0 bg-black"
+                                ></div>
                                 <h6>Ruang Phurh leh Motor Chungchang</h6>
                             </div>
                             <div class="q-mb-sm">
@@ -23,28 +34,42 @@
                                     Ruang phurh tanna hmun
                                 </p>
                                 <div>
-                                    <div class="text-sm font-medium text-black q-mb-xs">
+                                    <div
+                                        class="text-sm font-medium text-black q-mb-xs"
+                                    >
                                         District
                                     </div>
-                                    <q-select dense outlined="" v-model.number="form.source_district"
-                                        label="Select Source District" :options="district" behavior="menu"
-                                        :error="form.errors.source_district" :error-message="form.errors.source_district
-                                            ? form.errors.source_district[0]
-                                            : 'Source District is Required'
-                                            " />
-                                    <div v-if="
-                                        $page.props.errors.source_district
-                                    " class="text-red">
+                                    <q-select
+                                        dense
+                                        outlined=""
+                                        v-model.number="form.source_district"
+                                        label="Select Source District"
+                                        :options="district"
+                                        behavior="menu"
+                                        :error="form.errors.source_district"
+                                        :error-message="
+                                            form.errors.source_district
+                                                ? form.errors.source_district[0]
+                                                : 'Source District is Required'
+                                        "
+                                    />
+                                    <div
+                                        v-if="
+                                            $page.props.errors.source_district
+                                        "
+                                        class="text-red"
+                                    >
                                         {{ $page.props.errors.source_district }}
                                     </div>
                                 </div>
                             </div>
 
                             <div>
-                                <div class="text-sm font-medium text-black q-mb-xs">
+                                <div
+                                    class="text-sm font-medium text-black q-mb-xs"
+                                >
                                     Veng/Khua
                                 </div>
-
 
                                 <!-- <q-input type="text" placeholder="Ruang chhuah veng" id="from_places"
                                     v-model="form.source_locality" class="form-control" outlined :dense="dense"
@@ -53,16 +78,24 @@
                                         <q-btn round dense flat icon="map" @click="openMapDialog" />
                                     </template>
                                 </q-input> -->
-
                             </div>
-                            <input type="text" placeholder="Ruang chhuah veng" id="from_places"
-                                v-model="form.source_locality" class="form-control" :class="[
+                            <input
+                                type="text"
+                                placeholder="Ruang chhuah veng"
+                                id="from_places"
+                                v-model="form.source_locality"
+                                class="form-control"
+                                :class="[
                                     'border p-2 w-full rounded-lg',
                                     form.errors.source_locality
                                         ? 'border-red-500'
                                         : 'border-gray-300',
-                                ]" />
-                            <div v-if="form.errors.source_locality" class="text-red-500 text-sm">
+                                ]"
+                            />
+                            <div
+                                v-if="form.errors.source_locality"
+                                class="text-red-500 text-sm"
+                            >
                                 {{ form.errors.source_locality }}
                             </div>
 
@@ -104,15 +137,30 @@
                                     <!-- <div class="text-sm font-medium text-black q-mb-xs">
                                         District
                                     </div> -->
-                                    <q-select dense outlined="" v-model.number="form.destination_district
-                                        " label="Select Source District" :options="district" behavior="menu" :error="form.errors.destination_district
-                                            " :error-message="form.errors.destination_district ||
-                                                ''
-                                                " />
-                                    <div v-if="
-                                        $page.props.errors
-                                            .destination_district
-                                    " class="text-red">
+                                    <q-select
+                                        dense
+                                        outlined=""
+                                        v-model.number="
+                                            form.destination_district
+                                        "
+                                        label="Select Source District"
+                                        :options="district"
+                                        behavior="menu"
+                                        :error="
+                                            form.errors.destination_district
+                                        "
+                                        :error-message="
+                                            form.errors.destination_district ||
+                                            ''
+                                        "
+                                    />
+                                    <div
+                                        v-if="
+                                            $page.props.errors
+                                                .destination_district
+                                        "
+                                        class="text-red"
+                                    >
                                         {{
                                             $page.props.errors
                                                 .destination_district
@@ -136,14 +184,23 @@
                                         form.errors.destination_locality || ''
                                     "
                                 /> -->
-                                <input type="text" placeholder="Ruang Zalhna tur veng" id="to_places"
-                                    v-model="form.destination_locality" class="form-control" :class="[
+                                <input
+                                    type="text"
+                                    placeholder="Ruang Zalhna tur veng"
+                                    id="to_places"
+                                    v-model="form.destination_locality"
+                                    class="form-control"
+                                    :class="[
                                         'border p-2 w-full rounded-lg',
                                         form.errors.destination_locality
                                             ? 'border-red-500'
                                             : 'border-gray-300',
-                                    ]" />
-                                <div v-if="form.errors.destination_locality" class="text-red-500 text-sm">
+                                    ]"
+                                />
+                                <div
+                                    v-if="form.errors.destination_locality"
+                                    class="text-red-500 text-sm"
+                                >
                                     {{ form.errors.destination_locality }}
                                 </div>
 
@@ -157,21 +214,35 @@
                                     }}
                                 </div> -->
                             </div>
-                            <q-btn label="calculate" color="black" @click="calculateDistance" />
-
+                            <q-btn
+                                label="calculate"
+                                color="black"
+                                @click="calculateDistance"
+                            />
 
                             <div class="pt-5">
-                                <div class="text-sm font-medium text-black q-mb-xs">
+                                <div
+                                    class="text-sm font-medium text-black q-mb-xs"
+                                >
                                     Kilometer zat
                                 </div>
-                                <input type="text" placeholder="Distance (in km)" id="from_places"
-                                    v-model="form.distance" class="form-control" :class="[
+                                <input
+                                    type="text"
+                                    placeholder="Distance (in km)"
+                                    id="from_places"
+                                    v-model="form.distance"
+                                    class="form-control"
+                                    :class="[
                                         'border p-2 w-full rounded-lg',
                                         form.errors.distance
                                             ? 'border-red-500'
                                             : 'border-gray-300',
-                                    ]" />
-                                <div v-if="form.errors.distance" class="text-red-500 text-sm">
+                                    ]"
+                                />
+                                <div
+                                    v-if="form.errors.distance"
+                                    class="text-red-500 text-sm"
+                                >
                                     {{ form.errors.distance }}
                                 </div>
                             </div>
@@ -191,23 +262,32 @@
                                 </div>
                             </div> -->
 
-
-
                             <div class="pt-5">
                                 <p class="text-[#61646B]">
                                     Ruang phurhna motor
                                 </p>
-                                <div class="text-sm font-medium text-black q-mb-xs">
+                                <div
+                                    class="text-sm font-medium text-black q-mb-xs"
+                                >
                                     Motor hman man (Rs)
                                 </div>
-                                <input type="text" placeholder="Motor hman man" id="transport_cost"
-                                    v-model="form.transport_cost" class="form-control" :class="[
+                                <input
+                                    type="text"
+                                    placeholder="Motor hman man"
+                                    id="transport_cost"
+                                    v-model="form.transport_cost"
+                                    class="form-control"
+                                    :class="[
                                         'border p-2 w-full rounded-lg',
                                         form.errors.transport_cost
                                             ? 'border-red-500'
                                             : 'border-gray-300',
-                                    ]" />
-                                <div v-if="form.errors.transport_cost" class="text-red-500 text-sm">
+                                    ]"
+                                />
+                                <div
+                                    v-if="form.errors.transport_cost"
+                                    class="text-red-500 text-sm"
+                                >
                                     {{ form.errors.transport_cost }}
                                 </div>
                             </div>
@@ -227,20 +307,29 @@
                                 </div>
                             </div> -->
 
-
                             <div>
-
-                                <div class="text-sm font-medium text-black q-mb-xs">
+                                <div
+                                    class="text-sm font-medium text-black q-mb-xs"
+                                >
                                     Motor neitu/khalhtu hming
                                 </div>
-                                <input type="text" placeholder="Motor neitu/khalhtu hming pum" id="from_places"
-                                    v-model="form.driver_name" class="form-control" :class="[
+                                <input
+                                    type="text"
+                                    placeholder="Motor neitu/khalhtu hming pum"
+                                    id="from_places"
+                                    v-model="form.driver_name"
+                                    class="form-control"
+                                    :class="[
                                         'border p-2 w-full rounded-lg',
                                         form.errors.driver_name
                                             ? 'border-red-500'
                                             : 'border-gray-300',
-                                    ]" />
-                                <div v-if="form.errors.driver_name" class="text-red-500 text-sm">
+                                    ]"
+                                />
+                                <div
+                                    v-if="form.errors.driver_name"
+                                    class="text-red-500 text-sm"
+                                >
                                     {{ form.errors.driver_name }}
                                 </div>
                             </div>
@@ -259,18 +348,28 @@
                             </div> -->
 
                             <div>
-
-                                <div class="text-sm font-medium text-black q-mb-xs">
+                                <div
+                                    class="text-sm font-medium text-black q-mb-xs"
+                                >
                                     Motor neitu/khalhtu phone number
                                 </div>
-                                <input type="text" placeholder="Motor neitu/khalhtu biak pawh theihna tur"
-                                    id="from_places" v-model="form.driver_phone" class="form-control" :class="[
+                                <input
+                                    type="text"
+                                    placeholder="Motor neitu/khalhtu biak pawh theihna tur"
+                                    id="from_places"
+                                    v-model="form.driver_phone"
+                                    class="form-control"
+                                    :class="[
                                         'border p-2 w-full rounded-lg',
                                         form.errors.driver_phone
                                             ? 'border-red-500'
                                             : 'border-gray-300',
-                                    ]" />
-                                <div v-if="form.errors.driver_phone" class="text-red-500 text-sm">
+                                    ]"
+                                />
+                                <div
+                                    v-if="form.errors.driver_phone"
+                                    class="text-red-500 text-sm"
+                                >
                                     {{ form.errors.driver_phone }}
                                 </div>
                             </div>
@@ -294,18 +393,28 @@
                             </div> -->
 
                             <div>
-
-                                <div class="text-sm font-medium text-black q-mb-xs">
+                                <div
+                                    class="text-sm font-medium text-black q-mb-xs"
+                                >
                                     Motor registration number
                                 </div>
-                                <input type="text" placeholder="Ruang phurhna motor registration number"
-                                    id="from_places" v-model="form.vehicle_number" class="form-control" :class="[
+                                <input
+                                    type="text"
+                                    placeholder="Ruang phurhna motor registration number"
+                                    id="from_places"
+                                    v-model="form.vehicle_number"
+                                    class="form-control"
+                                    :class="[
                                         'border p-2 w-full rounded-lg',
                                         form.errors.vehicle_number
                                             ? 'border-red-500'
                                             : 'border-gray-300',
-                                    ]" />
-                                <div v-if="form.errors.vehicle_number" class="text-red-500 text-sm">
+                                    ]"
+                                />
+                                <div
+                                    v-if="form.errors.vehicle_number"
+                                    class="text-red-500 text-sm"
+                                >
                                     {{ form.errors.vehicle_number }}
                                 </div>
                             </div>
@@ -322,11 +431,22 @@
                                     {{ $page.props.errors.vehicle_number }}
                                 </div>
                             </div> -->
-                            <q-btn style="padding: 10px 24px; border-radius: 12px" outline unelevated text-color="black"
-                                label="Preview" color="white" @click="preview = true" />
-                            <q-btn unelevated label="Next" color="black" @click="submitForm"
-                                style="padding: 10px 95px; border-radius: 12px" />
-
+                            <q-btn
+                                style="padding: 10px 24px; border-radius: 12px"
+                                outline
+                                unelevated
+                                text-color="black"
+                                label="Preview"
+                                color="white"
+                                @click="preview = true"
+                            />
+                            <q-btn
+                                unelevated
+                                label="Next"
+                                color="black"
+                                @click="submitForm"
+                                style="padding: 10px 95px; border-radius: 12px"
+                            />
 
                             <!-- <q-btn class="text-black" label="Preview" color="white" @click="preview = true" />
                             <q-btn label="Next" color="black" type="submit" /> -->
@@ -335,15 +455,17 @@
                 </div>
 
                 <!-- Map Dialog -->
-                <q-dialog v-model="mapDialogVisible" style="width: 80%; height: 80%;" @before-show="initializeMap">
-                    <div id="map" style="height: 100%; width: 100%;"></div>
+                <q-dialog
+                    v-model="mapDialogVisible"
+                    style="width: 80%; height: 80%"
+                    @before-show="initializeMap"
+                >
+                    <div id="map" style="height: 100%; width: 100%"></div>
                 </q-dialog>
 
                 <!-- <q-dialog v-model="map" style="width: 80%; height: 80%;" @before-show="onMapOpen">
                     <div id="map" style="height: 100%; width: 100%;"></div>
                 </q-dialog> -->
-
-
 
                 <!-- dialogue -->
                 <q-dialog v-model="preview">
@@ -352,7 +474,8 @@
                         <q-card class="w-[411px] h-[822px] rounded-md">
                             <q-card-section class="">
                                 <p
-                                    class="text-center w-[242px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8">
+                                    class="text-center w-[242px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
+                                >
                                     Ruang Phurh leh Motor Chungchang
                                 </p>
                                 <p class="mb-8">Ruang phurh tanna</p>
@@ -419,16 +542,27 @@
                             </q-card-section>
 
                             <q-card-actions align="right">
-                                <q-btn class="text-black" color="white" label="Edit" v-close-popup />
-                                <q-btn label="Approve & Next" color="black" @click="submitForm" />
+                                <q-btn
+                                    class="text-black"
+                                    color="white"
+                                    label="Edit"
+                                    v-close-popup
+                                />
+                                <q-btn
+                                    label="Approve & Next"
+                                    color="black"
+                                    @click="submitForm"
+                                />
                             </q-card-actions>
                         </q-card>
                     </div>
-
                 </q-dialog>
                 <!-- Map Component -->
-                <MapComponent class="pt-[100px]" :origin="form.source_locality"
-                    :destination="form.destination_locality" />
+                <MapComponent
+                    class="pt-[100px]"
+                    :origin="form.source_locality"
+                    :destination="form.destination_locality"
+                />
             </q-page>
         </q-page-container>
     </q-layout>
@@ -441,9 +575,6 @@ import { ref, nextTick } from "vue";
 import { computed, onMounted, watch } from "vue";
 import { useQuasar } from "quasar";
 import MapComponent from "@/Components/MapComponent.vue";
-
-
-
 
 defineOptions({
     layout: WebLayout,
@@ -464,13 +595,13 @@ function openMapDialog() {
 onMounted(() => {
     initMap();
     setDestination();
-
 });
 
 function initMap() {
-
     directionsService = new google.maps.DirectionsService();
-    directionsDisplay = new google.maps.DirectionsRenderer({ draggable: false });
+    directionsDisplay = new google.maps.DirectionsRenderer({
+        draggable: false,
+    });
 }
 // Function to initialize the Google Map
 async function initializeMap() {
@@ -497,26 +628,38 @@ async function initializeMap() {
         marker.addListener("dragend", (event) => {
             const lat = event.latLng.lat();
             const lng = event.latLng.lng();
-            form.value.source_locality = `${lat}, ${lng}`;
+            form.source_locality = `${lat}, ${lng}`;
+            form.source_lat = lat;
+            form.source_lng = lng;
         });
     }
 }
 
 function setDestination() {
-    const fromPlaces = new google.maps.places.Autocomplete(document.getElementById('from_places'));
-    const toPlaces = new google.maps.places.Autocomplete(document.getElementById('to_places'));
+    const fromPlaces = new google.maps.places.Autocomplete(
+        document.getElementById("from_places")
+    );
+    const toPlaces = new google.maps.places.Autocomplete(
+        document.getElementById("to_places")
+    );
 
-    fromPlaces.addListener('place_changed', () => {
+    fromPlaces.addListener("place_changed", () => {
         const fromPlace = fromPlaces.getPlace();
-        if (fromPlace && fromPlace.formatted_address) {
+        if (fromPlace && fromPlace.geometry) {
+            const location = fromPlace.geometry.location;
             form.source_locality = fromPlace.formatted_address;
+            form.source_lat = location.lat();
+            form.source_lng = location.lng();
         }
     });
 
-    toPlaces.addListener('place_changed', () => {
+    toPlaces.addListener("place_changed", () => {
         const toPlace = toPlaces.getPlace();
-        if (toPlace && toPlace.formatted_address) {
+        if (toPlace && toPlace.geometry) {
+            const location = toPlace.geometry.location;
             form.destination_locality = toPlace.formatted_address;
+            form.destination_lat = location.lat();
+            form.destination_lng = location.lng();
         }
     });
 }
@@ -524,8 +667,8 @@ function calculateDistance() {
     const distanceMatrixService = new google.maps.DistanceMatrixService();
 
     // Replace with actual values from your form
-    const origin = form.source_locality; 
-    const destination = form.destination_locality; 
+    const origin = form.source_locality;
+    const destination = form.destination_locality;
 
     if (!origin || !destination) {
         alert("Please provide both source and destination localities.");
@@ -542,46 +685,43 @@ function calculateDistance() {
             avoidTolls: false,
         },
         (response, status) => {
-            if (status === "OK" && response.rows[0].elements[0].status === "OK") {
+            if (
+                status === "OK" &&
+                response.rows[0].elements[0].status === "OK"
+            ) {
                 const distance = response.rows[0].elements[0].distance;
-           
-            form.distance = (distance.value / 1000).toFixed(2);
-                const distanceInMeters = response.rows[0].elements[0].distance.value;
+
+                form.distance = (distance.value / 1000).toFixed(2);
+                const distanceInMeters =
+                    response.rows[0].elements[0].distance.value;
                 const distanceInKilometers = distanceInMeters / 1000; // Convert to kilometers
                 const transportCost = distanceInKilometers * 40; // ₹40 per km
 
                 // Update the form
                 form.transport_cost = transportCost.toFixed(2); // Set the cost rounded to 2 decimal places
-               
             } else {
                 console.error("Distance calculation failed:", status);
-                alert("Unable to calculate distance. Please check the addresses.");
+                alert(
+                    "Unable to calculate distance. Please check the addresses."
+                );
             }
-        },
+        }
     );
 }
 
-// function calculateDistance() {
-
-//     const distanceMatrixService = new google.maps.DistanceMatrixService();
-//     distanceMatrixService.getDistanceMatrix({
-//         origins: [form.source_locality],
-//         destinations: [form.destination_locality],
-//         travelMode: google.maps.TravelMode['DRIVING'],
-//         unitSystem: google.maps.UnitSystem.IMPERIAL,
-//         avoidHighways: false,
-//         avoidTolls: false,
-//     }, saveResults);
-// }
-
 function saveResults(response, status) {
     if (status !== google.maps.DistanceMatrixStatus.OK) {
-        alert('Error: ' + status);
+        alert("Error: " + status);
     } else {
         const originAddress = response.originAddresses[0];
         const destinationAddress = response.destinationAddresses[0];
         if (response.rows[0].elements[0].status === "ZERO_RESULTS") {
-            alert("Sorry, not available to use this travel mode between " + originAddress + " and " + destinationAddress);
+            alert(
+                "Sorry, not available to use this travel mode between " +
+                    originAddress +
+                    " and " +
+                    destinationAddress
+            );
         } else {
             const distance = response.rows[0].elements[0].distance;
             // const duration = response.rows[0].elements[0].duration;
@@ -593,13 +733,15 @@ function saveResults(response, status) {
     }
 }
 
-
-
 const form = useForm({
     source_district: props.form.source_district || "",
     source_locality: props.form.source_locality || "",
+    source_lat: props.form.source_lat || "",
+    source_lng: props.form.source_lng || "",
     destination_district: props.form.destination_district || "",
     destination_locality: props.form.destination_locality || "",
+    destination_lat: props.form.destination_lat || "",
+    destination_lng: props.form.destination_lng || "",
     distance: props.form.distance || "",
     vehicle_number: props.form.vehicle_number || "",
     vehicle_name: props.form.vehicle_name || "",
@@ -626,7 +768,7 @@ const submitForm = () => {
                 message: "Form 2 submitted successfully!",
                 position: "top-right",
             });
-        }
+        },
     });
 };
 // const submitForm = () => form.post(route("form.storeStep2")

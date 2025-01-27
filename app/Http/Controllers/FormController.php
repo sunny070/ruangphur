@@ -74,17 +74,17 @@ class FormController extends Controller
             'source_locality' => 'required|max:255',
             'destination_district' => 'required|max:255',
             'destination_locality' => 'required|max:255',
-            'distance' => 'required|numeric|min:1', // Distance must be a positive number
+            'distance' => 'required|numeric|min:1',
             'vehicle_number' => 'required|string|max:20',
-            // 'vehicle_name' => 'required|string|max:255',
+            
             'driver_name' => 'required|string|max:255',
-            'driver_phone' => 'required|string|regex:/^[0-9]{10}$/', // Only 10-digit phone numbers
-            'transport_cost' => 'required|numeric|min:0', // Transport cost must be a positive number
-            // 'source_lat' => 'required|numeric',
-            // 'source_lng' => 'required|numeric',
-            // 'destination_lat' => 'required|numeric',
-            // 'destination_lng' => 'required|numeric',
-            // 'distance' => 'required|numeric',
+            'driver_phone' => 'required|string|regex:/^[0-9]{10}$/', 
+            'transport_cost' => 'required|numeric|min:0',
+            'source_lat' => 'required|numeric',
+            'source_lng' => 'required|numeric',
+            'destination_lat' => 'required|numeric',
+            'destination_lng' => 'required|numeric',
+            'distance' => 'required|numeric',
         ]);
 
         session()->put('transport', $validated);

@@ -90,3 +90,8 @@ Route::get('/application/download', [ApplicationController::class, 'download'])-
 
 
 require __DIR__ . '/auth.php';
+
+Route::get('pages/maps', function () {
+    return Inertia::render('Maps', [
+    ]);
+})->name('maps');

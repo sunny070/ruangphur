@@ -3,8 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        {{-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBma3tkA0KlHgMhTDR5tyrANd29OtxYyJs&libraries=places&callback=initMap" async defer></script> --}}
-        <script defer src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBma3tkA0KlHgMhTDR5tyrANd29OtxYyJs" type="text/javascript"></script>
+        
         
         
 
