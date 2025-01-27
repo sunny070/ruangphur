@@ -80,10 +80,10 @@ class FormController extends Controller
             'driver_name' => 'required|string|max:255',
             'driver_phone' => 'required|string|regex:/^[0-9]{10}$/', // Only 10-digit phone numbers
             'transport_cost' => 'required|numeric|min:0', // Transport cost must be a positive number
-            'source_lat' => 'required|numeric',
-            'source_lng' => 'required|numeric',
-            'destination_lat' => 'required|numeric',
-            'destination_lng' => 'required|numeric',
+            // 'source_lat' => 'required|numeric',
+            // 'source_lng' => 'required|numeric',
+            // 'destination_lat' => 'required|numeric',
+            // 'destination_lng' => 'required|numeric',
             // 'distance' => 'required|numeric',
         ]);
 

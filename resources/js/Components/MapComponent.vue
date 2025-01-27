@@ -40,15 +40,21 @@
                         <div class="row" style="padding-top: 20px;">
                             <div class="container">
                                 <p id="in_mile">Distance in Mile: <span class="badge badge-pill badge-secondary">{{
-                                        distanceInMile }}</span></p>
+                                    distanceInMile }}</span></p>
                                 <p id="in_kilo">Distance in KM: <span class="badge badge-pill badge-secondary">{{
-                                        distanceInKilo }}</span></p>
+                                    distanceInKilo }}</span></p>
                                 <p id="duration_text">Duration: <span class="badge badge-pill badge-success">{{
-                                        durationText }}</span></p>
+                                    durationText }}</span></p>
+                            </div>
+                            <div>
+                                <button @click="toggleInputMode" class="btn btn-secondary">
+                                    Toggle to {{ isSettingOrigin ? 'Set Destination' : 'Set Origin' }}
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-md-8">
                     <noscript>
                         <div class="alert alert-info">
@@ -75,6 +81,7 @@ const durationText = ref('');
 let map = null;
 let directionsService = null;
 let directionsDisplay = null;
+let isSettingOrigin = true;
 
 onMounted(() => {
     initMap();
@@ -87,10 +94,38 @@ function initMap() {
         zoom: 16,
         center: myLatLng,
     });
+
     directionsService = new google.maps.DirectionsService();
     directionsDisplay = new google.maps.DirectionsRenderer({ draggable: false });
+
+    // Add a click event listener to the map
+    map.addListener('click', (event) => {
+        const latLng = event.latLng;
+        reverseGeocode(latLng, (address) => {
+            if (isSettingOrigin) {
+                origin.value = address;
+            } else {
+                destination.value = address;
+            }
+        });
+    });
 }
 
+function reverseGeocode(latLng, callback) {
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ location: latLng }, (results, status) => {
+        if (status === "OK" && results[0]) {
+            callback(results[0].formatted_address);
+        } else {
+            alert("Geocode was not successful for the following reason: " + status);
+        }
+    });
+}
+
+function toggleInputMode() {
+    isSettingOrigin = !isSettingOrigin;
+    alert(isSettingOrigin ? "Click to set Origin" : "Click to set Destination");
+}
 function setDestination() {
     const fromPlaces = new google.maps.places.Autocomplete(document.getElementById('from_places'));
     const toPlaces = new google.maps.places.Autocomplete(document.getElementById('to_places'));
