@@ -1,217 +1,169 @@
 <script setup>
-import {Head} from "@inertiajs/vue3";
-import { ref, onMounted, watch } from 'vue'
-import { GoogleMap, Marker, Polyline } from 'vue3-google-map'
-
+import { ref, onMounted, nextTick } from "vue";
+import { GoogleMap, Marker } from "vue3-google-map";
+import { QPage, QInput, QDialog, QCard, QCardSection, QCardActions, QBtn } from "quasar";
 import WebLayout from "@/Layouts/WebLayout.vue";
 
 defineOptions({
-    layout:WebLayout
-})
-const mapRef = ref(null)
-const directionsService = ref(null)
-const directionsRenderer = ref(null)
-const googleApi = ref(null)
+    layout: WebLayout,
+});
 
-const center = ref({ lat:23.164543, lng: 92.9375739 }) // Default: India
-const origin = ref('')
-const destination = ref('')
-const originCoords = ref(null)
-const destinationCoords = ref(null)
-const distance = ref(null)
-const duration = ref(null)
-const routePath = ref([])
-const showMarkers = ref(true) // Control marker visibility
+// Map-related refs
+const center = ref({ lat: 23.164543, lng: 92.9375739 }); // Default map center
+const sourceCoords = ref(null);
+const destinationCoords = ref(null);
 
-const cost = ref(null);
+// Form fields
+const source_locality = ref("");
+const source_lat = ref("");
+const source_lng = ref("");
+const destination_locality = ref("");
+const destination_lat = ref("");
+const destination_lng = ref("");
+const ratePerKm = 40; // Rate per kilometer
+const distanceKm = ref(0); // Distance in kilometers
+const transportCost = ref(0); // Transport cost in currency
 
-// Load Google API when map is ready
+// Dialog visibility
+const showSourceDialog = ref(false);
+const showDestinationDialog = ref(false);
+
+// Google Maps Geocoder
+const geocoder = ref(null);
+
+
 onMounted(() => {
-    watch(
-        () => mapRef.value?.ready,
-        (ready) => {
-            if (ready) {
-                googleApi.value = mapRef.value.api
-                directionsService.value = new googleApi.value.DirectionsService()
-                directionsRenderer.value = new googleApi.value.DirectionsRenderer({ map: mapRef.value.map })
-                initAutocomplete()
-                resetSelection()
+    nextTick(() => {
+        if (typeof google !== "undefined") {
+            geocoder.value = new google.maps.Geocoder();
+        } else {
+            console.error("Google Maps API not loaded.");
+        }
+    });
+});
+// Fetch address from coordinates
+const getAddressFromCoords = (coords, type) => {
+    if (geocoder.value) {
+        geocoder.value.geocode({ location: coords }, (results, status) => {
+            if (status === "OK" && results[0]) {
+                const address = results[0].formatted_address;
+                if (type === "source") {
+                    source_locality.value = address;
+                    source_lat.value = coords.lat;
+                    source_lng.value = coords.lng;
+                } else if (type === "destination") {
+                    destination_locality.value = address;
+                    destination_lat.value = coords.lat;
+                    destination_lng.value = coords.lng;
+                }
+                calculateDistanceAndCost(); // Recalculate distance and cost when coordinates are updated
+            } else {
+                console.error("Geocoder failed due to:", status);
             }
-        }
-    )
-})
-
-// Initialize Google Maps Places Autocomplete
-const initAutocomplete = () => {
-    if (!googleApi.value) return
-
-    const autocompleteOrigin = new googleApi.value.places.Autocomplete(document.getElementById('origin'))
-    const autocompleteDestination = new googleApi.value.places.Autocomplete(document.getElementById('destination'))
-
-    autocompleteOrigin.addListener('place_changed', () => {
-        const place = autocompleteOrigin.getPlace()
-        if (place.geometry) {
-            origin.value = place.formatted_address
-            originCoords.value = place.geometry.location.toJSON()
-        }
-    })
-
-    autocompleteDestination.addListener('place_changed', () => {
-        const place = autocompleteDestination.getPlace()
-        if (place.geometry) {
-            destination.value = place.formatted_address
-            destinationCoords.value = place.geometry.location.toJSON()
-        }
-    })
-}
-
-// Handle Map Click to Set Source & Destination
-const handleMapClick = (event) => {
+        });
+    }
+};
+// Handle map click to set location
+const handleMapClick = (event, type) => {
     const clickedLocation = {
         lat: event.latLng.lat(),
-        lng: event.latLng.lng()
+        lng: event.latLng.lng(),
+    };
+
+    if (type === "source") {
+        sourceCoords.value = clickedLocation;
+        getAddressFromCoords(clickedLocation, "source");
+    } else if (type === "destination") {
+        destinationCoords.value = clickedLocation;
+        getAddressFromCoords(clickedLocation, "destination");
     }
+};
 
-    const geocoder = new googleApi.value.Geocoder()
 
-    if (!originCoords.value) {
-        originCoords.value = clickedLocation
-        geocoder.geocode({ location: clickedLocation }, (results, status) => {
-            if (status === 'OK' && results[0]) {
-                origin.value = results[0].formatted_address
-            } else {
-                origin.value = `Lat: ${clickedLocation.lat}, Lng: ${clickedLocation.lng}`
-            }
-        })
-    } else if (!destinationCoords.value) {
-        destinationCoords.value = clickedLocation
-        geocoder.geocode({ location: clickedLocation }, (results, status) => {
-            if (status === 'OK' && results[0]) {
-                destination.value = results[0].formatted_address
-            } else {
-                destination.value = `Lat: ${clickedLocation.lat}, Lng: ${clickedLocation.lng}`
-            }
-        })
+
+// Calculate distance using Haversine formula
+const calculateDistanceAndCost = () => {
+    if (sourceCoords.value && destinationCoords.value) {
+        const R = 6371; // Earth's radius in kilometers
+        const dLat = degToRad(destinationCoords.value.lat - sourceCoords.value.lat);
+        const dLng = degToRad(destinationCoords.value.lng - sourceCoords.value.lng);
+        const lat1 = degToRad(sourceCoords.value.lat);
+        const lat2 = degToRad(destinationCoords.value.lat);
+
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        distanceKm.value = (R * c).toFixed(2); // Calculate distance in km and round to 2 decimal places
+
+        transportCost.value = (distanceKm.value * ratePerKm).toFixed(2); // Calculate transport cost
     }
+};
 
-}
-
-// Calculate Distance & Show Route on Map
-const calculateRoute = () => {
-    if (!mapRef.value?.ready || !originCoords.value || !destinationCoords.value) {
-        alert('Please select valid origin and destination.')
-        return
-    }
-
-    directionsRenderer.value.setMap(mapRef.value.map) // Attach map when calculating route
-
-    directionsService.value.route(
-        {
-            origin: originCoords.value,
-            destination: destinationCoords.value,
-            travelMode: googleApi.value.TravelMode.DRIVING,
-        },
-        (response, status) => {
-            if (status === 'OK') {
-                directionsRenderer.value.setDirections(response)
-
-                // Extract route path
-                routePath.value = response.routes[0].overview_path.map(point => ({
-                    lat: point.lat(),
-                    lng: point.lng()
-                }))
-
-                // Hide markers when route is shown
-                showMarkers.value = false
-
-                // Calculate Distance & Duration
-                const service = new googleApi.value.DistanceMatrixService()
-                service.getDistanceMatrix(
-                    {
-                        origins: [originCoords.value],
-                        destinations: [destinationCoords.value],
-                        travelMode: googleApi.value.TravelMode.DRIVING,
-                    },
-                    (result, status) => {
-                        if (status === 'OK' && result.rows[0].elements[0].status === 'OK') {
-                            distance.value = result.rows[0].elements[0].distance.text
-                            duration.value = result.rows[0].elements[0].duration.text
-                            const numericDistance = parseFloat(distance.value.replace(/[^0-9.]/g, '')); // Extract numbers
-                            cost.value = numericDistance * 40;
-                        } else {
-                            alert('Error fetching distance.')
-                        }
-                    }
-                )
-            } else {
-                alert('Error fetching route.')
-            }
-        }
-    )
-}
-
-// Reset Selection
-const resetSelection = () => {
-    origin.value = ''
-    destination.value = ''
-    originCoords.value = null
-    destinationCoords.value = null
-    routePath.value = []
-    distance.value = null
-    duration.value = null
-    // directionsRenderer.value.setDirections(null)
-    directionsRenderer.value.setMap(null) // Remove the route from the map
-    showMarkers.value = true // Show markers again
-}
+// Convert degrees to radians
+const degToRad = (deg) => {
+    return deg * (Math.PI / 180);
+};
 </script>
 <template>
     <q-page padding>
-        <Head title="Maps"/>
         <div class="container">
-            <GoogleMap
-                ref="mapRef"
-                api-key="AIzaSyAGK-HMMYfseKAJY356jUJLnz2ILC5bN_g"
-                class="map"
-                :center="center"
-                :zoom="7"
-                @click="handleMapClick"
-            >
+            <h2>Transportation Map</h2>
 
-                <Marker v-if="showMarkers && originCoords" :options="{ position: originCoords, label: 'S' }" />
-                <Marker v-if="showMarkers && destinationCoords" :options="{ position: destinationCoords, label: 'D' }" />
-                <!--            <Polyline v-if="routePath.length" :options="{ path: routePath, strokeColor: '#FF0000', strokeWeight: 4 }" />-->
-            </GoogleMap>
-
+            <!-- Input Fields -->
             <div class="input-container">
-                <input id="origin"  v-model="origin" placeholder="Enter origin or click on map" />
-                <input id="destination" v-model="destination" placeholder="Enter destination or click on map" />
-
+                <QInput v-model="source_locality" label="Source Locality" readonly @click="showSourceDialog = true" />
+                <QInput v-model="destination_locality" label="Destination Locality" readonly
+                    @click="showDestinationDialog = true" />
             </div>
 
-            <div class="input-container">
-
-                <button @click="calculateRoute">Show Route</button>
-                <button @click="resetSelection">Reset</button>
+            <!-- Distance and Cost Display -->
+            <div class="info-container">
+                <p>Distance: {{ distanceKm }} km</p>
+                <p>Transport Cost: ₹{{ transportCost }}</p>
             </div>
 
-            <div class="info" v-if="distance && duration">
-                <p><strong>Source:</strong> {{ origin }}</p>
-                <p><strong>Destination:</strong> {{ destination }}</p>
+            <!-- Dialog for Source Selection -->
+            <QDialog v-model="showSourceDialog">
+                <QCard style="width: 90vw; max-width: 600px;">
+                    <QCardSection>
+                        <h6>Select Source Location</h6>
+                        <GoogleMap :center="center" :zoom="7" class="dialog-map"
+                            @click="(event) => handleMapClick(event, 'source')">
+                            <Marker v-if="sourceCoords" :position="sourceCoords"
+                                :options="{ position: sourceCoords, label: 'S' }"
+                                @dragend="(event) => handleMapClick(event, 'source')" />
+                        </GoogleMap>
+                    </QCardSection>
+                    <QCardActions align="right">
+                        <QBtn flat label="Cancel" @click="showSourceDialog = false" />
+                        <QBtn flat label="Confirm" color="primary" @click="showSourceDialog = false" />
+                    </QCardActions>
+                </QCard>
+            </QDialog>
 
-                <p><strong>Source Cords:</strong> {{ originCoords }}</p>
-                <p><strong>Destination Cords:</strong> {{ destinationCoords }}</p>
-
-                <p><strong>Distance:</strong> {{ distance }}</p>
-                <p><strong>Duration:</strong> {{ duration }}</p>
-                <p><strong>Rate:</strong> Rs 40 per Km</p>
-                <p><strong>Cost:</strong>Rs {{ cost }}</p>
-
-
-            </div>
+            <!-- Dialog for Destination Selection -->
+            <QDialog v-model="showDestinationDialog">
+                <QCard style="width: 90vw; max-width: 600px;">
+                    <QCardSection>
+                        <h6>Select Destination Location</h6>
+                        <GoogleMap :center="center" :zoom="7" class="dialog-map"
+                            @click="(event) => handleMapClick(event, 'destination')">
+                            <Marker v-if="destinationCoords" :position="destinationCoords"
+                                :options="{ position: destinationCoords, label: 'D' }"
+                                @dragend="(event) => handleMapClick(event, 'destination')" />
+                        </GoogleMap>
+                    </QCardSection>
+                    <QCardActions align="right">
+                        <QBtn flat label="Cancel" @click="showDestinationDialog = false" />
+                        <QBtn flat label="Confirm" color="primary" @click="showDestinationDialog = false" />
+                    </QCardActions>
+                </QCard>
+            </QDialog>
         </div>
     </q-page>
-
 </template>
+
 <style scoped>
 .container {
     display: flex;
@@ -219,39 +171,22 @@ const resetSelection = () => {
     align-items: center;
 }
 
-.map {
-    width: 80%;
-    height: 500px;
-    padding-top: 5px;
-    margin-top: 5px;
-}
-
 .input-container {
     margin-top: 20px;
     display: flex;
-    gap: 10px;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 600px;
 }
 
-input {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 250px;
+.info-container {
+    margin-top: 20px;
+    text-align: center;
 }
 
-button {
-    padding: 8px 12px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-.info {
-    margin-top: 10px;
+.dialog-map {
+    width: 100%;
+    height: 400px;
 }
 </style>

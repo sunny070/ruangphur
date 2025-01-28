@@ -14,19 +14,19 @@
                     <div class="grid md:grid-cols-3">
                         <div>
                             <h5 class="text-bold">
-                                {{ application.transport.distance }}
+                                {{ application?.transport?.distance }}
                             </h5>
                             <p class="text-[#5B656F]">Kilometre</p>
                         </div>
                         <div>
                             <h5 class="text-bold">
-                                {{ application.transport.vehicle_number }}
+                                {{ application?.transport?.vehicle_number }}
                             </h5>
                             <p class="text-[#5B656F]">Motor Reg.</p>
                         </div>
                         <div>
                             <h5 class="text-bold">
-                                {{ application.transport.transport_cost }}
+                                {{ application?.transport?.transport_cost }}
                             </h5>
                             <p class="text-[#5B656F]">Amount (Rs)</p>
                         </div>
@@ -83,11 +83,11 @@
                 </div>
                 <div class="leading-[2px] pt-4">
                     <p class="text-[#61646B]">Veng/Khua</p>
-                    <p>{{ application.deceased.locality }}</p>
+                    <p>{{ application?.deceased?.locality }}</p>
                 </div>
                 <div class="leading-[2px] pt-4">
                     <p class="text-[#61646B]">Assembly Constituency</p>
-                    <p>{{ application.deceased.constituency }}</p>
+                    <p>{{ application?.deceased?.constituency }}</p>
                 </div>
             </div>
 
@@ -99,19 +99,19 @@
                     </p>
                     <div class="leading-[2px]">
                         <p class="text-[#61646B]">Hming</p>
-                        <p>{{ application.applicant.name }}</p>
+                        <p>{{ application?.applicant?.name }}</p>
                     </div>
                     <div class="leading-[2px] pt-4">
                         <p class="text-[#61646B]">District</p>
-                        <p>{{ application.applicant.district }}</p>
+                        <p>{{ application?.applicant?.district }}</p>
                     </div>
                     <div class="leading-[2px] pt-4">
                         <p class="text-[#61646B]">Veng/Khua</p>
-                        <p>{{ application.applicant.locality }}</p>
+                        <p>{{ application?.applicant?.locality }}</p>
                     </div>
                     <div class="leading-[2px] pt-4">
                         <p class="text-[#61646B]">Phone Number</p>
-                        <p>{{ application.applicant.mobile }}</p>
+                        <p>{{ application?.applicant?.mobile }}</p>
                     </div>
                 </div>
 
@@ -122,15 +122,15 @@
                     </p>
                     <div class="leading-[2px]">
                         <p class="text-[#61646B]">Bank hming</p>
-                        <p>{{ application.applicant.bank_name }}</p>
+                        <p>{{ application?.applicant?.bank_name }}</p>
                     </div>
                     <div class="leading-[2px] pt-4">
                         <p class="text-[#61646B]">Bank account number</p>
-                        <p>{{ application.applicant.account_no }}</p>
+                        <p>{{ application?.applicant?.account_no }}</p>
                     </div>
                     <div class="leading-[2px] pt-4">
                         <p class="text-[#61646B]">IFSC Code</p>
-                        <p>{{ application.applicant.ifsc_code }}</p>
+                        <p>{{ application?.applicant?.ifsc_code }}</p>
                     </div>
                 </div>
             </div>
@@ -146,47 +146,47 @@
                 <p class="mb-8">Ruang phurh tanna</p>
                 <div class="leading-[2px]">
                     <p class="text-[#61646B]">District</p>
-                    <p>{{ application.transport.source_district }}</p>
+                    <p>{{ application?.transport?.source_district }}</p>
                 </div>
                 <div class="leading-[2px] pt-4">
                     <p class="text-[#61646B]">Veng/Khua</p>
-                    <p>{{ application.transport.source_locality }}</p>
+                    <p>{{ application?.transport?.source_locality }}</p>
                 </div>
                 <p class="mb-8 mt-8">Ruang dahna tur hmun</p>
                 <div class="leading-[2px] pt-4">
                     <p class="text-[#61646B]">District</p>
-                    <p>{{ application.transport.destination_district }}</p>
+                    <p>{{ application?.transport?.destination_district }}</p>
                 </div>
                 <div class="leading-[2px] pt-4">
                     <p class="text-[#61646B]">Veng/Khua</p>
-                    <p>{{ application.transport.destination_locality }}</p>
+                    <p>{{ application?.transport?.destination_locality }}</p>
                 </div>
 
                 <div class="leading-[2px] pt-4">
                     <p class="text-[#61646B]">Kilometer</p>
-                    <p>{{ application.transport.distance }}</p>
+                    <p>{{ application?.transport?.distance }}</p>
                 </div>
 
                 <p class="mb-8 mt-8">Ruang phurhna motor</p>
                 <div class="leading-[2px] pt-4">
                     <p class="text-[#61646B]">Motor registration number</p>
-                    <p>{{ application.transport.vehicle_number }}</p>
+                    <p>{{ application?.transport?.vehicle_number }}</p>
                 </div>
                 <div class="leading-[2px] pt-4">
                     <p class="text-[#61646B]">Motor hming</p>
-                    <p>{{ application.transport.vehicle_name }}</p>
+                    <p>{{ application?.transport?.vehicle_name }}</p>
                 </div>
                 <div class="leading-[2px] pt-4">
                     <p class="text-[#61646B]">Motor neitu/khalhtu hming</p>
-                    <p>{{ application.transport.driver_name }}</p>
+                    <p>{{ application?.transport?.driver_name }}</p>
                 </div>
                 <div class="leading-[2px] pt-4">
                     <p class="text-[#61646B]">Phone Number</p>
-                    <p>{{ application.transport.driver_phone }}</p>
+                    <p>{{ application?.transport?.driver_phone }}</p>
                 </div>
                 <div class="leading-[2px] pt-4">
                     <p class="text-[#61646B]">Motor saung (Rs.)</p>
-                    <p>{{ application.transport.transport_cost }}</p>
+                    <p>{{ application?.transport?.transport_cost }}</p>
                 </div>
             </div>
         </div>

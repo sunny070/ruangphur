@@ -456,9 +456,9 @@
 
 <script setup>
 import { useForm } from "@inertiajs/vue3";
-import WebLayout from "@/Layouts/WebLayout.vue";
 import { ref, computed } from "vue";
 import { useQuasar } from "quasar";
+import WebLayout from "@/Layouts/WebLayout.vue";
 
 defineOptions({
     layout: WebLayout,
