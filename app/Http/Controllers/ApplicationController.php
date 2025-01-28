@@ -23,7 +23,8 @@ class ApplicationController extends Controller
     $application = Application::where('application_no', $id)
     ->with([
         'applicant.district.constituency',
-        'deceased.district.constituency',
+        'deceased.district',
+        'deceased.constituency',
         'transport.sourceDistrict',
         'transport.destinationDistrict'
     ])

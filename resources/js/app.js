@@ -1,11 +1,11 @@
 import '../css/app.css';
 import './bootstrap';
-
+import { Dialog, Loading, Notify, LocalStorage } from "quasar";
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createApp, h } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
-import { Quasar ,Notify} from "quasar";
+import { Quasar } from "quasar";
 import "@quasar/extras/roboto-font/roboto-font.css"
 import "@quasar/extras/material-icons/material-icons.css"
 import "quasar/src/css/index.sass"
@@ -23,7 +23,7 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(Quasar, {
-                plugins: {Notify},
+                plugins: {Notify, Dialog, Loading, LocalStorage},
             })
             .use(ZiggyVue)
             .mount(el);

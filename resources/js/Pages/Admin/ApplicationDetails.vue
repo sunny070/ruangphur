@@ -148,7 +148,7 @@
                     <p class="text-[#61646B]">District</p>
                     <p>{{ application?.transport?.source_district }}</p>
                 </div>
-                <div class="leading-[2px] pt-4">
+                <div class="pt-4">
                     <p class="text-[#61646B]">Veng/Khua</p>
                     <p>{{ application?.transport?.source_locality }}</p>
                 </div>
@@ -157,7 +157,7 @@
                     <p class="text-[#61646B]">District</p>
                     <p>{{ application?.transport?.destination_district }}</p>
                 </div>
-                <div class="leading-[2px] pt-4">
+                <div class="pt-4">
                     <p class="text-[#61646B]">Veng/Khua</p>
                     <p>{{ application?.transport?.destination_locality }}</p>
                 </div>

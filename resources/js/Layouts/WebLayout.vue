@@ -2,7 +2,7 @@
     <q-layout>
         <q-container>
             <header
-                class="bg-[#E9F4FF] grid grid-cols-2 items-center gap-2 py-10 lg:grid-cols-3"
+                class="bg-[#E9F4FF] grid grid-cols-2  gap-2 py-10 lg:grid-cols-3"
             >
                 <div class="md:pl-[223px] md:pr-[55px]">
                     <img
@@ -16,7 +16,7 @@
                             src="image/Group 1321315089.png"
                         /> -->
                 </div>
-                <nav class="flex flex-1 justify-end">
+                <nav class="">
                     <q-tabs class="text-black">
                         <Link :href="route('home')"
                             ><q-tab

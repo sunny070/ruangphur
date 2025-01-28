@@ -80,7 +80,7 @@
                         <p class="text-[#61646B]">Assembly Constituency</p>
                         <p>
                             {{
-                                application.deceased.district.constituency?.name
+                                application.deceased.constituency?.name
                             }}
                         </p>
                     </div>
@@ -110,7 +110,7 @@
                             }}
                         </p>
                     </div>
-                    <div class="leading-[2px] pt-4">
+                    <div class="pt-4">
                         <p class="text-[#61646B]">Veng/Khua</p>
                         <p>
                             {{ application.transport.destination_locality }}

@@ -71,20 +71,20 @@ class FormController extends Controller
         // dd($request);
         $validated = $request->validate([
             'source_district' => 'required|max:255',
-            'source_locality' => 'required|max:255',
+            'source_locality' => 'max:255',
             'destination_district' => 'required|max:255',
-            'destination_locality' => 'required|max:255',
-            'distance' => 'required|numeric|min:1',
+            'destination_locality' => 'max:255',
+            'distance' => 'required',
             'vehicle_number' => 'required|string|max:20',
             
             'driver_name' => 'required|string|max:255',
             'driver_phone' => 'required|string|regex:/^[0-9]{10}$/', 
-            'transport_cost' => 'required|numeric|min:0',
-            'source_lat' => 'required|numeric',
-            'source_lng' => 'required|numeric',
-            'destination_lat' => 'required|numeric',
-            'destination_lng' => 'required|numeric',
-            'distance' => 'required|numeric',
+            'transport_cost' => 'required',
+            'source_lat' => 'numeric',
+            'source_lng' => 'numeric',
+            'destination_lat' => 'numeric',
+            'destination_lng' => 'numeric',
+            
         ]);
 
         session()->put('transport', $validated);

@@ -89,7 +89,7 @@
                                 <div class="text-sm font-medium text-black q-mb-xs">
                                     Kilometer zat
                                 </div>
-                                <q-input v-model="distance" id="distance" type="number" outlined
+                                <q-input v-model="form.distance" id="distance" type="number" outlined
                                     label="Distance (in km)" readonly />
                                 <!-- <input type="text" placeholder="Distance (in km)" id="from_places"
                                     v-model="form.distance" class="form-control" :class="[
@@ -111,7 +111,7 @@
                                 <div class="text-sm font-medium text-black q-mb-xs">
                                     Motor hman man (Rs)
                                 </div>
-                                <q-input v-model="transport_cost" id="transport-cost" type="number" outlined
+                                <q-input v-model="form.transport_cost" id="transport-cost" type="number" outlined
                                     label="Transport Cost (₹)" readonly />
                                 <!-- <input type="text" placeholder="Motor hman man" id="transport_cost"
                                     v-model="form.transport_cost" class="form-control" :class="[
@@ -424,10 +424,16 @@ const getAddressFromCoords = (coords, type) => {
                     source_locality.value = address;
                     source_lat.value = coords.lat;
                     source_lng.value = coords.lng;
+                    form.source_locality = address;
+                    form.source_lat = coords.lat;
+                    form.source_lng = coords.lng;
                 } else if (type === "destination") {
                     destination_locality.value = address;
                     destination_lat.value = coords.lat;
                     destination_lng.value = coords.lng;
+                    form.destination_locality = address;
+                    form.destination_lat = coords.lat;
+                    form.destination_lng = coords.lng;
                 }
                 calculateDistanceAndCost(); // Recalculate distance and cost when coordinates are updated
             } else {
@@ -468,9 +474,9 @@ const calculateDistanceAndCost = () => {
             Math.sin(dLat / 2) * Math.sin(dLat / 2) +
             Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        distance.value = (R * c).toFixed(2); // Calculate distance in km and round to 2 decimal places
+        form.distance = (R * c).toFixed(2); // Calculate distance in km and round to 2 decimal places
 
-        transport_cost.value = (distance.value * ratePerKm).toFixed(2); // Calculate transport cost
+        form.transport_cost = (form.distance * ratePerKm).toFixed(2); // Calculate transport cost
     }
 };
 

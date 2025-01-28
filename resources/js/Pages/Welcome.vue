@@ -34,7 +34,7 @@ const faqs = [
 
                 <!-- <WebLayout> -->
                     <section
-                    class="bg-[#E9F4FF] grid grid-cols-1 gap-14 md:grid-cols-2 mb-6 text-foreground p-4 md:pl-[223px] md:pt-[119px] md:pr-[55px] md:pb-[65px]"
+                    class="bg-[#E9F4FF] grid grid-cols-1 gap-14 md:grid-cols-2 mb-6 text-foreground p-4 md:pl-[223px] md:pt-[119px] md:pb-[65px]"
                 >
                     <!-- Button for Dilna -->
                     <div class="mb-6 w-[420px] h-[120px]">
