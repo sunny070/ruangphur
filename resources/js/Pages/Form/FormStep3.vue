@@ -33,6 +33,28 @@
                                 <div
                                     class="text-sm font-medium text-black q-mb-xs"
                                 >
+                                    Diltu hming
+                                </div>
+                                <div class="">
+                                    <q-input
+                                        outlined
+                                        placeholder="Diltu hming pum"
+                                        v-model="form.name"
+                                        :error="form.errors.name"
+                                        :error-message="form.errors.name || ''"
+                                    />
+                                </div>
+                                <div
+                                    v-if="$page.props.errors.name"
+                                    class="text-red"
+                                >
+                                    {{ $page.props.errors.name }}
+                                </div>
+                            </div>
+                            <div>
+                                <div
+                                    class="text-sm font-medium text-black q-mb-xs"
+                                >
                                     District
                                 </div>
                                 <q-select
@@ -45,38 +67,35 @@
                                     :error-message="form.errors.district || ''"
                                 />
                                 <div
-                                        v-if="
-                                            $page.props.errors.district
-                                        "
-                                        class="text-red"
-                                    >
-                                        {{ $page.props.errors.district }}
-                                    </div>
+                                    v-if="$page.props.errors.district"
+                                    class="text-red"
+                                >
+                                    {{ $page.props.errors.district }}
+                                </div>
                             </div>
 
                             <!-- Individual Text Inputs -->
+
                             <div>
                                 <div
                                     class="text-sm font-medium text-black q-mb-xs"
                                 >
-                                    Diltu hming
+                                    Veng/Khua
                                 </div>
                                 <q-input
                                     outlined
                                     dense
-                                    placeholder="Diltu hming pum"
-                                    v-model="form.name"
-                                    :error="form.errors.name"
-                                    :error-message="form.errors.name || ''"
+                                    placeholder="Veng/Khua"
+                                    v-model="form.locality"
+                                    :error="form.errors.locality"
+                                    :error-message="form.errors.locality || ''"
                                 />
                                 <div
-                                        v-if="
-                                            $page.props.errors.name
-                                        "
-                                        class="text-red"
-                                    >
-                                        {{ $page.props.errors.name }}
-                                    </div>
+                                    v-if="$page.props.errors.locality"
+                                    class="text-red"
+                                >
+                                    {{ $page.props.errors.locality }}
+                                </div>
                             </div>
                             <div>
                                 <div
@@ -92,38 +111,12 @@
                                     :error="form.errors.mobile"
                                     :error-message="form.errors.mobile || ''"
                                 />
-                                 <div
-                                        v-if="
-                                            $page.props.errors.mobile
-                                        "
-                                        class="text-red"
-                                    >
-                                        {{ $page.props.errors.mobile }}
-                                    </div>
-
-                            </div>
-                            <div>
                                 <div
-                                    class="text-sm font-medium text-black q-mb-xs"
+                                    v-if="$page.props.errors.mobile"
+                                    class="text-red"
                                 >
-                                    Veng/Khua
+                                    {{ $page.props.errors.mobile }}
                                 </div>
-                                <q-input
-                                    outlined
-                                    dense
-                                    placeholder="Veng/Khua"
-                                    v-model="form.locality"
-                                    :error="form.errors.locality"
-                                    :error-message="form.errors.locality || ''"
-                                />
-                                 <div
-                                        v-if="
-                                            $page.props.errors.locality
-                                        "
-                                        class="text-red"
-                                    >
-                                        {{ $page.props.errors.locality }}
-                                    </div>
                             </div>
                             <div>
                                 <div
@@ -139,14 +132,12 @@
                                     :error="form.errors.bank_name"
                                     :error-message="form.errors.bank_name || ''"
                                 />
-                                 <div
-                                        v-if="
-                                            $page.props.errors.bank_name
-                                        "
-                                        class="text-red"
-                                    >
-                                        {{ $page.props.errors.bank_name }}
-                                    </div>
+                                <div
+                                    v-if="$page.props.errors.bank_name"
+                                    class="text-red"
+                                >
+                                    {{ $page.props.errors.bank_name }}
+                                </div>
                             </div>
                             <div>
                                 <div
@@ -164,14 +155,12 @@
                                         form.errors.account_no || ''
                                     "
                                 />
-                                 <div
-                                        v-if="
-                                            $page.props.errors.account_no
-                                        "
-                                        class="text-red"
-                                    >
-                                        {{ $page.props.errors.account_no }}
-                                    </div>
+                                <div
+                                    v-if="$page.props.errors.account_no"
+                                    class="text-red"
+                                >
+                                    {{ $page.props.errors.account_no }}
+                                </div>
                             </div>
                             <div>
                                 <div
@@ -187,14 +176,12 @@
                                     :error="form.errors.ifsc_code"
                                     :error-message="form.errors.ifsc_code || ''"
                                 />
-                                 <div
-                                        v-if="
-                                            $page.props.errors.ifsc_code
-                                        "
-                                        class="text-red"
-                                    >
-                                        {{ $page.props.errors.ifsc_code }}
-                                    </div>
+                                <div
+                                    v-if="$page.props.errors.ifsc_code"
+                                    class="text-red"
+                                >
+                                    {{ $page.props.errors.ifsc_code }}
+                                </div>
                             </div>
 
                             <!-- File Upload Fields -->
@@ -203,6 +190,37 @@
                             >
                                 Document Upload
                             </div>
+                            <!-- <div>
+                                <div
+                                    class="text-sm font-medium text-black q-mb-xs"
+                                >
+                                    Mitthi/Chhungte Aadhaar Neitu
+                                </div>
+                                <q-select
+                                    outlined
+                                    dense
+                                    v-model="form.relation"
+                                    label="Select Relation"
+                                    :options="[
+                                        'Mitthi',
+                                        'Mitthi Nu',
+                                        'Mitthi Pa',
+                                    ]"
+                                    :error="form.errors.relation"
+                                    :error-message="form.errors.relation || ''"
+                                />
+                                <p class="text-[#61646B]">
+                                    Mitthi hi naupang emaw aadhaar la neilo a
+                                    nih chuan a chhungte aadhaar upload tur a
+                                    ni.
+                                </p>
+                                <div
+                                    v-if="$page.props.errors.relation"
+                                    class="text-red"
+                                >
+                                    {{ $page.props.errors.relation }}
+                                </div>
+                            </div> -->
                             <div>
                                 <div
                                     class="text-sm font-medium text-black q-mb-xs"
@@ -220,14 +238,12 @@
                                         <q-icon name="attach_file" />
                                     </template>
                                 </q-file>
-                                 <div
-                                        v-if="
-                                            $page.props.errors.id_proof
-                                        "
-                                        class="text-red"
-                                    >
-                                        {{ $page.props.errors.id_proof }}
-                                    </div>
+                                <div
+                                    v-if="$page.props.errors.id_proof"
+                                    class="text-red"
+                                >
+                                    {{ $page.props.errors.id_proof }}
+                                </div>
                             </div>
                             <div>
                                 <div
@@ -246,14 +262,12 @@
                                         <q-icon name="attach_file" />
                                     </template>
                                 </q-file>
-                                 <div
-                                        v-if="
-                                            $page.props.errors.receipt
-                                        "
-                                        class="text-red"
-                                    >
-                                        {{ $page.props.errors.receipt }}
-                                    </div>
+                                <div
+                                    v-if="$page.props.errors.receipt"
+                                    class="text-red"
+                                >
+                                    {{ $page.props.errors.receipt }}
+                                </div>
                             </div>
                             <div>
                                 <div
@@ -272,14 +286,19 @@
                                         <q-icon name="attach_file" />
                                     </template>
                                 </q-file>
-                                 <div
-                                        v-if="
-                                            $page.props.errors.death_certificate
-                                        "
-                                        class="text-red"
-                                    >
-                                        {{ $page.props.errors.death_certificate }}
-                                    </div>
+                                <p class="text-[#61646B]">
+                                    Death certificate emaw Declaration of death
+                                    by the Medical Officer lehkha/ Damdawiina
+                                    thi lo tan Annexure 1.3 II in a sawi ang in
+                                    Authorised Officials hriatpuina lehkha thil
+                                    tel tur a ni.
+                                </p>
+                                <div
+                                    v-if="$page.props.errors.death_certificate"
+                                    class="text-red"
+                                >
+                                    {{ $page.props.errors.death_certificate }}
+                                </div>
                             </div>
                             <div>
                                 <div
@@ -298,27 +317,25 @@
                                         <q-icon name="attach_file" />
                                     </template>
                                 </q-file>
-                                 <div
-                                        v-if="
-                                            $page.props.errors.additional_document
-                                        "
-                                        class="text-red"
-                                    >
-                                        {{ $page.props.errors.additional_document }}
-                                    </div>
+                                <div
+                                    v-if="
+                                        $page.props.errors.additional_document
+                                    "
+                                    class="text-red"
+                                >
+                                    {{ $page.props.errors.additional_document }}
+                                </div>
                             </div>
 
                             <!-- Buttons -->
                             <q-btn
-                                class="text-black"
-                                label="Preview"
-                                color="white"
-                                @click="preview = true"
+                                style="padding: 10px 24px; border-radius: 12px" outline unelevated text-color="black"
+                                label="Preview" color="white" @click="preview = true"
                             />
                             <q-btn
                                 label="Submit & Send OTP"
-                                color="black"
-                                 @click="submitForm"
+                                unelevated color="black" @click="submitForm"
+                                style="padding: 10px 50px; border-radius: 12px" 
                             />
                         </q-form>
                     </div>
@@ -376,26 +393,31 @@
                                 </div>
 
                                 <p
-                        class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
-                    >
-                        Document Thiltel te
-                    </p>
-                    <div class="leading-[2px]">
-                        <!-- <img class="w-[412px] h-[473px]" id="background" src="/public/image/tick.png" /> -->
-                        <p>{{ form.id_proof?.name || "No file uploaded"  }}</p>
-                    </div>
-                    <div class="leading-[2px] pt-4">
-                        <!-- <p class="text-[#61646B]">District</p> -->
-                        <p>{{ form.receipt?.name }}</p>
-                    </div>
-                    <div class="leading-[2px] pt-4">
-                        <!-- <p class="text-[#61646B]">Veng/Khua</p> -->
-                        <p>{{ form.death_certificate?.name }}</p>
-                    </div>
-                    <div class="leading-[2px] pt-4">
-                        <!-- <p class="text-[#61646B]">Phone Number</p> -->
-                        <p>{{ form.additional_document?.name }}</p>
-                    </div>
+                                    class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
+                                >
+                                    Document Thiltel te
+                                </p>
+                                <div class="leading-[2px]">
+                                    <!-- <img class="w-[412px] h-[473px]" id="background" src="/public/image/tick.png" /> -->
+                                    <p>
+                                        {{
+                                            form.id_proof?.name ||
+                                            "No file uploaded"
+                                        }}
+                                    </p>
+                                </div>
+                                <div class="leading-[2px] pt-4">
+                                    <!-- <p class="text-[#61646B]">District</p> -->
+                                    <p>{{ form.receipt?.name }}</p>
+                                </div>
+                                <div class="leading-[2px] pt-4">
+                                    <!-- <p class="text-[#61646B]">Veng/Khua</p> -->
+                                    <p>{{ form.death_certificate?.name }}</p>
+                                </div>
+                                <div class="leading-[2px] pt-4">
+                                    <!-- <p class="text-[#61646B]">Phone Number</p> -->
+                                    <p>{{ form.additional_document?.name }}</p>
+                                </div>
                             </q-card-section>
 
                             <q-card-actions align="right">
@@ -406,9 +428,9 @@
                                     v-close-popup
                                 />
                                 <q-btn
-                                label="Submit & Send OTP"
-                                color="black"
-                                 @click="submitForm"
+                                    label="Submit & Send OTP"
+                                    color="black"
+                                    @click="submitForm"
                                 />
                             </q-card-actions>
                         </q-card>
@@ -507,19 +529,31 @@ const submitForm = () => {
             form.errors = errors; // Assign errors to form.errors
             preview.value = false;
         },
-        onSuccess: () =>{
+        onSuccess: () => {
             preview.value = false; // Close the preview dialog if open
-            
+
             // Optional: Display a success notification
             $q.notify({
                 type: "positive",
                 message: "OTP Sent successfully!",
                 position: "top-right",
             });
-        }
+        },
     });
 };
 
 // Back to previous step
 const backToStep2 = () => window.history.back();
 </script>
+
+<style>
+.custom-input-container {
+    display: flex;
+    width: 369px;
+    flex-direction: column;
+
+    gap: 10px;
+    border-radius: 12px;
+    border: 1px solid var(--Secondary-400, #a3acb8);
+}
+</style>

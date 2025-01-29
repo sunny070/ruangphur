@@ -36,9 +36,10 @@
                 </div>
             </div>
         </div>
+
         <!-- {{ application.deceased.district?.constituency }} -->
         <div
-            class="grid grid-cols-2 md:ml-[218px] md:mr-[218px] lg:ml-[500px] lg:mr-[500px]"
+            class="grid md:grid-cols-2 md:ml-[218px] md:mr-[218px] lg:ml-[500px] lg:mr-[500px]"
         >
             <div class="flex flex-col gap-3">
                 <div class="border-2 w-[413px] h-[641px] p-14 rounded-md">
@@ -59,7 +60,7 @@
                         <p class="text-[#61646B]">Gender</p>
                         <p>{{ application.deceased.gender }}</p>
                     </div>
-                    
+
                     <div class="leading-[2px] pt-4">
                         <p class="text-[#61646B]">Thih ni leh darkar</p>
                         <p>{{ application.deceased.time_of_death }}</p>
@@ -79,9 +80,7 @@
                     <div class="leading-[2px] pt-4">
                         <p class="text-[#61646B]">Assembly Constituency</p>
                         <p>
-                            {{
-                                application.deceased.constituency?.name
-                            }}
+                            {{ application.deceased.constituency?.name }}
                         </p>
                     </div>
                 </div>
@@ -204,55 +203,50 @@
                         Document Thiltel te
                     </p>
 
-                    
-
-                    
-                        
-                        <q-chip dense class="transparent text-black"
-                            icon="check_circle"
-                            clickable
-
-                            @click="
-                                handleOpenApplicant(
-                                    application.applicant?.id_proof
-                                )
-                            "
-                            >Motor hman man Voucher/Receipt</q-chip
-                        >
-                        <q-chip dense class="transparent text-black"
-                            icon="check_circle"
-                            clickable
-
-                            @click="
-                                handleOpenApplicant(
-                                    application.applicant?.receipt
-                                )
-                            "
-                            >Motor hman man Voucher/Receipt</q-chip
-                        >
-                        <q-chip dense class="transparent text-black"
-                            icon="check_circle"
-                            clickable
-                            @click="
-                                handleOpenApplicant(
-                                    application.applicant?.death_certificate
-                                )
-                            "
-                            >Death Certificate</q-chip
-                        >
-                        <q-chip dense class="transparent text-black"
-                            icon="check_circle"
-                            clickable
-                            @click="
-                                handleOpenApplicant(
-                                    application.applicant?.additional_document
-                                )
-                            "
-                            >Diltu Aadhar card/voter ID</q-chip
-                        >
-                        
-                    
-                    
+                    <q-chip
+                        dense
+                        class="transparent text-black"
+                        icon="check_circle"
+                        clickable
+                        @click="
+                            handleOpenApplicant(application.applicant?.id_proof)
+                        "
+                        >Motor hman man Voucher/Receipt</q-chip
+                    >
+                    <q-chip
+                        dense
+                        class="transparent text-black"
+                        icon="check_circle"
+                        clickable
+                        @click="
+                            handleOpenApplicant(application.applicant?.receipt)
+                        "
+                        >Motor hman man Voucher/Receipt</q-chip
+                    >
+                    <q-chip
+                        dense
+                        class="transparent text-black"
+                        icon="check_circle"
+                        clickable
+                        @click="
+                            handleOpenApplicant(
+                                application.applicant?.death_certificate
+                            )
+                        "
+                        >Death Certificate</q-chip
+                    >
+                    <q-chip
+                        dense
+                        class="transparent text-black"
+                        icon="check_circle"
+                        clickable
+                        @click="
+                            handleOpenApplicant(
+                                application.applicant?.additional_document
+                            )
+                        "
+                        >Diltu Aadhar card/voter ID</q-chip
+                    >
                 </div>
                 <div class="border-2 rounded-md w-[413px] h-[590px] p-8">
                     <p

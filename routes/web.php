@@ -57,7 +57,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/admin/application/{application}/approve', [AdminController::class, 'approve'])->name('admin.application.approve');
     Route::post('/admin/application/{application}/reject', [AdminController::class, 'reject'])->name('admin.application.reject');
     Route::get('/admin/application/{application}', [AdminController::class, 'show'])->name('applications.show');
-    
+
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -77,7 +77,6 @@ Route::group([], function () {
 
     Route::post('/admin/application/{application}/approve', [VerifierController::class, 'verify'])->name('verifier.application.approve');
     Route::post('/admin/application/{application}/reject', [VerifierController::class, 'reject'])->name('verifier.application.reject');
-
 });
 
 
@@ -121,6 +120,5 @@ Route::get('/application/download', [ApplicationController::class, 'download'])-
 require __DIR__ . '/auth.php';
 
 Route::get('pages/maps', function () {
-    return Inertia::render('Maps', [
-    ]);
+    return Inertia::render('Maps', []);
 })->name('maps');

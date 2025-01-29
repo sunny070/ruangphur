@@ -40,14 +40,15 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <q-input filled v-model="form.name" label="Mitthi hming" required /> -->
+                    
 
                     <div class="">
                         <div class="text-sm font-medium text-black q-mb-xs">
                             A chhungte hming
                         </div>
                         <div class="flex gap-4">
-                            <q-select
+                            <div>
+                            <q-select class=""
                                 outlined
                                 dense
                                 label="Pa"
@@ -72,6 +73,8 @@
                             >
                                 {{ $page.props.errors.relative }}
                             </div>
+                        </div>
+                        <div>
                             <input
                                 type="text"
                                 v-model="form.relative_name"
@@ -81,7 +84,7 @@
                                         ? 'border-red-500'
                                         : 'border-gray-300'
                                 "
-                                placeholder="A chhungte hming"
+                                placeholder="An hming chhut luhna"
                             />
                             <div
                                 v-if="form.errors.relative_name"
@@ -89,6 +92,7 @@
                             >
                                 {{ form.errors.relative_name }}
                             </div>
+                        </div>
                         </div>
                     </div>
 
@@ -115,26 +119,7 @@
                         </div>
                     </div>
 
-                    <!-- <div>
-                        <div class="text-sm font-medium text-black q-mb-xs">
-                            A pianni leh thla
-                        </div>
-                        <q-input
-                            type="date"
-                            outlined
-                            placeholder="Mitthi hming chhu lut rawh le"
-                            dense
-                            class="custom-input"
-                            v-model="form.dob"
-                            :error="form.errors.dob"
-                            :error-message="
-                                form.errors.dob ? form.errors.dob : ''
-                            "
-                        />
-                        <div v-if="$page.props.errors.dob" class="text-red">
-                            {{ $page.props.errors.dob }}
-                        </div>
-                    </div> -->
+                    
                     <div>
                         <div class="text-sm font-medium text-black q-mb-xs">
                             Gender
@@ -204,28 +189,7 @@
                         </div>
                     </div>
 
-                    <!-- <div>
-                        <div class="text-sm font-medium text-black q-mb-xs">
-                            Veng/Khua
-                        </div>
-                        <q-input
-                            outlined
-                            placeholder="Ruang Zalhna tur veng"
-                            dense
-                            class="custom-input"
-                            v-model="form.locality"
-                            :error="form.errors.locality"
-                            :error-message="
-                                form.errors.locality ? form.errors.locality : ''
-                            "
-                        />
-                        <div
-                            v-if="$page.props.errors.locality"
-                            class="text-red"
-                        >
-                            {{ $page.props.errors.locality }}
-                        </div>
-                    </div> -->
+                    
 
                     <div>
                         <div class="text-sm font-medium text-black q-mb-xs">
@@ -279,31 +243,7 @@
                             {{ form.errors.time_of_death }}
                         </div>
                     </div>
-                    <!-- <div>
-                        <div class="text-sm font-medium text-black q-mb-xs">
-                            Thih ni leh darkar
-                        </div>
-                        <q-input
-                            type="datetime-local"
-                            outlined
-                            placeholder="Mitthi thih ni leh darkar"
-                            dense
-                            class="custom-input"
-                            v-model="form.time_of_death"
-                            :error="form.errors.time_of_death"
-                            :error-message="
-                                form.errors.time_of_death
-                                    ? form.errors.time_of_death
-                                    : ''
-                            "
-                        />
-                        <div
-                            v-if="$page.props.errors.time_of_death"
-                            class="text-red"
-                        >
-                            {{ $page.props.errors.time_of_death }}
-                        </div>
-                    </div> -->
+                    
 
                     <div>
                         <div class="text-sm font-medium text-black q-mb-xs">
