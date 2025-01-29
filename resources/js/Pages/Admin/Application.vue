@@ -8,14 +8,18 @@
             {{ flash.error }}
         </q-banner>
 
-       <!-- Status Cards -->
-       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <!-- Status Cards -->
+        <div
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
+        >
             <div
                 v-for="status in statusCards"
                 :key="status.label"
                 :class="`w-full h-[78px] ${status.bgClass} ${status.textClass} text-center`"
             >
-                <h6 class="text-sm sm:text-base font-bold">{{ status.count }}</h6>
+                <h6 class="text-sm sm:text-base font-bold">
+                    {{ status.count }}
+                </h6>
                 <p class="text-xs sm:text-sm">{{ status.label }}</p>
             </div>
         </div>
@@ -93,9 +97,12 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="">
                 <!-- Action buttons (only visible when at least one checkbox is selected) -->
-                <div v-if="showActionButtons" class="flex flex-col sm:flex-row gap-2">
+                <div
+                    v-if="showActionButtons"
+                    class="flex flex-col sm:flex-row gap-2"
+                >
                     <q-btn
-                    style="border-radius: 8px;"
+                        style="border-radius: 8px"
                         size="md"
                         flat
                         outlined
@@ -105,9 +112,9 @@
                         <q-icon name="check" size="16px" class="q-mr-xs" />
                         <span>Select All</span>
                     </q-btn>
-                    
+
                     <q-btn
-                    style="border-radius: 8px;"
+                        style="border-radius: 8px"
                         size="md"
                         flat
                         outlined
@@ -123,7 +130,7 @@
                         <span>Approve All</span>
                     </q-btn>
                     <q-btn
-                    style="border-radius: 8px;"
+                        style="border-radius: 8px"
                         size="md"
                         flat
                         outlined
@@ -194,9 +201,7 @@
             <table class="q-table q-table__grid w-full">
                 <thead>
                     <tr class="bg-[#3A424A] text-white">
-                        <th>
-                            
-                        </th>
+                        <th></th>
                         <th>APPLICANT ID</th>
                         <th>MITTHI HMING</th>
                         <th>MITTHI KHUA</th>
@@ -256,8 +261,9 @@
                                         <q-item-section>View</q-item-section>
                                     </q-item>
                                     <q-item
+                                    clickable
                                         class="action-btn"
-                                        @click="editApplication(application.id)"
+                                        @click="editDialog = true"
                                     >
                                         <q-item-section
                                             >Edit/Update</q-item-section
@@ -285,6 +291,100 @@
                 </tbody>
             </table>
         </div>
+
+        <q-dialog v-model="editDialog">
+            <div>
+                <!-- <hr class="my-4 border-border" /> -->
+                <q-card class="w-[411px] h-[822px] rounded-md">
+                    <q-card-section class="" v-for="application in filteredApplications"
+                    :key="application.id">
+                        <p
+                            class="text-center w-[242px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
+                        >
+                            Ruang Phurh leh Motor Chungchang
+                        </p>
+                        <td>{{ application?.application_no }}</td>
+                        <td>{{ application?.deceased?.name }}</td>
+                        <td>{{ application?.deceased?.district?.name }}</td>
+                        <td>{{ application?.transport?.distance }}</td>
+                        <td>{{ application?.transport?.transport_cost }}</td>
+                        <p class="mb-8">Ruang phurh tanna</p>
+                        <!-- <div class="leading-[2px] pl-5">
+                            <p class="text-[#61646B]">District</p>
+                            <p>{{ applications.source_district["label"] }}</p>
+                        </div>
+                        <div class="leading-[2px] pt-4 pl-5">
+                            <p class="text-[#61646B]">Veng/Khua</p>
+                            <p>{{ form.source_locality }}</p>
+                        </div>
+                        <hr class="my-4 border-border" />
+                        <p class="mb-8 mt-8 text-[#363636]">
+                            Ruang dahna tur hmun
+                        </p>
+                        <div class="leading-[2px] pt-4 pl-5">
+                            <p class="text-[#61646B]">District</p>
+                            <p>
+                                {{ form.destination_district["label"] }}
+                            </p>
+                        </div>
+                        <div class="leading-[2px] pt-4 pl-5">
+                            <p class="text-[#61646B]">Veng/Khua</p>
+                            <p>
+                                {{ form.destination_locality }}
+                            </p>
+                        </div>
+                        <hr class="my-4 border-border" />
+
+                        <div class="leading-[2px] pt-4">
+                            <p class="text-[#61646B]">Kilometer</p>
+                            <p>{{ form.distance }}</p>
+                        </div>
+                        <hr class="my-4 border-border" />
+                        <p class="mb-8 mt-8">Ruang phurhna motor</p>
+                        <div class="leading-[2px] pt-4">
+                            <p class="text-[#61646B]">
+                                Motor registration number
+                            </p>
+                            <p>{{ form.vehicle_number }}</p>
+                        </div>
+                        <div class="leading-[2px] pt-4">
+                            <p class="text-[#61646B]">Motor hming</p>
+                            <p>{{ form.vehicle_name }}</p>
+                        </div>
+                        <div class="leading-[2px] pt-4">
+                            <p class="text-[#61646B]">
+                                Motor neitu/khalhtu hming
+                            </p>
+                            <p>{{ form.driver_name }}</p>
+                        </div>
+                        <div class="leading-[2px] pt-4">
+                            <p class="text-[#61646B]">
+                                Motor neitu/khalhtu phone number
+                            </p>
+                            <p>{{ form.driver_phone }}</p>
+                        </div>
+                        <div class="leading-[2px] pt-4">
+                            <p class="text-[#61646B]">Motor hman man (Rs)</p>
+                            <p>{{ form.transport_cost }}</p>
+                        </div> -->
+                    </q-card-section>
+
+                    <q-card-actions align="right">
+                        <q-btn
+                            class="text-black"
+                            color="white"
+                            label="Edit"
+                            v-close-popup
+                        />
+                        <q-btn
+                            label="Approve & Next"
+                            color="black"
+                            @click="submitForm"
+                        />
+                    </q-card-actions>
+                </q-card>
+            </div>
+        </q-dialog>
     </q-page>
 </template>
 
@@ -303,6 +403,8 @@ const props = defineProps({
     applications: Array,
     flash: Object,
 });
+
+const editDialog = ref(false);
 const districtFilteredApplications = ref([]);
 const selectedDistrict = ref(null); // Reactive variable for the selected district
 const districtOptions = ref([]); // Options for the district dropdown
@@ -318,15 +420,18 @@ const showActionButtons = computed(() => selectedApplications.value.length > 0);
 // Select/Deselect all logic
 const selectAllCheckbox = ref(false);
 
-
 const toggleSelectAll = () => {
-    if (selectedApplications.value.length === filteredApplications.value.length) {
+    if (
+        selectedApplications.value.length === filteredApplications.value.length
+    ) {
         // Deselect all
         selectedApplications.value = [];
         selectAllCheckbox.value = false;
     } else {
         // Select all
-        selectedApplications.value = filteredApplications.value.map((app) => app.id);
+        selectedApplications.value = filteredApplications.value.map(
+            (app) => app.id
+        );
         selectAllCheckbox.value = true;
     }
 };
@@ -478,13 +583,37 @@ const exportToExcel = () => {
     XLSX.writeFile(workbook, `Applications_${timestamp}.xlsx`);
 };
 
-
 const statusCards = computed(() => [
-    { label: "Incoming", count: 106, bgClass: "bg-[#FFF7EF]", textClass: "text-[#FD7900]" },
-    { label: "Approved", count: 1, bgClass: "bg-[#EEFFF8]", textClass: "text-[#00AA68]" },
-    { label: "Rejected", count: 1, bgClass: "bg-[#FFF2F2]", textClass: "text-[#FE6262]" },
-    { label: "Pending", count: 1, bgClass: "bg-[#F2F8FF]", textClass: "text-[#404CF1]" },
-    { label: "Completed", count: 1, bgClass: "bg-[#F2FBFF]", textClass: "text-[#00AEFF]" },
+    {
+        label: "Incoming",
+        count: 106,
+        bgClass: "bg-[#FFF7EF]",
+        textClass: "text-[#FD7900]",
+    },
+    {
+        label: "Approved",
+        count: 1,
+        bgClass: "bg-[#EEFFF8]",
+        textClass: "text-[#00AA68]",
+    },
+    {
+        label: "Rejected",
+        count: 1,
+        bgClass: "bg-[#FFF2F2]",
+        textClass: "text-[#FE6262]",
+    },
+    {
+        label: "Pending",
+        count: 1,
+        bgClass: "bg-[#F2F8FF]",
+        textClass: "text-[#404CF1]",
+    },
+    {
+        label: "Completed",
+        count: 1,
+        bgClass: "bg-[#F2FBFF]",
+        textClass: "text-[#00AEFF]",
+    },
 ]);
 </script>
 
