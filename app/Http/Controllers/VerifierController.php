@@ -22,4 +22,17 @@ class VerifierController extends Controller
             ]
         ]);
     }
+
+    public function verify(Application $application)
+    {
+        if ($application && $application->status === 'Pending') {
+            $application->status = 'Verified'; // Change the status to 'Verified'
+            $application->verified_at = now(); // Set the verified_at timestamp
+            $application->save();
+
+            return redirect()->route('verifier.application')->with('success', 'Application verified.');
+        }
+
+        return redirect()->route('verifier.application')->with('error', 'Application is already processed or invalid.');
+    }
 }

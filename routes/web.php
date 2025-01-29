@@ -75,6 +75,9 @@ Route::group(['middleware' => [RoleMiddleware::using('approver')]], function () 
 Route::group([], function () {
     Route::get('/verifier/application', [VerifierController::class, 'index'])->name('verifier.application');
 
+    Route::post('/admin/application/{application}/approve', [VerifierController::class, 'verify'])->name('verifier.application.approve');
+    Route::post('/admin/application/{application}/reject', [VerifierController::class, 'reject'])->name('verifier.application.reject');
+
 });
 
 

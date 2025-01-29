@@ -66,18 +66,7 @@ class AdminController extends Controller
         return redirect()->route('application')->with('error', 'Application is already processed or invalid.');
     }
 
-    public function verify(Application $application)
-    {
-        if ($application && $application->status === 'Pending') {
-            $application->status = 'Verified'; // Change the status to 'Verified'
-            $application->verified_at = now(); // Set the verified_at timestamp
-            $application->save();
-
-            return redirect()->route('admin.applications')->with('success', 'Application verified.');
-        }
-
-        return redirect()->route('admin.applications')->with('error', 'Application is already processed or invalid.');
-    }
+    
 
     public function reject(Application $application)
     {

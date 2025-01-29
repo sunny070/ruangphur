@@ -33,6 +33,13 @@
         <!-- Status Counts -->
 
         <div></div>
+        <!-- <div class="flex justify-evenly items-center">
+            <div v-for="status in statusCards" :key="status.label"
+                :class="`w-[190px] h-[78px] text-center ${status.bgClass} ${status.textClass}`">
+                <h6 class="text-bold">{{ status.count }}</h6>
+                <p>{{ status.label }}</p>
+            </div>
+        </div> -->
         <div class="flex justify-evenly items-center">
             <div class="w-[190px] h-[78px] bg-[#FFF7EF] text-[#FD7900] text-center">
                 <h6 class="text-bold">106</h6>
@@ -65,12 +72,12 @@
 
         <!-- Status Action -->
 
-        <div class="flex gap-96">
-            <div>
+        <div class="grid md:grid-cols-2">
+            <div class="">
                 <!-- Action buttons (only visible when at least one checkbox is selected) -->
                 <div v-if="showActionButtons" class="flex">
                     <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center"
-                        @click="selectAll">
+                        @click="toggleSelectAll">
                         <q-icon name="check" size="16px" class="q-mr-xs" />
                         <span>Select All</span>
                     </q-btn>
@@ -86,30 +93,19 @@
                     </q-btn>
                 </div>
             </div>
-            <div class="flex">
-                <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center" style="
-                        color: #000;
-                        width: 100px;
-                        height: 40px;
-                        flex-shrink: 0;
-                        border-radius: 8px;
-                        background: transparent;
-                    ">
-                    <q-icon name="print" size="16px" class="q-mr-xs" />
-                    <span>Print</span>
-                </q-btn>
-                <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center" style="
-                        color: #000;
-                        width: 100px;
-                        height: 40px;
-                        flex-shrink: 0;
-                        border-radius: 8px;
-
-                        background: transparent;
-                    ">
-                    <q-icon name="ios_share" size="16px" class="q-mr-xs" />
-                    <span>Export</span>
-                </q-btn>
+            <div class="flex ">
+                <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center"
+                style="color: #000; width: 100px; height: 40px; border-radius: 8px;"
+                @click="printTable">
+                <q-icon name="print" size="16px" class="q-mr-xs" />
+                <span>Print</span>
+            </q-btn>
+            <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center"
+                style="color: #000; width: 100px; height: 40px; border-radius: 8px;"
+                @click="exportToExcel">
+                <q-icon name="ios_share" size="16px" class="q-mr-xs" />
+                <span>Export</span>
+            </q-btn>
                 <q-select style="
                         color: #000;
                         width: 128px;
@@ -123,12 +119,12 @@
             </div>
         </div>
         <!-- Applications Table -->
-        <div class="table-responsive">
+        <div ref="printSection" class="table-responsive">
             <table class="q-table q-table__grid q-mb-lg">
-                <thead class="bg-[#3A424A] text-white font-bold h-[30px] w-full text-[11px]">
+                <thead>
                     <tr>
                         <th>
-                            <q-checkbox v-model="selectAllCheckbox" @change="toggleSelectAll" />
+                            <input type="checkbox" v-model="selectAllCheckbox" @change="toggleSelectAll" />
                         </th>
                         <th>APPLICANT ID</th>
                         <th>MITTHI HMING</th>
@@ -142,11 +138,10 @@
                         <th>ACTIONS</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="filteredApplications.length">
                     <tr v-for="application in filteredApplications" :key="application.id">
                         <td>
-                            <q-checkbox v-model="selectedApplications" :true-value="application.id"
-                                :false-value="null" />
+                            <input type="checkbox" :value="application.id" v-model="selectedApplications" />
                         </td>
                         <td>{{ application?.application_no }}</td>
                         <td>{{ application?.deceased?.name }}</td>
@@ -166,7 +161,7 @@
                         </td>
                         <td>{{ application?.created_at }}</td>
                         <td>
-                            <q-btn flat icon="more_vert" :style="buttonStyle" />
+                            <q-btn flat icon="more_vert" />
                             <q-menu>
                                 <q-list>
                                     <q-item clickable class="action-btn" @click="viewApplication(application.id)">
@@ -183,6 +178,13 @@
                         </td>
                     </tr>
                 </tbody>
+                <tbody v-else>
+                    <tr>
+                        <td colspan="11" class="text-center text-gray-500">
+                            No applications found.
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     </q-page>
@@ -191,11 +193,14 @@
 <script setup>
 import { defineProps, ref, computed, onMounted } from "vue";
 import { router as $inertia } from "@inertiajs/vue3";
+import * as XLSX from "xlsx"; // Import SheetJS library
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 
 defineOptions({
     layout: AdminLayout,
 });
+
+
 
 // Props passed from the parent (admin controller)
 const props = defineProps({
@@ -208,10 +213,22 @@ const districtOptions = ref([]); // Options for the district dropdown
 const searchQuery = ref("");
 const currentFilter = ref("All");
 
-// Reactive data for selected applications
-const selectedApplications = ref([]);
-// Show buttons only when at least one checkbox is selected
+const selectedApplications = ref([]); // Array to store selected application IDs
+
+// Computed property to check if any application is selected
 const showActionButtons = computed(() => selectedApplications.value.length > 0);
+
+// Select/Deselect all logic
+const selectAllCheckbox = ref(false);
+const toggleSelectAll = () => {
+    if (selectAllCheckbox.value) {
+        // Select all application IDs
+        selectedApplications.value = filteredApplications.map(app => app.id);
+    } else {
+        // Deselect all
+        selectedApplications.value = [];
+    }
+};
 
 
 const filterByDistrict = () => {
@@ -291,18 +308,7 @@ const deleteApplication = (applicationId) => {
 };
 
 
-// Handle Select All checkbox change
-const toggleSelectAll = () => {
-    if (selectAllCheckbox.value) {
-        selectedApplications.value = filteredApplications.map(application => application.id);
-    } else {
-        selectedApplications.value = [];
-    }
-};
-// Handle the "Select All" action
-const selectAll = () => {
-    selectedApplications.value = filteredApplications.map(application => application.id);
-};
+
 
 // Handle the "Approve All" action
 const approveAll = () => {
@@ -312,6 +318,45 @@ const approveAll = () => {
 // Handle the "Reject All" action
 const rejectAll = () => {
     // Implement the logic for rejecting all selected applications
+};
+
+
+
+
+// Print the table
+const printTable = () => {
+    const printContents = document.querySelector(".table-responsive").innerHTML;
+    const printWindow = window.open("", "", "width=800,height=600");
+    printWindow.document.write(`
+        <html>
+            <head><title>Print Table</title></head>
+            <body>${printContents}</body>
+        </html>
+    `);
+    printWindow.document.close();
+    printWindow.print();
+};
+
+
+// Export table data to Excel
+const exportToExcel = () => {
+    const data = filteredApplications.value.map((app) => ({
+        "Applicant ID": app?.application_no,
+        "Deceased Name": app?.deceased?.name,
+        "Deceased District": app?.deceased?.district?.name,
+        "Kilometer": app?.transport?.distance,
+        "Amount": app?.transport?.transport_cost,
+        "Applicant Name": app?.applicant?.name,
+        "Applicant Phone": app?.applicant?.mobile,
+        "Status": app?.status,
+        "Date Created": app?.created_at,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Applications");
+
+    XLSX.writeFile(workbook, "Applications.xlsx");
 };
 </script>
 

@@ -28,12 +28,12 @@ class UserSeeder extends Seeder
 
         $approver = User::find(2);
         if ($approver) {
-            $approver->assignRole('approver');
+            $approver->assignRole('verifier');
         }
 
         $verifier = User::find(3);
         if ($verifier) {
-            $verifier->assignRole('verifier');
+            $verifier->assignRole('approver');
         }
 
         $user = User::find(4);

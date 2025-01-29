@@ -74,11 +74,11 @@
                         <q-icon name="check" size="16px" class="q-mr-xs" />
                         <span>Select All</span>
                     </q-btn>
-                    <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center"
+                    <!-- <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center"
                         @click="approveAll" :disabled="!selectedApplications.length">
                         <q-icon name="check_circle" size="16px" class="q-mr-xs" />
                         <span>Approve All</span>
-                    </q-btn>
+                    </q-btn> -->
                     <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center"
                         @click="rejectAll" :disabled="!selectedApplications.length">
                         <q-icon name="cancel" size="16px" class="q-mr-xs" />

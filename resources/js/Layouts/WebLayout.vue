@@ -91,6 +91,63 @@
                 </nav>
             </header>
 
+
+<!-- 
+            <header class="bg-[#E9F4FF] py-10">
+        <div class="flex justify-between items-center">
+            <div class="md:pl-[223px] md:pr-[55px]">
+                <img id="background" class="w-[194px] h-[72px]" src="/image/Group 1321315097.png" />
+            </div>
+            
+            <div class="md:hidden">
+                <button @click="toggleMenu" class="text-black focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <nav class="hidden md:block">
+            <q-tabs class="text-black">
+                <Link :href="route('home')">
+                    <q-tab name="Home" label="Home" :to="{ name: 'home' }" />
+                </Link>
+                <Link :href="route('form.step1')">
+                    <q-tab name="Dilna Form" label="Dilna Form" :to="{ name: 'form.step1' }" />
+                </Link>
+                <Link :href="route('track')">
+                    <q-tab name="Bill Chuina" label="Bill Chuina" :to="{ name: 'track' }" />
+                </Link>
+                <Link :href="route('application.faqs')">
+                    <q-tab name="FAQs" label="FAQs" :to="{ name: 'application.faqs' }" />
+                </Link>
+                <Link :href="route('application.download')">
+                    <q-tab name="Downloads" label="Downloads" :to="{ name: 'application.download' }" />
+                </Link>
+            </q-tabs>
+        </nav>
+
+        <nav v-if="isMenuOpen" class="md:hidden">
+            <div class="flex flex-col">
+                <Link :href="route('home')" class="py-2 text-black">Home</Link>
+                <Link :href="route('form.step1')" class="py-2 text-black">Dilna Form</Link>
+                <Link :href="route('track')" class="py-2 text-black">Bill Chuina</Link>
+                <Link :href="route('application.faqs')" class="py-2 text-black">FAQs</Link>
+                <Link :href="route('application.download')" class="py-2 text-black">Downloads</Link>
+            </div>
+        </nav>
+
+        <nav v-if="canLogin" class="flex flex-1 justify-end">
+            <Link v-if="$page.props.auth.user" :href="route('dashboard')" class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
+                Dashboard
+            </Link>
+            <template v-else>
+                
+            </template>
+        </nav>
+    </header> -->
+
             <!-- <div class=" ">
                 <q-slot />
             </div> -->
@@ -128,6 +185,16 @@
 <script setup>
 import { Head, Link } from "@inertiajs/vue3";
 
+
+// import { ref } from "vue";
+
+
+
+// const isMenuOpen = ref(false);
+
+// const toggleMenu = () => {
+//     isMenuOpen.value = !isMenuOpen.value;
+// };
 defineProps({
     canLogin: {
         type: Boolean,
