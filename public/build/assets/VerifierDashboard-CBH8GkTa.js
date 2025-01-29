@@ -1,0 +1,1 @@
+import{_ as r}from"./AdminLayout-5KNea1XO.js";import"./QLayout-DkfsYSgK.js";import"./app-DY6z9ZO-.js";import"./format-DPtYjOdv.js";import"./DropdownLink-D2MymX6x.js";const p=Object.assign({layout:r},{__name:"VerifierDashboard",setup(t){return(i,e)=>"verifier Login"}});export{p as default};
