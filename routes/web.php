@@ -57,7 +57,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/admin/application/{application}/approve', [AdminController::class, 'approve'])->name('admin.application.approve');
     Route::post('/admin/application/{application}/reject', [AdminController::class, 'reject'])->name('admin.application.reject');
     Route::get('/admin/application/{application}', [AdminController::class, 'show'])->name('applications.show');
-
+    Route::put('/application/{application}', [AdminController::class, 'update'])->name('applications.update');
+    Route::delete('/applications/{application}', [AdminController::class, 'destroy'])->name('applications.destroy');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
