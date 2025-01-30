@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeceasedController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\ProfileController;
@@ -13,6 +14,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Middleware\RoleMiddleware;
 use Inertia\Inertia;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -27,9 +29,9 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('admin.dashboard');
+// Route::get('/dashboard', function () {
+//     return Inertia::render('Dashboard');
+// })->middleware(['auth', 'verified'])->name('admin.dashboard');
 
 Route::get('/verifier/dashboard', function () {
     return Inertia::render('Verifier/VerifierDashboard');
@@ -53,6 +55,7 @@ Route::group(['prefix' => 'user'], function () {
 // Amin login
 Route::middleware('auth')->group(function () {
     Route::get('/admin/application', [AdminController::class, 'index'])->name('admin.application');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/bill', [AdminController::class, 'bill'])->name('admin.bill');
     Route::post('/admin/application/{application}/approve', [AdminController::class, 'approve'])->name('admin.application.approve');
     Route::post('/admin/application/{application}/reject', [AdminController::class, 'reject'])->name('admin.application.reject');
@@ -76,8 +79,8 @@ Route::group(['middleware' => [RoleMiddleware::using('approver')]], function () 
 Route::group([], function () {
     Route::get('/verifier/application', [VerifierController::class, 'index'])->name('verifier.application');
 
-    Route::post('/admin/application/{application}/approve', [VerifierController::class, 'verify'])->name('verifier.application.approve');
-    Route::post('/admin/application/{application}/reject', [VerifierController::class, 'reject'])->name('verifier.application.reject');
+    Route::post('/verifier/application/{application}/approve', [VerifierController::class, 'verify'])->name('verifier.application.approve');
+    Route::post('/verifier/application/{application}/reject', [VerifierController::class, 'reject'])->name('verifier.application.reject');
 });
 
 

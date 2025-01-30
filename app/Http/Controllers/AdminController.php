@@ -34,7 +34,7 @@ class AdminController extends Controller
     public function bill()
     {
         $applications = Application::with(['applicant', 'deceased.district', 'transport']) // Eager load related models
-           ->where('status','Payment')
+           ->where('status','Approved')
             ->get();
 
         return Inertia::render('Admin/BillPayment', [
