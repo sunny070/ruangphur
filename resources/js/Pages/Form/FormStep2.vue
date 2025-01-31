@@ -46,6 +46,8 @@
                             </div>
                             <q-input outlined v-model="source_locality" label="Source Locality" readonly
                                 @click="showSourceDialog = true" />
+                            <!-- <q-input outlined v-model="source_locality" label="Source Locality" readonly
+                                @click="showSourceDialog = true" /> -->
                             <div v-if="form.errors.source_locality" class="text-red-500 text-sm">
                                 {{ form.errors.source_locality }}
                             </div>
@@ -75,8 +77,10 @@
 
                             <div>
 
+
                                 <q-input outlined v-model="destination_locality" label="Destination Locality" readonly
                                     @click="showDestinationDialog = true" />
+
                                 <div v-if="form.errors.destination_locality" class="text-red-500 text-sm">
                                     {{ form.errors.destination_locality }}
                                 </div>
@@ -190,43 +194,44 @@
                     <q-card style="width: 90vw; max-width: 600px;">
                         <q-card-section>
                             <h6>Select Source Location</h6>
+                            
                             <GoogleMap :center="center" :zoom="7" class="map-container"
                                 @click="(event) => handleMapClick(event, 'source')">
                                 <Marker v-if="sourceCoords" :position="sourceCoords"
                                     :options="{ position: sourceCoords, label: 'S' }"
                                     @dragend="(event) => handleMapClick(event, 'source')" />
-
                             </GoogleMap>
+                            <q-input outlined v-model="sourceSearch" placeholder="Search Source Location"
+                                @update:model-value="searchLocation($event, 'source')" />
                         </q-card-section>
                         <q-card-section align="right">
                             <q-btn flat color="red" label="Cancel" @click="showSourceDialog = false" />
-
-
                             <q-btn flat label="Confirm" color="green" @click="showSourceDialog = false" />
-
-
                         </q-card-section>
                     </q-card>
                 </q-dialog>
+
                 <q-dialog v-model="showDestinationDialog">
                     <q-card style="width: 90vw; max-width: 600px;">
                         <q-card-section>
                             <h6>Select Destination Location</h6>
+                            <q-input outlined v-model="destinationSearch" placeholder="Search Destination Location"
+                                @update:model-value="searchLocation($event, 'destination')" />
                             <GoogleMap :center="center" :zoom="7" class="map-container"
                                 @click="(event) => handleMapClick(event, 'destination')">
-                                <!-- <Marker v-if="showMarkers && originCoords" :options="{ position: originCoords, label: 'S' }" /> -->
+                                <Marker v-if="sourceCoords" :position="sourceCoords"
+                                    :options="{ position: sourceCoords, label: 'S' }" />
                                 <Marker v-if="destinationCoords" :position="destinationCoords"
                                     :options="{ position: destinationCoords, label: 'D' }"
                                     @dragend="(event) => handleMapClick(event, 'destination')" />
+                                <Polyline v-if="sourceCoords && destinationCoords"
+                                    :path="[sourceCoords, destinationCoords]"
+                                    :options="{ strokeColor: '#FF0000', strokeOpacity: 1.0, strokeWeight: 2 }" />
                             </GoogleMap>
                         </q-card-section>
                         <q-card-section align="right">
                             <q-btn flat label="Cancel" color="red" @click="showDestinationDialog = false" />
-
-
                             <q-btn flat label="Confirm" color="green" @click="showDestinationDialog = false" />
-
-
                         </q-card-section>
                     </q-card>
                 </q-dialog>
@@ -324,15 +329,13 @@ import WebLayout from "@/Layouts/WebLayout.vue";
 import { ref, nextTick } from "vue";
 import { computed, onMounted, watch } from "vue";
 import { useQuasar } from "quasar";
-import { GoogleMap, Marker } from "vue3-google-map"
-
+import { GoogleMap, Marker, Polyline } from "vue3-google-map"
 
 defineOptions({
     layout: WebLayout,
 });
 const $q = useQuasar();
 const preview = ref(false);
-
 
 const props = defineProps(["form", "districts"]);
 
@@ -355,6 +358,10 @@ const transport_cost = ref(0); // Transport cost in currency
 const showSourceDialog = ref(false);
 const showDestinationDialog = ref(false);
 
+
+const sourceSearch = ref("");
+const destinationSearch = ref("");
+const autocomplete = ref(null);
 // Google Maps Geocoder
 const geocoder = ref(null);
 
@@ -363,13 +370,12 @@ onMounted(() => {
     nextTick(() => {
         if (typeof google !== "undefined") {
             geocoder.value = new google.maps.Geocoder();
+            autocomplete.value = new google.maps.places.AutocompleteService();
         } else {
             console.error("Google Maps API not loaded.");
         }
     });
 });
-
-
 
 const form = useForm({
     source_district: props.form.source_district || "",
@@ -387,7 +393,7 @@ const form = useForm({
     driver_phone: props.form.driver_phone || "",
     transport_cost: props.form.transport_cost || "",
 });
-// const district = props.districts;
+
 const district = ref(props.districts || []);
 
 const submitForm = () => {
@@ -411,10 +417,63 @@ const submitForm = () => {
 };
 
 
+const searchLocation = (query, type) => {
+    if (autocomplete.value) {
+        autocomplete.value.getPlacePredictions({ input: query }, (predictions, status) => {
+            if (status === google.maps.places.PlacesServiceStatus.OK && predictions.length) {
+                getCoordsFromPlaceId(predictions[0].place_id, type);
+            }
+        });
+    }
+};
+
+const getCoordsFromPlaceId = (placeId, type) => {
+    const placesService = new google.maps.places.PlacesService(document.createElement("div"));
+    placesService.getDetails({ placeId }, (place, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+            const location = {
+                lat: place.geometry.location.lat(),
+                lng: place.geometry.location.lng(),
+            };
+            if (type === "source") {
+                sourceCoords.value = location;
+                source_locality.value = place.formatted_address;
+                source_lat.value = location.lat;
+                source_lng.value = location.lng;
+                form.source_locality = place.formatted_address;
+                form.source_lat = location.lat;
+                form.source_lng = location.lng;
+            } else if (type === "destination") {
+                destinationCoords.value = location;
+                destination_locality.value = place.formatted_address;
+                destination_lat.value = location.lat;
+                destination_lng.value = location.lng;
+                form.destination_locality = place.formatted_address;
+                form.destination_lat = location.lat;
+                form.destination_lng = location.lng;
+            }
+            calculateDistanceAndCost();
+        }
+    });
+};
+
+// const handleMapClick = (event, type) => {
+//   const clickedLocation = {
+//     lat: event.latLng.lat(),
+//     lng: event.latLng.lng(),
+//   };
+
+//   if (type === "source") {
+//     sourceCoords.value = clickedLocation;
+//     getAddressFromCoords(clickedLocation, "source");
+//   } else if (type === "destination") {
+//     destinationCoords.value = clickedLocation;
+//     getAddressFromCoords(clickedLocation, "destination");
+//   }
+// };
 
 
 
-// Fetch address from coordinates
 const getAddressFromCoords = (coords, type) => {
     if (geocoder.value) {
         geocoder.value.geocode({ location: coords }, (results, status) => {
@@ -443,7 +502,6 @@ const getAddressFromCoords = (coords, type) => {
     }
 };
 
-// Handle map click to set location
 const handleMapClick = (event, type) => {
     const clickedLocation = {
         lat: event.latLng.lat(),
@@ -456,12 +514,10 @@ const handleMapClick = (event, type) => {
     } else if (type === "destination") {
         destinationCoords.value = clickedLocation;
         getAddressFromCoords(clickedLocation, "destination");
+        calculateDistanceAndCost(); // Recalculate distance and cost when destination is updated
     }
 };
 
-
-
-// Calculate distance using Haversine formula
 const calculateDistanceAndCost = () => {
     if (sourceCoords.value && destinationCoords.value) {
         const R = 6371; // Earth's radius in kilometers
@@ -480,15 +536,12 @@ const calculateDistanceAndCost = () => {
     }
 };
 
-// Convert degrees to radians
 const degToRad = (deg) => {
     return deg * (Math.PI / 180);
 };
-// const submitForm = () => form.post(route("form.storeStep2")
-// );
+
 const backToStep1 = () => window.history.back(); // Navigate back
 </script>
-
 
 <style scoped>
 .container {

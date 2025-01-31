@@ -5,15 +5,17 @@ import { ref, onMounted } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import { Head } from "@inertiajs/vue3";
 import BarChart from "@/Components/BarChart.vue"; // Import the chart component
+import CircularChart from '@/Components/CircularChart.vue';
 
 defineOptions({
     layout: AdminLayout,
 });
 const props = defineProps({
     applications: Object,
-    statusCounts: Object,
-    topApplicants: Array,
-    chartData: Object, // Receive chartData from the backend
+  statusCounts: Object,
+  topApplicants: Array,
+  chartData: Object, // For the grouped bar chart
+  mitthiRecordChartData: Object, // For the circular chart
 });
 
 // const { props } = usePage();
@@ -41,16 +43,13 @@ const applicantColumns = [
 </script>
 
 <template>
+
     <Head title="Dashboard" />
 
     <q-page class="q-pa-md">
         <div class="row q-col-gutter-md">
             <!-- Status Cards -->
-            <div
-                class="col-12 col-md-3"
-                v-for="(count, status) in statusCounts"
-                :key="status"
-            >
+            <div class="col-12 col-md-3" v-for="(count, status) in statusCounts" :key="status">
                 <q-card>
                     <q-card-section>
                         <div class="text-h6">{{ status }}</div>
@@ -67,11 +66,13 @@ const applicantColumns = [
                         <p class="text-sm text-gray-600">
                             District tin a dil dan
                         </p>
-                        <BarChart
-                            :labels="chartData.labels"
-                            :pendingData="chartData.pendingData"
-                            :approvedData="chartData.approvedData"
-                        />
+                        <BarChart :labels="chartData.labels" :pendingData="chartData.pendingData" :approvedData="chartData.approvedData" />
+                        <!-- <div class="mt-8">
+                            <h3 class="text-lg font-semibold">Mitthi Record</h3>
+                            <p class="text-sm text-gray-600">Ruangphur portal/app atanga dilna lut te (Pending
+                                Applications by District)</p>
+                            <CircularChart :labels="mitthiRecordChartData.labels" :data="mitthiRecordChartData.data" />
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -91,10 +92,7 @@ const applicantColumns = [
                 <q-card>
                     <q-card-section>
                         <div class="text-h6">Top 10 Applicants</div>
-                        <q-table
-                            :rows="topApplicants"
-                            :columns="applicantColumns"
-                        />
+                        <q-table :rows="topApplicants" :columns="applicantColumns" />
                     </q-card-section>
                 </q-card>
             </div>

@@ -45,8 +45,5 @@ class Application extends Model
         return $this->hasOne(Deceased::class);
     }
 
-    // public function transport()
-    // {
-    //     return $this->hasOneThrough(Transport::class, Deceased::class, 'application_id', 'deceased_id');
-    // }
+    
 }
