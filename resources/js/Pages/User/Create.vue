@@ -56,6 +56,26 @@
                            ]"
                     />
                 </div>
+                
+                <div class="col-xs-12 col-sm-6">
+                    <q-select v-model="form.district"
+                              multiple
+                              use-chips
+                              :options="districts"
+                              dense
+                              class="my-input"
+                              label="Assign District"
+                              outlined
+                              :option-value="'id'"
+                              :option-label="'name'"
+                              :error="form.errors.hasOwnProperty('districts')"
+                              :error-message="form.errors?.districts?.toString()"
+                              @blur="delete form.errors['districts']"
+                              :rules="[
+                                   val=>val.length>0 || 'District is required'
+                              ]"
+                    />
+                </div>
                 <div class="col-xs-12 col-sm-6">
                     <q-select v-model="form.roles"
                               multiple
@@ -136,12 +156,14 @@ const q= useQuasar();
 
 const props = defineProps({
     roles:Object,
+    districts:Object
 })
 const form = useForm({
     name:"",
     phone:"",
     email:"",
     roles:[],
+    district:[],
     password:"",
     password_confirmation:"",
 

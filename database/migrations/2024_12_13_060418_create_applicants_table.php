@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('bank_name');
             $table->string('account_no');
             $table->string('ifsc_code');
+            $table->string('relation');
 
              $table->string('id_proof')->nullable();
         $table->string('receipt')->nullable();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\District;
 use App\Models\User;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -36,8 +37,10 @@ class UserController extends Controller
 
     public function create(){
         $roles = Role::all();
+        
         return Inertia::render('User/Create',[
-            'roles' => $roles
+            'roles' => $roles,
+            'districts' => District::all(),
         ]);
     }
 
@@ -52,7 +55,8 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|unique:users',
             'phone' => 'required|digits:10|unique:users',
-            'password' => 'required|min:6|confirmed'
+            'password' => 'required|min:6|confirmed',
+            'district_id' => 'required'
         ]);
         $roleIds = array_column($request->input('roles'), 'id');
         $data = User::query()->create($validatedData);
@@ -115,6 +119,7 @@ public function update(Request $request, User $model)
     // Validate the request
     $request->validate([
         'name' => 'required',
+        'district_id' => 'required',
         'email' => [Rule::unique('users', 'email')->ignore($model)],
         'phone' => ['digits:10', Rule::unique('users', 'phone')->ignore($model)],
         'password' => 'nullable|min:6|confirmed', // Allow nullable password

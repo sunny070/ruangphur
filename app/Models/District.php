@@ -26,6 +26,11 @@ class District extends Model
     {
         return $this->hasMany(Deceased::class, 'district');
     }
+    
+    public function user(): HasMany
+    {
+        return $this->hasMany(User::class);
+    }
 
     
 

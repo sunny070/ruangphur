@@ -6,7 +6,7 @@
                     <div>
 
                         <h5>Enter OTP to verify</h5>
-                        <p>An OTP has been sent to 97666 44441 </p>
+                        <p>An OTP has been sent to {{ props.phone }} </p>
                     </div>
                     <q-form @submit.prevent="submitOtp" class="q-gutter-md" >
                         <div id="q-app" style="min-height: 100vh">
@@ -52,6 +52,9 @@ import { Notify } from "quasar";
 defineOptions({
     layout: WebLayout,
 });
+
+
+const props = defineProps(["phone" ]);
 
 const length = 6; // The length of the OTP (6 characters)
 const fieldValues = ref(Array(length).fill("")); // OTP field values

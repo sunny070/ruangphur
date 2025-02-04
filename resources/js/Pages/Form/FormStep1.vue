@@ -40,7 +40,6 @@
                             </div>
                         </div>
                     </div>
-                    
 
                     <div class="">
                         <div class="text-sm font-medium text-black q-mb-xs">
@@ -48,51 +47,46 @@
                         </div>
                         <div class="flex gap-4">
                             <div>
-                            <q-select class=""
-                                outlined
-                                dense
-                                label="Pa"
-                                v-model="form.relative"
-                                lazy-rules
-                                :error="form.errors.relative"
-                                :error-message="
-                                    form.errors.relative
-                                        ? form.errors.relative
-                                        : ''
-                                "
-                                :rules="[
-                                    (val) =>
-                                        (val && val.length > 0) ||
-                                        'Chhungte Hming is required',
-                                ]"
-                                :options="['Pa', 'Nu', 'Others']"
-                            />
-                            <div
-                                v-if="$page.props.errors.relative"
-                                class="text-red"
-                            >
-                                {{ $page.props.errors.relative }}
+                                <q-select class=" w-24"
+                                    outlined
+                                    dense
+                                    v-model="form.relative"
+                                    :options=relative
+                                    label="Pa"
+                                    lazy-rules
+                                    :error="form.errors.relative"
+                                    :error-message="
+                                        form.errors.relative
+                                            ? form.errors.relative
+                                            : ''
+                                    "
+                                />
+                                <div
+                                    v-if="$page.props.errors.relative"
+                                    class="text-red"
+                                >
+                                    {{ $page.props.errors.relative }}
+                                </div>
                             </div>
-                        </div>
-                        <div>
-                            <input
-                                type="text"
-                                v-model="form.relative_name"
-                                class="border p-2 w-full rounded-lg"
-                                :class="
-                                    form.errors.relative_name
-                                        ? 'border-red-500'
-                                        : 'border-gray-300'
-                                "
-                                placeholder="An hming chhut luhna"
-                            />
-                            <div
-                                v-if="form.errors.relative_name"
-                                class="text-red-500 text-sm"
-                            >
-                                {{ form.errors.relative_name }}
+                            <div>
+                                <input
+                                    type="text"
+                                    v-model="form.relative_name"
+                                    class="border p-2 w-60 rounded-lg"
+                                    :class="
+                                        form.errors.relative_name
+                                            ? 'border-red-500'
+                                            : 'border-gray-300'
+                                    "
+                                    placeholder="An hming chhut luhna"
+                                />
+                                <div
+                                    v-if="form.errors.relative_name"
+                                    class="text-red-500 text-sm"
+                                >
+                                    {{ form.errors.relative_name }}
+                                </div>
                             </div>
-                        </div>
                         </div>
                     </div>
 
@@ -101,6 +95,7 @@
                             A pianni leh thla
                         </div>
                         <input
+                        class="text-[#61646B]"
                             type="date"
                             placeholder="Mitthi Pianni leh thla"
                             v-model="form.dob"
@@ -119,7 +114,6 @@
                         </div>
                     </div>
 
-                    
                     <div>
                         <div class="text-sm font-medium text-black q-mb-xs">
                             Gender
@@ -189,8 +183,6 @@
                         </div>
                     </div>
 
-                    
-
                     <div>
                         <div class="text-sm font-medium text-black q-mb-xs">
                             Assembly constituency
@@ -202,11 +194,6 @@
                             v-model="form.constituency"
                             lazy-rules
                             :options="filteredConstituencies"
-                            :rules="[
-                                (val) =>
-                                    (val && val.length > 0) ||
-                                    'Assembly constituency is required',
-                            ]"
                             :error="form.errors.constituency"
                             :error-message="
                                 form.errors.constituency
@@ -226,6 +213,7 @@
                             Thih ni leh darkar
                         </div>
                         <input
+                            class="text-[#61646B]"
                             type="datetime-local"
                             placeholder="Mitthi thih ni leh darkar"
                             v-model="form.time_of_death"
@@ -243,7 +231,6 @@
                             {{ form.errors.time_of_death }}
                         </div>
                     </div>
-                    
 
                     <div>
                         <div class="text-sm font-medium text-black q-mb-xs">
@@ -328,13 +315,16 @@
                             src="image/ruang.png"
                             alt=""
                         />
-                        <h5 class="text-2xl">
+                        <h5 class="text-2xl text-bold">
                             {{ form.name }}
                         </h5>
+                        <p class="mb-4 text-sm text-bold">
+                        s/o {{ form.relative_name }}
+                    </p>
                     </q-card-section>
+                    <hr class="my-4 border-border m-4" />
 
                     <q-card-section class="q-pt-none ml-[42px]">
-                        <hr class="my-4 border-border" />
                         <div class="leading-[2px] pt-6">
                             <p class="text-[#61646B]">Mitthi pianni leh thla</p>
                             <p>{{ form.dob }}</p>
@@ -372,17 +362,17 @@
 
                     <q-card-actions class="ml-[22px] pt-[35px]">
                         <q-btn
-                        style="padding: 10px 28px; border-radius: 12px"
-                        outline
-                        unelevated
-                             text-color="black"
+                            style="padding: 10px 28px; border-radius: 12px"
+                            outline
+                            unelevated
+                            text-color="black"
                             color="white"
                             label="Edit"
                             v-close-popup
                         />
                         <q-btn
-                        style="padding: 10px 80px; border-radius: 12px"
-                        unelevated
+                            style="padding: 10px 80px; border-radius: 12px"
+                            unelevated
                             label="Approve & Next"
                             color="black"
                             @click="submitForm"
@@ -404,7 +394,7 @@ defineOptions({
     layout: WebLayout,
 });
 
-const props = defineProps(["form", "districts", "constituency"]); // Prefill from server
+const props = defineProps(["form", "districts", "constituency","relative"]); // Prefill from server
 
 const preview = ref(false);
 
@@ -412,6 +402,7 @@ const $q = useQuasar();
 
 const district = ref(props.districts || []);
 const constituencies = ref(props.constituency || []);
+const relative = ref(props.relative || []);
 
 // Reactive variable for filtered constituencies
 const filteredConstituencies = computed(() => {

@@ -35,22 +35,25 @@
                                 >
                                     Diltu hming
                                 </div>
-                                <div class="">
-                                    <q-input
-                                        outlined
-                                        placeholder="Diltu hming pum"
-                                        v-model="form.name"
-                                        :error="form.errors.name"
-                                        :error-message="form.errors.name || ''"
-                                    />
-                                </div>
+                                <input
+                                    type="text"
+                                    placeholder="Diltu hming pum"
+                                    v-model="form.name"
+                                    :class="[
+                                        'border p-2 w-full rounded-lg',
+                                        form.errors.name
+                                            ? 'border-red-500'
+                                            : 'border-gray-300',
+                                    ]"
+                                />
                                 <div
-                                    v-if="$page.props.errors.name"
-                                    class="text-red"
+                                    v-if="form.errors.name"
+                                    class="text-red-500 text-sm"
                                 >
-                                    {{ $page.props.errors.name }}
+                                    {{ form.errors.name }}
                                 </div>
                             </div>
+
                             <div>
                                 <div
                                     class="text-sm font-medium text-black q-mb-xs"
@@ -82,19 +85,22 @@
                                 >
                                     Veng/Khua
                                 </div>
-                                <q-input
-                                    outlined
-                                    dense
+                                <input
+                                    type="text"
                                     placeholder="Veng/Khua"
                                     v-model="form.locality"
-                                    :error="form.errors.locality"
-                                    :error-message="form.errors.locality || ''"
+                                    :class="[
+                                        'border p-2 w-full rounded-lg',
+                                        form.errors.locality
+                                            ? 'border-red-500'
+                                            : 'border-gray-300',
+                                    ]"
                                 />
                                 <div
-                                    v-if="$page.props.errors.locality"
-                                    class="text-red"
+                                    v-if="form.errors.locality"
+                                    class="text-red-500 text-sm"
                                 >
-                                    {{ $page.props.errors.locality }}
+                                    {{ form.errors.locality }}
                                 </div>
                             </div>
                             <div>
@@ -103,19 +109,30 @@
                                 >
                                     Phone number
                                 </div>
-                                <q-input
-                                    outlined
-                                    dense
+
+                                <input
+                                    type="text"
+                                    maxlength="10"
+                                    @input="
+                                        form.driver_phone = form.mobile
+                                            .replace(/\D/g, '')
+                                            .slice(0, 10)
+                                    "
                                     placeholder="Phone number"
                                     v-model="form.mobile"
-                                    :error="form.errors.mobile"
-                                    :error-message="form.errors.mobile || ''"
+                                    :class="[
+                                        'border p-2 w-full rounded-lg',
+                                        form.errors.mobile
+                                            ? 'border-red-500'
+                                            : 'border-gray-300',
+                                    ]"
                                 />
+                               
                                 <div
-                                    v-if="$page.props.errors.mobile"
-                                    class="text-red"
+                                    v-if="form.errors.mobile"
+                                    class="text-red-500 text-sm"
                                 >
-                                    {{ $page.props.errors.mobile }}
+                                    {{ form.errors.mobile }}
                                 </div>
                             </div>
                             <div>
@@ -124,19 +141,23 @@
                                 >
                                     Bank hming
                                 </div>
-                                <q-input
-                                    outlined
-                                    dense
+
+                                <input
+                                    type="text"
                                     placeholder="Bank hming"
                                     v-model="form.bank_name"
-                                    :error="form.errors.bank_name"
-                                    :error-message="form.errors.bank_name || ''"
+                                    :class="[
+                                        'border p-2 w-full rounded-lg',
+                                        form.errors.bank_name
+                                            ? 'border-red-500'
+                                            : 'border-gray-300',
+                                    ]"
                                 />
                                 <div
-                                    v-if="$page.props.errors.bank_name"
-                                    class="text-red"
+                                    v-if="form.errors.bank_name"
+                                    class="text-red-500 text-sm"
                                 >
-                                    {{ $page.props.errors.bank_name }}
+                                    {{ form.errors.bank_name }}
                                 </div>
                             </div>
                             <div>
@@ -145,21 +166,23 @@
                                 >
                                     Bank account number
                                 </div>
-                                <q-input
-                                    outlined
-                                    dense
+
+                                <input
+                                    type="text"
                                     placeholder="Bank account number"
                                     v-model="form.account_no"
-                                    :error="form.errors.account_no"
-                                    :error-message="
-                                        form.errors.account_no || ''
-                                    "
+                                    :class="[
+                                        'border p-2 w-full rounded-lg',
+                                        form.errors.account_no
+                                            ? 'border-red-500'
+                                            : 'border-gray-300',
+                                    ]"
                                 />
                                 <div
-                                    v-if="$page.props.errors.account_no"
-                                    class="text-red"
+                                    v-if="form.errors.account_no"
+                                    class="text-red-500 text-sm"
                                 >
-                                    {{ $page.props.errors.account_no }}
+                                    {{ form.errors.account_no }}
                                 </div>
                             </div>
                             <div>
@@ -168,19 +191,23 @@
                                 >
                                     IFSC code
                                 </div>
-                                <q-input
-                                    outlined
-                                    dense
+
+                                <input
+                                    type="text"
                                     placeholder="Bank IFSC code"
                                     v-model="form.ifsc_code"
-                                    :error="form.errors.ifsc_code"
-                                    :error-message="form.errors.ifsc_code || ''"
+                                    :class="[
+                                        'border p-2 w-full rounded-lg',
+                                        form.errors.ifsc_code
+                                            ? 'border-red-500'
+                                            : 'border-gray-300',
+                                    ]"
                                 />
                                 <div
-                                    v-if="$page.props.errors.ifsc_code"
-                                    class="text-red"
+                                    v-if="form.errors.ifsc_code"
+                                    class="text-red-500 text-sm"
                                 >
-                                    {{ $page.props.errors.ifsc_code }}
+                                    {{ form.errors.ifsc_code }}
                                 </div>
                             </div>
 
@@ -190,7 +217,7 @@
                             >
                                 Document Upload
                             </div>
-                            <!-- <div>
+                            <div>
                                 <div
                                     class="text-sm font-medium text-black q-mb-xs"
                                 >
@@ -220,7 +247,7 @@
                                 >
                                     {{ $page.props.errors.relation }}
                                 </div>
-                            </div> -->
+                            </div>
                             <div>
                                 <div
                                     class="text-sm font-medium text-black q-mb-xs"
@@ -329,13 +356,20 @@
 
                             <!-- Buttons -->
                             <q-btn
-                                style="padding: 10px 24px; border-radius: 12px" outline unelevated text-color="black"
-                                label="Preview" color="white" @click="preview = true"
+                                style="padding: 10px 24px; border-radius: 12px"
+                                outline
+                                unelevated
+                                text-color="black"
+                                label="Preview"
+                                color="white"
+                                @click=openDialog
                             />
                             <q-btn
                                 label="Submit & Send OTP"
-                                unelevated color="black" @click="submitForm"
-                                style="padding: 10px 50px; border-radius: 12px" 
+                                unelevated
+                                color="black"
+                                @click="submitForm"
+                                style="padding: 10px 50px; border-radius: 12px"
                             />
                         </q-form>
                     </div>
@@ -345,78 +379,96 @@
                 <q-dialog v-model="preview">
                     <div>
                         <!-- <hr class="my-4 border-border" /> -->
-                        <q-card class="w-[411px] h-[822px] rounded-md">
+                        <q-card class="w-[411px] h-auto rounded-md">
                             <q-card-section class="">
                                 <p
-                                    class="text-center flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
+                                    class="text-center flex-shrink-0 rounded-[20px] mb-8"
                                 >
                                     Ruang Phurh Diltu leh a man Chungchang
                                 </p>
-                                <div class="leading-[2px]">
-                                    <p class="text-[#61646B]">Hming</p>
-                                    <p>{{ form.name }}</p>
+                                <p class="">Diltu</p>
+                                <div class="pl-5">
+                                    <div class="leading-[2px]">
+                                        <p class="text-[#61646B]">Hming</p>
+                                        <p>{{ form.name }}</p>
+                                    </div>
+                                    <div class="leading-[2px] pt-4">
+                                        <p class="text-[#61646B]">District</p>
+                                        <p>{{ form.district["label"] }}</p>
+                                    </div>
+                                    <div class="leading-[2px] pt-4">
+                                        <p class="text-[#61646B]">Veng/Khua</p>
+                                        <p>{{ form.locality }}</p>
+                                    </div>
+                                    <div class="leading-[2px] pt-4">
+                                        <p class="text-[#61646B]">
+                                            Phone Number
+                                        </p>
+                                        <p>{{ form.mobile }}</p>
+                                    </div>
                                 </div>
-                                <div class="leading-[2px] pt-4">
-                                    <p class="text-[#61646B]">District</p>
-                                    <p>{{ form.district["label"] }}</p>
+                                <hr class="my-4 border-border" />
+                                <p class="">Bank Details</p>
+                                <div class="pl-5">
+                                    <div class="leading-[2px]">
+                                        <p class="text-[#61646B]">Bank hming</p>
+                                        <p>{{ form.bank_name }}</p>
+                                    </div>
+                                    <div class="leading-[2px] pt-4">
+                                        <p class="text-[#61646B]">
+                                            Bank account number
+                                        </p>
+                                        <p>
+                                            {{ form.account_no }}
+                                        </p>
+                                    </div>
+                                    <div class="leading-[2px] pt-4">
+                                        <p class="text-[#61646B]">IFSC Code</p>
+                                        <p>{{ form.ifsc_code }}</p>
+                                    </div>
                                 </div>
-                                <div class="leading-[2px] pt-4">
-                                    <p class="text-[#61646B]">Veng/Khua</p>
-                                    <p>{{ form.locality }}</p>
-                                </div>
-                                <div class="leading-[2px] pt-4">
-                                    <p class="text-[#61646B]">Phone Number</p>
-                                    <p>{{ form.mobile }}</p>
-                                </div>
-
                                 <hr class="my-4 border-border" />
                                 <p
-                                    class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
-                                >
-                                    Bank Details
-                                </p>
-                                <div class="leading-[2px]">
-                                    <p class="text-[#61646B]">Bank hming</p>
-                                    <p>{{ form.bank_name }}</p>
-                                </div>
-                                <div class="leading-[2px] pt-4">
-                                    <p class="text-[#61646B]">
-                                        Bank account number
-                                    </p>
-                                    <p>
-                                        {{ form.account_no }}
-                                    </p>
-                                </div>
-                                <div class="leading-[2px] pt-4">
-                                    <p class="text-[#61646B]">IFSC Code</p>
-                                    <p>{{ form.ifsc_code }}</p>
-                                </div>
-
-                                <p
-                                    class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
+                                    class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] mb-8"
                                 >
                                     Document Thiltel te
                                 </p>
-                                <div class="leading-[2px]">
-                                    <!-- <img class="w-[412px] h-[473px]" id="background" src="/public/image/tick.png" /> -->
-                                    <p>
-                                        {{
-                                            form.id_proof?.name ||
-                                            "No file uploaded"
-                                        }}
+                                <div class="pl-5">
+                                    <div class="">
+                                        <!-- <img class="w-[412px] h-[473px]" id="background" src="/public/image/tick.png" /> -->
+                                        <p>
+                                            {{
+                                                form.id_proof?.name ||
+                                                "No file uploaded"
+                                            }}
+                                        </p>
+                                    </div>
+                                    <div class="pt-4">
+                                        <!-- <p class="text-[#61646B]">District</p> -->
+                                        <p>{{ form.receipt?.name }}</p>
+                                    </div>
+                                    <div class="pt-4">
+                                        <!-- <p class="text-[#61646B]">Veng/Khua</p> -->
+                                        <p>
+                                            {{ form.death_certificate?.name }}
+                                        </p>
+                                    </div>
+                                    <div class="pt-4">
+                                        <!-- <p class="text-[#61646B]">Phone Number</p> -->
+                                        <p>
+                                            {{ form.additional_document?.name }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-2">
+                                    <input type="checkbox" class="mt-1" />
+                                    <p class="text-[#757575]">
+                                        Kei {{ form.name }} hian heng dilna
+                                        leh document upload-te hi thu diktak a
+                                        ni tih ka nemnghet e, diklo emaw felhlel
+                                        a awm anih chuan a tul angin mawh ka
+                                        phur ang.
                                     </p>
-                                </div>
-                                <div class="leading-[2px] pt-4">
-                                    <!-- <p class="text-[#61646B]">District</p> -->
-                                    <p>{{ form.receipt?.name }}</p>
-                                </div>
-                                <div class="leading-[2px] pt-4">
-                                    <!-- <p class="text-[#61646B]">Veng/Khua</p> -->
-                                    <p>{{ form.death_certificate?.name }}</p>
-                                </div>
-                                <div class="leading-[2px] pt-4">
-                                    <!-- <p class="text-[#61646B]">Phone Number</p> -->
-                                    <p>{{ form.additional_document?.name }}</p>
                                 </div>
                             </q-card-section>
 
@@ -445,12 +497,15 @@
 import { useForm } from "@inertiajs/vue3";
 import WebLayout from "@/Layouts/WebLayout.vue";
 import { ref } from "vue";
+import { useQuasar } from "quasar";
 
 defineOptions({ layout: WebLayout });
 
 const props = defineProps(["form", "districts"]);
 const preview = ref(false);
 
+
+const $q = useQuasar();
 // Text fields for dynamic input rendering (excluding district)
 const textFields = [
     { key: "name", label: "Diltu hming", placeholder: "Diltu hming pum" },
@@ -505,6 +560,7 @@ const form = useForm({
     bank_name: "",
     account_no: "",
     ifsc_code: "",
+    relation: "",
     id_proof: null,
     receipt: null,
     death_certificate: null,
@@ -540,6 +596,11 @@ const submitForm = () => {
             });
         },
     });
+};
+
+
+const openDialog = () => {
+    preview.value = true
 };
 
 // Back to previous step

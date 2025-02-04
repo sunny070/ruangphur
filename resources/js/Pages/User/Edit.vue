@@ -77,6 +77,25 @@
                     />
                 </div>
                 <div class="col-xs-12 col-sm-6">
+                    <q-select v-model="form.roles"
+                              multiple
+                              use-chips
+                              :options="roleOptions"
+                              dense
+                              class="my-input"
+                              label="Roles"
+                              outlined
+                              :option-value="'id'"
+                              :option-label="'name'"
+                              :error="form.errors.hasOwnProperty('roles')"
+                              :error-message="form.errors?.roles?.toString()"
+                              @blur="delete form.errors['roles']"
+                              :rules="[
+                                val=>val.length>0 || 'roles is required'
+                       ]"
+                    />
+                </div>
+                <div class="col-xs-12 col-sm-6">
                     <q-input v-model="form.password"
                              type="password"
                              class="my-input"
@@ -138,6 +157,7 @@ const form = useForm({
     phone: props.data?.phone,
     email: props.data?.email,
     roles: props.data?.roles.map(item => item.name) || [],
+    district: props.data?.district_id.map(item => item.district_id) || [],
     password: '',
     password_confirmation: '',
 })
