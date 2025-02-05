@@ -13,23 +13,20 @@ return new class extends Migration
     {
         Schema::create('transports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('deceased_id')->constrained()->onDelete('cascade');
-
-            $table->string('source_district');
+            $table->foreignIdFor(\App\Models\District::class,'source_district');
             $table->string('source_locality');
-            $table->string('destination_district');
+            $table->foreignIdFor(\App\Models\District::class,'destination_district');
             $table->string('destination_locality');
             // $table->string('distance');
             $table->string('vehicle_number');
             $table->string('driver_name');
             $table->string('driver_phone');
-            $table->string('transport_cost');
-
             $table->decimal('source_lat', 10, 7);
             $table->decimal('source_lng', 10, 7);
             $table->decimal('destination_lat', 10, 7);
             $table->decimal('destination_lng', 10, 7);
             $table->decimal('distance', 8, 2);
+            $table->string('transport_cost');
             $table->timestamps();
         });
     }

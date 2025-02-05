@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('relatives', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('deceased_id');
             $table->string('name');
             $table->timestamps();
         });

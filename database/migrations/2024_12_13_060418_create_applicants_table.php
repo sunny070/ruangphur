@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\District;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,17 +14,16 @@ return new class extends Migration
     {
         Schema::create('applicants', function (Blueprint $table) {
             $table->id();
-            
+
             $table->string('name');
             $table->string('mobile');
-            $table->string('district');
+            $table->foreignIdFor(District::class);
 
             $table->string('locality');
             $table->string('bank_name');
             $table->string('account_no');
             $table->string('ifsc_code');
-            $table->string('relation');
-
+            $table->string('relation')->nullable();
              $table->string('id_proof')->nullable();
         $table->string('receipt')->nullable();
         $table->string('death_certificate')->nullable();

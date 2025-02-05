@@ -17,7 +17,7 @@ class RelativeSeeder extends Seeder
 
         foreach ($relatives as $relative) {
             DB::table('relatives')->insert([
-                'deceased_id' => 1, // Change this based on actual deceased IDs
+              // Change this based on actual deceased IDs
                 'name' => $relative,
                 'created_at' => now(),
                 'updated_at' => now(),

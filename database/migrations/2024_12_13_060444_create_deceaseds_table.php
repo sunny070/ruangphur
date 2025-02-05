@@ -13,16 +13,15 @@ return new class extends Migration
     {
         Schema::create('deceaseds', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('application_id')->constrained()->onDelete('cascade');
             $table->string('name');
-            $table->string('relative');
-            
+            $table->foreignIdFor(\App\Models\Relative::class);
+
             $table->string('relative_name');
             $table->date('dob');
             $table->string('gender');
-            $table->string('district');
+            $table->foreignIdFor(\App\Models\District::class);
             $table->string('locality');
-            $table->string('constituency')->nullable();
+            $table->foreignIdFor(\App\Models\Constituency::class);
             $table->string('time_of_death')->nullable();
             $table->string('place_of_death')->nullable();
             $table->timestamps();

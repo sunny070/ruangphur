@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Application;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,7 +14,9 @@ return new class extends Migration
     {
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('applicant_id')->constrained()->onDelete('cascade');
+            $table->foreignIdFor(\App\Models\Applicant::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(\App\Models\Deceased::class);
+            $table->foreignIdFor(\App\Models\Transport::class);
             $table->string('status')->nullable();
             $table->string('application_no')->unique();
             $table->timestamp('verified_at')->nullable();

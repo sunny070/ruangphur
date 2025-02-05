@@ -16,14 +16,14 @@ class AssemblyConstituencySeeder extends Seeder
         // Districts with their respective constituencies
         $districts = [
             'Aizawl' => [
-                'Tuivaw', 'Chalfilh', 'Tawi', 
+                'Tuivaw', 'Chalfilh', 'Tawi',
                 'Aizawl North - I', 'Aizawl North - II', 'Aizawl North - III',
-                'Aizawl East - I', 'Aizawl East - II', 
+                'Aizawl East - I', 'Aizawl East - II',
                 'Aizawl West - I', 'Aizawl West - II', 'Aizawl West - III',
                 'Aizawl South - I', 'Aizawl South - II', 'Aizawl South - III'
             ],
             'Lunglei' => [
-                'South Tuipui', 'Lunglei North', 'Lunglei East', 
+                'South Tuipui', 'Lunglei North', 'Lunglei East',
                 'Lunglei West', 'Lunglei South', 'Thorang', 'West Tuipui'
             ],
             'Serchhip' => ['Serchhip', 'Tuikum', 'Hrangturzo'],
@@ -39,9 +39,13 @@ class AssemblyConstituencySeeder extends Seeder
 
         foreach ($districts as $districtName => $constituencies) {
             // Insert district
-            $districtId = DB::table('districts')->insertGetId([
+            for ($i = 1; $i <= 11; $i++) {
+                echo $i . "<br>";
+            }
+            $districtId = DB::table('districts')
+                ->insertGetId([
                 'name' => $districtName,
-                'district_code' => strtoupper(substr($districtName, 0, 3)), // Generate code like "AIZ" for Aizawl
+                'district_code' => $i, // Generate code like "AIZ" for Aizawl
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
