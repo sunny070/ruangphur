@@ -51,7 +51,7 @@
                                     class="w-24"
                                     outlined
                                     dense
-                                    v-model="form.relative"
+                                    v-model="form.relative_id"
                                     :options="relative"
                                     label="Pa"
                                     lazy-rules
@@ -365,11 +365,14 @@ defineOptions({
     layout: WebLayout,
 });
 
+
+const formStore = useFormStore(); // Initialize the Pinia store
+
 const props = defineProps(["districts", "constituency", "relative"]); // Prefill from server
 
 const preview = ref(false);
+
 const $q = useQuasar();
-const formStore = useFormStore(); // Initialize the Pinia store
 
 const district = ref(props.districts || []);
 const constituencies = ref(props.constituency || []);
@@ -391,13 +394,13 @@ const genderOptions = [
 
 const form = useForm({
     name: formStore.formStep1Data.name || "",
-    relative: formStore.formStep1Data.relative || "",
+    relative_id: formStore.formStep1Data.relative || "",
     relative_name: formStore.formStep1Data.relative_name || "",
     dob: formStore.formStep1Data.dob || "",
     gender: formStore.formStep1Data.gender || "",
-    district: formStore.formStep1Data.district || "",
+    district_id: formStore.formStep1Data.district || "",
     locality: formStore.formStep1Data.locality || "",
-    constituency: formStore.formStep1Data.constituency || "",
+    constituency_id: formStore.formStep1Data.constituency || "",
     time_of_death: formStore.formStep1Data.time_of_death || "",
     place_of_death: formStore.formStep1Data.place_of_death || "",
 });

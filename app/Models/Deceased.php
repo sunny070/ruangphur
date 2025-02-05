@@ -11,13 +11,8 @@ class Deceased extends Model
     use HasFactory;
 
     protected $fillable = [
-<<<<<<< Updated upstream
-        'name','relative_id', 'relative_name', 'dob', 'gender',
-        'district_id', 'locality', 'constituency_id', 'time_of_death', 'place_of_death',
-=======
         'application_id', 'name','relative_id', 'relative_name', 'dob', 'gender',
         'district_id', 'locality', 'constituency', 'time_of_death', 'place_of_death',
->>>>>>> Stashed changes
     ];
 
     public function district(): BelongsTo

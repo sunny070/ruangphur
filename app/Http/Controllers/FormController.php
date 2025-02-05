@@ -30,64 +30,58 @@ class FormController extends Controller
 
 public function storeStep1(Request $request)
 {
+    // dd($request);
     $validated = $request->validate([
         'name' => 'required|string|regex:/^[a-zA-Z\s]*$/', // Only letters and spaces
-        'relative' => 'required',
+        'relative_id' => 'required',
         'relative_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
         'dob' => 'required|date',
         'gender' => 'required',
-        'district' => 'required',
+        'district_id' => 'required',
         'locality' => 'required|string',
-        'constituency' => 'required',
+        'constituency_id' => 'required',
         'time_of_death' => 'required|string',
         'place_of_death' => 'required|string',
     ]);
 
     // You can now directly use the validated data to store in the database or perform other actions.
     // For example:
-    Deceased::create($validated);
+    // Deceased::create($validated);
 
     return redirect()->route('form.step2');
 }
 
     // Step 2
     public function step2()
-    {
-        $transportData = session('transport', []);
+{
+    return Inertia::render('Form/FormStep2', [
+        'districts' => District::query()->get(['id as value', 'name as label']),
+    ]);
+}
 
+public function storeStep2(Request $request)
+{
+    $validated = $request->validate([
+        'source_district' => 'required|max:255',
+        'source_locality' => 'max:255',
+        'destination_district' => 'required|max:255',
+        'destination_locality' => 'max:255',
+        'distance' => 'required',
+        'vehicle_number' => 'required|string|max:20',
+        'driver_name' => 'required|string|max:255',
+        'driver_phone' => 'required|string|regex:/^[0-9]{10}$/',
+        'transport_cost' => 'required',
+        'source_lat' => 'numeric',
+        'source_lng' => 'numeric',
+        'destination_lat' => 'numeric',
+        'destination_lng' => 'numeric',
+    ]);
 
-        return Inertia::render('Form/FormStep2', [
-            'form' => $transportData,
-            'districts' => District::query()->get(['id as value', 'name as label']),
-        ]);
-    }
+    // Save the validated data to the database or perform other actions
+    // You can now rely on Pinia to manage the form state
 
-
-    public function storeStep2(Request $request)
-    {
-        // dd($request);
-        $validated = $request->validate([
-            'source_district' => 'required|max:255',
-            'source_locality' => 'max:255',
-            'destination_district' => 'required|max:255',
-            'destination_locality' => 'max:255',
-            'distance' => 'required',
-            'vehicle_number' => 'required|string|max:20',
-
-            'driver_name' => 'required|string|max:255',
-            'driver_phone' => 'required|string|regex:/^[0-9]{10}$/',
-            'transport_cost' => 'required',
-            'source_lat' => 'numeric',
-            'source_lng' => 'numeric',
-            'destination_lat' => 'numeric',
-            'destination_lng' => 'numeric',
-
-        ]);
-
-        session()->put('transport', $validated);
-
-        return redirect()->route('form.step3');
-    }
+    return redirect()->route('form.step3');
+}
 
 
     // Step 3
