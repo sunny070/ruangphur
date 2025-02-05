@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call(RoleTableSeeder::class);
         $this->call(UserSeeder::class);
-//         $this->call(DistrictSeeder::class);
+         $this->call(DistrictSeeder::class);
         $this->call(AssemblyConstituencySeeder::class);
         $this->call(RelativeSeeder::class);
     }

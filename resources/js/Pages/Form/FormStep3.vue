@@ -63,11 +63,11 @@
                                 <q-select
                                     outlined
                                     dense
-                                    v-model="form.district"
+                                    v-model="form.district_id"
                                     label="Select District"
                                     :options="districts"
-                                    :error="form.errors.district"
-                                    :error-message="form.errors.district || ''"
+                                    :error="form.errors.district_id"
+                                    :error-message="form.errors.district_id || ''"
                                 />
                                 <div
                                     v-if="$page.props.errors.district"
@@ -127,7 +127,7 @@
                                             : 'border-gray-300',
                                     ]"
                                 />
-                               
+
                                 <div
                                     v-if="form.errors.mobile"
                                     class="text-red-500 text-sm"
@@ -555,7 +555,7 @@ const districts = ref(props.districts || []);
 const form = useForm({
     name: "",
     mobile: "",
-    district: "",
+    district_id: "",
     locality: "",
     bank_name: "",
     account_no: "",

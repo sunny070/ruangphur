@@ -47,12 +47,11 @@
                         </div>
                         <div class="flex gap-4">
                             <div>
-                                <q-select
-                                    class="w-24"
+                                <q-select class=" w-24"
                                     outlined
                                     dense
                                     v-model="form.relative"
-                                    :options="relative"
+                                    :options=relative
                                     label="Pa"
                                     lazy-rules
                                     :error="form.errors.relative"
@@ -96,7 +95,7 @@
                             A pianni leh thla
                         </div>
                         <input
-                            class="text-[#61646B]"
+                        class="text-[#61646B]"
                             type="date"
                             placeholder="Mitthi Pianni leh thla"
                             v-model="form.dob"
@@ -289,8 +288,8 @@
                             {{ form.name }}
                         </h5>
                         <p class="mb-4 text-sm text-bold">
-                            s/o {{ form.relative_name }}
-                        </p>
+                        s/o {{ form.relative_name }}
+                    </p>
                     </q-card-section>
                     <hr class="my-4 border-border m-4" />
 
@@ -355,21 +354,20 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
-import { ref, computed, onMounted } from 'vue';
-import { useQuasar } from 'quasar';
-import { useFormStore } from '@/Stores/FormStore'; // Import the Pinia store
+import { useForm } from "@inertiajs/vue3";
+import { ref, computed } from "vue";
+import { useQuasar } from "quasar";
 import WebLayout from "@/Layouts/WebLayout.vue";
 
 defineOptions({
     layout: WebLayout,
 });
 
-const props = defineProps(["districts", "constituency", "relative"]); // Prefill from server
+const props = defineProps(["form", "districts", "constituency","relative"]); // Prefill from server
 
 const preview = ref(false);
+
 const $q = useQuasar();
-const formStore = useFormStore(); // Initialize the Pinia store
 
 const district = ref(props.districts || []);
 const constituencies = ref(props.constituency || []);
@@ -390,16 +388,16 @@ const genderOptions = [
 ];
 
 const form = useForm({
-    name: formStore.formStep1Data.name || "",
-    relative: formStore.formStep1Data.relative || "",
-    relative_name: formStore.formStep1Data.relative_name || "",
-    dob: formStore.formStep1Data.dob || "",
-    gender: formStore.formStep1Data.gender || "",
-    district: formStore.formStep1Data.district || "",
-    locality: formStore.formStep1Data.locality || "",
-    constituency: formStore.formStep1Data.constituency || "",
-    time_of_death: formStore.formStep1Data.time_of_death || "",
-    place_of_death: formStore.formStep1Data.place_of_death || "",
+    name: props.form.name || "",
+    relative: props.form.relative || "",
+    relative_name: props.form.relative_name || "",
+    dob: props.form.dob || "",
+    gender: props.form.gender || "",
+    district: props.form.district || "",
+    locality: props.form.locality || "",
+    constituency: props.form.constituency || "",
+    time_of_death: props.form.time_of_death || "",
+    place_of_death: props.form.place_of_death || "",
 });
 
 const formatDateTime = (datetime) => {
@@ -441,8 +439,6 @@ const ageAtDeath = computed(() => {
 });
 
 const submitForm = () => {
-    formStore.setFormStep1Data(form); // Save form data to Pinia store
-
     form.post(route("form.storeStep1"), {
         onError: (errors) => {
             console.log(errors); // Check errors returned from backend

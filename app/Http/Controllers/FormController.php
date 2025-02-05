@@ -20,40 +20,35 @@ class FormController extends Controller
 {
     // Step 1
     public function step1()
-    {
-        $deceasedData = session('deceased', []); // Retrieve session data or empty array
-        // dd(Constituency::query()->get(['id as value', 'name as label', 'district_id as district']));
-        return Inertia::render('Form/FormStep1', [
+{
+    return Inertia::render('Form/FormStep1', [
+        'districts' => District::query()->get(['id as value', 'name as label']),
+        'relative' => Relative::query()->get(['id as value', 'name as label']),
+        'constituency' => Constituency::query()->get(['id as value', 'name as label', 'district_id as district'])
+    ]);
+}
 
-            'form' => $deceasedData,
-            'districts' => District::query()->get(['id as value', 'name as label']),
-            'relative' => Relative::query()->get(['id as value', 'name as label']),
-            'constituency' => Constituency::query()->get(['id as value', 'name as label', 'district_id as district'])
-        ]);
-    }
+public function storeStep1(Request $request)
+{
+    $validated = $request->validate([
+        'name' => 'required|string|regex:/^[a-zA-Z\s]*$/', // Only letters and spaces
+        'relative' => 'required',
+        'relative_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
+        'dob' => 'required|date',
+        'gender' => 'required',
+        'district' => 'required',
+        'locality' => 'required|string',
+        'constituency' => 'required',
+        'time_of_death' => 'required|string',
+        'place_of_death' => 'required|string',
+    ]);
 
-    public function storeStep1(Request $request)
-    {
-        // dd($request);
-        $validated = $request->validate([
-            'name' => 'required|string|regex:/^[a-zA-Z\s]*$/', // Only letters and spaces
-            'relative' => 'required',
-            'relative_name' => 'required|string|regex:/^[a-zA-Z\s]*$/',
-            'dob' => 'required|date',
-            'gender' => 'required',
+    // You can now directly use the validated data to store in the database or perform other actions.
+    // For example:
+    Deceased::create($validated);
 
-            'district' => 'required',
-            'locality' => 'required|string',
-            'constituency' => 'required',
-            'time_of_death' => 'required|string',
-            'place_of_death' => 'required|string',
-
-        ]);
-
-        session()->put('deceased', $validated);
-
-        return redirect()->route('form.step2');
-    }
+    return redirect()->route('form.step2');
+}
 
     // Step 2
     public function step2()
@@ -111,7 +106,7 @@ class FormController extends Controller
         $validated = $request->validate([
             'name' => 'required|string',
             'mobile' => 'required|string',
-            'district' => 'required',
+            'district_id' => 'required',
             'locality' => 'required|string',
             'bank_name' => 'required|string',
             'account_no' => 'required|string',
@@ -181,9 +176,75 @@ class FormController extends Controller
         );
     }
 
+
+
+
+
     // Validate OTP and Submit
+//    public function validateOtp(Request $request)
+//    {
+//        // Validate OTP
+//        $request->validate(['otp' => 'required|digits:6']);
+//
+//        // Retrieve OTP from session
+//        $sessionOtp = session('otp');
+//        if ($sessionOtp != $request->otp) {
+//            return back()->withErrors(['otp' => 'Invalid OTP.']);
+//        }
+//
+//        // Retrieve form data from session
+//        $deceasedData = session('deceased');
+//        $transportData = session('transport');
+//        $applicantData = session('applicant');
+//
+//        // Fix the gender data (assuming 'gender' is an object)
+//        if (isset($deceasedData['gender']) && is_array($deceasedData['gender'])) {
+//            $deceasedData['gender'] = $deceasedData['gender']['value'];  // Extract the value
+//            $deceasedData['relative'] = $deceasedData['relative']['value'];  // Extract the value
+//        }
+//
+//        // Create the Applicant
+//        $applicant = Applicant::create(array_merge($applicantData, [
+//            'district' => $applicantData['district']['value'],
+//        ]));
+//
+//        // Generate the Application Number (only once)
+//        $applicationNumber = $this->generateApplicationNumber();
+//
+//        // Create the Application record
+//        $application = Application::create([
+//            'applicant_id' => $applicant->id,
+//            'status' => 'Pending',
+//            'application_no' => $applicationNumber,
+//        ]);
+//
+//        // Create the Deceased record
+//        $deceased = Deceased::create(array_merge($deceasedData, [
+//            'application_id' => $application->id,
+//            'district' => $deceasedData['district']['value'],
+//            'constituency' => $deceasedData['constituency']['value']
+//        ]));
+//
+//        // Create the Transport record
+//        Transport::create(array_merge($transportData, [
+//            'deceased_id' => $deceased->id,
+//            'source_district' => $transportData['source_district']['value'],
+//            'destination_district' => $transportData['destination_district']['value']
+//        ]));
+//
+//        // Clear session data
+//        session()->forget(['deceased', 'transport', 'applicant', 'otp']);
+//
+//        // Pass the application number to the FormComplete page
+//        return Inertia::render('Form/FormComplete', [
+//            'application_no' => $applicationNumber,  // Use the same application number
+//        ]);
+//    }
+
+
     public function validateOtp(Request $request)
     {
+//        dd($request);
         // Validate OTP
         $request->validate(['otp' => 'required|digits:6']);
 
@@ -198,49 +259,80 @@ class FormController extends Controller
         $transportData = session('transport');
         $applicantData = session('applicant');
 
-        // Fix the gender data (assuming 'gender' is an object)
+        // Fix gender and relative data
         if (isset($deceasedData['gender']) && is_array($deceasedData['gender'])) {
-            $deceasedData['gender'] = $deceasedData['gender']['value'];  // Extract the value
-            $deceasedData['relative'] = $deceasedData['relative']['value'];  // Extract the value
+            $deceasedData['gender'] = $deceasedData['gender']['value'];
+            $deceasedData['relative'] = $deceasedData['relative']['value'];
         }
 
         // Create the Applicant
-        $applicant = Applicant::create(array_merge($applicantData, [
-            'district' => $applicantData['district']['value'],
-        ]));
+        $applicant = Applicant::create([
+            ...$applicantData,
+            'district_id' => $applicantData['district_id']
+//            'district_id' => $applicantData['district']['value'],
+        ]);
 
-        // Generate the Application Number (only once)
+        // Generate the Application Number
         $applicationNumber = $this->generateApplicationNumber();
+
+        // Create the Deceased record
+        $deceased = Deceased::create([
+            ...$deceasedData,
+
+            'district_id' => $deceasedData['district']['value'],
+            'constituency' => $deceasedData['constituency']['value'],
+        ]);
+
+        // Create the Transport record
+        Transport::create([
+            ...$transportData,
+
+            'source_district' => $transportData['source_district']['value'],
+            'destination_district' => $transportData['destination_district']['value'],
+        ]);
 
         // Create the Application record
         $application = Application::create([
             'applicant_id' => $applicant->id,
+            'deceased_id' => $deceased->id,
+            'transport_id' => $transportData['id'],
             'status' => 'Pending',
             'application_no' => $applicationNumber,
         ]);
 
-        // Create the Deceased record
-        $deceased = Deceased::create(array_merge($deceasedData, [
-            'application_id' => $application->id,
-            'district' => $deceasedData['district']['value'],
-            'constituency' => $deceasedData['constituency']['value']
-        ]));
 
-        // Create the Transport record
-        Transport::create(array_merge($transportData, [
-            'deceased_id' => $deceased->id,
-            'source_district' => $transportData['source_district']['value'],
-            'destination_district' => $transportData['destination_district']['value']
-        ]));
+
+        // Store Attachments
+        $attachmentData = [];
+        if ($request->hasFile('id_proof')) {
+            $attachmentData['id_proof'] = $request->file('id_proof')->store('documents', 'public');
+        }
+        if ($request->hasFile('receipt')) {
+            $attachmentData['receipt'] = $request->file('receipt')->store('documents', 'public');
+        }
+        if ($request->hasFile('death_certificate')) {
+            $attachmentData['death_certificate'] = $request->file('death_certificate')->store('documents', 'public');
+        }
+        if ($request->hasFile('additional_document')) {
+            $attachmentData['additional_document'] = $request->file('additional_document')->store('documents', 'public');
+        }
+
+        if (!empty($attachmentData)) {
+            $attachmentData['application_id'] = $application->id;
+            Attachment::create($attachmentData);
+        }
 
         // Clear session data
         session()->forget(['deceased', 'transport', 'applicant', 'otp']);
 
         // Pass the application number to the FormComplete page
         return Inertia::render('Form/FormComplete', [
-            'application_no' => $applicationNumber,  // Use the same application number
+            'application_no' => $applicationNumber,
         ]);
     }
+
+
+
 
     private function generateApplicationNumber()
     {

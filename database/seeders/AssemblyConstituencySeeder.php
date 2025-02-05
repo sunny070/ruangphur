@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -38,19 +37,16 @@ class AssemblyConstituencySeeder extends Seeder
         ];
 
         foreach ($districts as $districtName => $constituencies) {
-            // Insert district
-            for ($i = 1; $i <= 11; $i++) {
-                echo $i . "<br>";
-            }
-            $districtId = DB::table('districts')
-                ->insertGetId([
-                'name' => $districtName,
-                'district_code' => $i, // Generate code like "AIZ" for Aizawl
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            // Fetch the district ID from the existing table
+            $districtId = DB::table('districts')->where('name', $districtName)->value('id');
 
-            // Insert constituencies for the district
+            if (!$districtId) {
+                // If the district does not exist, skip it
+                echo "District '$districtName' not found, skipping...\n";
+                continue;
+            }
+
+            // Insert constituencies for the existing district
             foreach ($constituencies as $constituency) {
                 DB::table('constituencies')->insert([
                     'name' => $constituency,
