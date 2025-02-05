@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignIdFor(\App\Models\Relative::class);
 
             $table->string('relative_name');
-            $table->date('dob');
+            $table->string('dob');
             $table->string('gender');
             $table->foreignIdFor(\App\Models\District::class);
             $table->string('locality');

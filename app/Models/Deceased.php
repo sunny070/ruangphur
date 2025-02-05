@@ -11,17 +11,22 @@ class Deceased extends Model
     use HasFactory;
 
     protected $fillable = [
-        'application_id', 'name','relative', 'relative_name', 'dob', 'gender',
-        'district', 'locality', 'constituency', 'time_of_death', 'place_of_death',
+        'name','relative_id', 'relative_name', 'dob', 'gender',
+        'district_id', 'locality', 'constituency_id', 'time_of_death', 'place_of_death',
     ];
 
     public function district(): BelongsTo
     {
-       return $this->belongsTo(District::class,'district');
+       return $this->belongsTo(District::class);
     }
     public function constituency(): BelongsTo
     {
-       return $this->belongsTo(Constituency::class,'constituency');
+       return $this->belongsTo(Constituency::class);
     }
-    
+
+    public function relative():BelongsTo
+    {
+        return  $this->belongsTo(Relative::class);
+    }
+
 }
