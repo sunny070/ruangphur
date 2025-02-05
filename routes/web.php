@@ -54,8 +54,11 @@ Route::group(['prefix' => 'user'], function () {
 
 // Amin login
 Route::middleware('auth')->group(function () {
-    Route::get('/admin/application', [AdminController::class, 'index'])->name('admin.application');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+   
+
+    
+    Route::get('/admin/application', [AdminController::class, 'index'])->name('admin.application');
     Route::get('/admin/bill', [AdminController::class, 'bill'])->name('admin.bill');
     Route::post('/admin/application/{application}/approve', [AdminController::class, 'approve'])->name('admin.application.approve');
     Route::post('/admin/application/{application}/reject', [AdminController::class, 'reject'])->name('admin.application.reject');

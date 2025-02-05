@@ -221,6 +221,8 @@ public function destroy(Application $application)
 
 
 
+
+
 // public function update(Request $request, Application $application)
 // {   dd($request->all());
 //     $application->update($request->all());
