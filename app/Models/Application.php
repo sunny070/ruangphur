@@ -17,6 +17,9 @@ class Application extends Model
     ];
     protected $fillable = [
         'applicant_id',
+        'deceased_id',
+        'transport_id',
+        
         'status',
     'application_no',
     'verified_at',

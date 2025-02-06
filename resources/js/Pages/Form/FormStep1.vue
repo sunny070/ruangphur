@@ -53,14 +53,13 @@
                                     dense
                                     v-model="form.relative_id"
                                     :options="relative"
+                                    option-label="label"
+                                    option-value="value"
+                                    map-options
+                                    emit-value
                                     label="Pa"
-                                    lazy-rules
-                                    :error="form.errors.relative"
-                                    :error-message="
-                                        form.errors.relative
-                                            ? form.errors.relative
-                                            : ''
-                                    "
+                                    :error="form.errors.relative_id"
+                                    :error-message="form.errors.relative_id"
                                 />
                                 <div
                                     v-if="$page.props.errors.relative"
@@ -144,14 +143,15 @@
                         <q-select
                             outlined
                             dense
-                            v-model="form.district"
+                            v-model="form.district_id"
                             label="Select District"
                             :options="district"
-                            :error="form.errors.district"
-                            :error-message="
-                                form.errors.district ? form.errors.district : ''
-                            "
-                            required
+                            option-label="label"
+                            option-value="value"
+                            map-options
+                            emit-value
+                            :error="form.errors.district_id"
+                            :error-message="form.errors.district_id"
                         />
                         <div
                             v-if="$page.props.errors.district"
@@ -192,15 +192,14 @@
                             outlined
                             dense
                             label="Mitthi te awmna assembly constituency"
-                            v-model="form.constituency"
-                            lazy-rules
+                            v-model="form.constituency_id"
                             :options="filteredConstituencies"
-                            :error="form.errors.constituency"
-                            :error-message="
-                                form.errors.constituency
-                                    ? form.errors.constituency
-                                    : ''
-                            "
+                            option-label="label"
+                            option-value="value"
+                            map-options
+                            emit-value
+                            :error="form.errors.constituency_id"
+                            :error-message="form.errors.constituency_id"
                         />
                         <div
                             v-if="$page.props.errors.constituency"
@@ -318,7 +317,7 @@
                         </div>
                         <div class="leading-[2px] pt-4">
                             <p class="text-[#61646B]">District</p>
-                            <p>{{ form.district["label"] }}</p>
+                            <p>{{ selectedDistrictLabel }}</p>
                         </div>
                         <div class="leading-[2px] pt-4">
                             <p class="text-[#61646B]">Veng/Khua</p>
@@ -326,7 +325,7 @@
                         </div>
                         <div class="leading-[2px] pt-4">
                             <p class="text-[#61646B]">Assembly Constituency</p>
-                            <p>{{ form.constituency["label"] }}</p>
+                            <p>{{ selectedConstituencyLabel }}</p>
                         </div>
                     </q-card-section>
 
@@ -355,20 +354,16 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
-import { ref, computed, onMounted } from 'vue';
-import { useQuasar } from 'quasar';
-import { useFormStore } from '@/Stores/FormStore'; // Import the Pinia store
+import { useForm } from "@inertiajs/vue3";
+import { ref, computed } from "vue";
+import { useQuasar } from "quasar";
 import WebLayout from "@/Layouts/WebLayout.vue";
 
 defineOptions({
     layout: WebLayout,
 });
 
-
-const formStore = useFormStore(); // Initialize the Pinia store
-
-const props = defineProps(["districts", "constituency", "relative"]); // Prefill from server
+const props = defineProps(["form", "districts", "constituency", "relative"]); // Prefill from server
 
 const preview = ref(false);
 
@@ -378,11 +373,26 @@ const district = ref(props.districts || []);
 const constituencies = ref(props.constituency || []);
 const relative = ref(props.relative || []);
 
+const selectedDistrictLabel = computed(() => {
+    const districtObj = district.value.find(d => d.value === form.district_id);
+    return districtObj ? districtObj.label : '';
+});
+
+const selectedConstituencyLabel = computed(() => {
+    const constituencyObj = constituencies.value.find(c => c.value === form.constituency_id);
+    return constituencyObj ? constituencyObj.label : '';
+});
+
+const selectedRelativeLabel = computed(() => {
+    const relativeObj = relative.value.find(r => r.value === form.relative_id);
+    return relativeObj ? relativeObj.label : '';
+});
+
 // Reactive variable for filtered constituencies
 const filteredConstituencies = computed(() => {
-    if (!form.district) return [];
+    if (!form.district_id) return [];
     return constituencies.value.filter(
-        (item) => item.district === form.district.value
+        (item) => item.district === form.district_id
     );
 });
 
@@ -393,18 +403,17 @@ const genderOptions = [
 ];
 
 const form = useForm({
-    name: formStore.formStep1Data.name || "",
-    relative_id: formStore.formStep1Data.relative || "",
-    relative_name: formStore.formStep1Data.relative_name || "",
-    dob: formStore.formStep1Data.dob || "",
-    gender: formStore.formStep1Data.gender || "",
-    district_id: formStore.formStep1Data.district || "",
-    locality: formStore.formStep1Data.locality || "",
-    constituency_id: formStore.formStep1Data.constituency || "",
-    time_of_death: formStore.formStep1Data.time_of_death || "",
-    place_of_death: formStore.formStep1Data.place_of_death || "",
+    name: props.form.name || "",
+    relative_id: props.form.relative_id || "",
+    relative_name: props.form.relative_name || "",
+    dob: props.form.dob || "",
+    gender: props.form.gender || "",
+    district_id: props.form.district_id || "",
+    locality: props.form.locality || "",
+    constituency_id: props.form.constituency_id || "",
+    time_of_death: props.form.time_of_death || "",
+    place_of_death: props.form.place_of_death || "",
 });
-
 const formatDateTime = (datetime) => {
     if (!datetime) return "";
 
@@ -444,8 +453,6 @@ const ageAtDeath = computed(() => {
 });
 
 const submitForm = () => {
-    formStore.setFormStep1Data(form); // Save form data to Pinia store
-
     form.post(route("form.storeStep1"), {
         onError: (errors) => {
             console.log(errors); // Check errors returned from backend

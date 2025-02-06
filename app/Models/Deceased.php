@@ -11,8 +11,8 @@ class Deceased extends Model
     use HasFactory;
 
     protected $fillable = [
-        'application_id', 'name','relative_id', 'relative_name', 'dob', 'gender',
-        'district_id', 'locality', 'constituency', 'time_of_death', 'place_of_death',
+         'name','relative_id', 'relative_name', 'dob', 'gender',
+        'district_id', 'locality', 'constituency_id', 'time_of_death', 'place_of_death',
     ];
 
     public function district(): BelongsTo

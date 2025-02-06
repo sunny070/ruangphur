@@ -8,6 +8,7 @@ use Inertia\Inertia;
 
 class ApplicationController extends Controller
 {
+    
     // Show tracking page
     public function index()
     {

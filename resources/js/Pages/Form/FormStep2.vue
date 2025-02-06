@@ -466,20 +466,28 @@
                                     </p>
                                 </div>
                                 <hr class="my-4 border-border" />
-                                <div class="flex gap-10 justify-evenly items-center">
-
+                                <div
+                                    class="flex gap-10 justify-evenly items-center"
+                                >
                                     <div class="leading-[2px] pt-4">
-                                        <p class="text-bold text-[18px] text-center">{{ form.distance }}</p>
+                                        <p
+                                            class="text-bold text-[18px] text-center"
+                                        >
+                                            {{ form.distance }}
+                                        </p>
                                         <p class="text-[#61646B]">Kilometer</p>
                                     </div>
                                     <div class="leading-[2px] pt-4">
-                                        <p class="text-bold text-[18px] text-center">{{ form.transport_cost }}</p>
+                                        <p
+                                            class="text-bold text-[18px] text-center"
+                                        >
+                                            {{ form.transport_cost }}
+                                        </p>
                                         <p class="text-[#61646B]">
                                             Motor hman man
                                         </p>
                                     </div>
                                 </div>
-
 
                                 <hr class="my-4 border-border" />
                                 <p class="mb-8 mt-8">Ruang phurhna motor</p>
@@ -505,19 +513,24 @@
                                     </p>
                                     <p>{{ form.driver_phone }}</p>
                                 </div>
-                                
                             </q-card-section>
 
                             <q-card-actions class="ml-[22px] pt-[35px]">
                                 <q-btn
-                                style="padding: 10px 28px; border-radius: 12px"
+                                    style="
+                                        padding: 10px 28px;
+                                        border-radius: 12px;
+                                    "
                                     class="text-black"
                                     color="white"
                                     label="Edit"
                                     v-close-popup
                                 />
                                 <q-btn
-                                 style="padding: 10px 80px; border-radius: 12px"
+                                    style="
+                                        padding: 10px 80px;
+                                        border-radius: 12px;
+                                    "
                                     label="Approve & Next"
                                     color="black"
                                     @click="submitForm"
@@ -538,17 +551,14 @@ import { ref, nextTick } from "vue";
 import { computed, onMounted, watch } from "vue";
 import { useQuasar } from "quasar";
 import { GoogleMap, Marker, Polyline } from "vue3-google-map";
-import { useFormStore } from '@/Stores/FormStore'; // Import the Pinia store
 
 defineOptions({
     layout: WebLayout,
 });
-const formStore = useFormStore(); // Initialize the Pinia store
-
-const props = defineProps(['districts']); // Prefill from server
-
-const preview = ref(false);
 const $q = useQuasar();
+const preview = ref(false);
+
+const props = defineProps(["form", "districts"]);
 
 // Map-related refs
 const center = ref({ lat: 23.164543, lng: 92.9375739 }); // Default map center
@@ -556,77 +566,74 @@ const sourceCoords = ref(null);
 const destinationCoords = ref(null);
 
 // Form fields
-const source_locality = ref('');
-const source_lat = ref('');
-const source_lng = ref('');
-const destination_locality = ref('');
-const destination_lat = ref('');
-const destination_lng = ref('');
+const source_locality = ref("");
+const source_lat = ref("");
+const source_lng = ref("");
+const destination_locality = ref("");
+const destination_lat = ref("");
+const destination_lng = ref("");
 const ratePerKm = 40; // Rate per kilometer
 const distance = ref(0); // Distance in kilometers
 const transport_cost = ref(0); // Transport cost in currency
-
 // Dialog visibility
 const showSourceDialog = ref(false);
 const showDestinationDialog = ref(false);
 
-const sourceSearch = ref('');
-const destinationSearch = ref('');
+const sourceSearch = ref("");
+const destinationSearch = ref("");
 const autocomplete = ref(null);
+// Google Maps Geocoder
 const geocoder = ref(null);
 
 // Initialize Google Maps Geocoder
 onMounted(() => {
-  nextTick(() => {
-    if (typeof google !== 'undefined') {
-      geocoder.value = new google.maps.Geocoder();
-      autocomplete.value = new google.maps.places.AutocompleteService();
-    } else {
-      console.error('Google Maps API not loaded.');
-    }
-  });
+    nextTick(() => {
+        if (typeof google !== "undefined") {
+            geocoder.value = new google.maps.Geocoder();
+            autocomplete.value = new google.maps.places.AutocompleteService();
+        } else {
+            console.error("Google Maps API not loaded.");
+        }
+    });
 });
 
-// Use Pinia store for form data
 const form = useForm({
-  source_district: formStore.formStep2Data.source_district || '',
-  source_locality: formStore.formStep2Data.source_locality || '',
-  source_lat: formStore.formStep2Data.source_lat || '',
-  source_lng: formStore.formStep2Data.source_lng || '',
-  destination_district: formStore.formStep2Data.destination_district || '',
-  destination_locality: formStore.formStep2Data.destination_locality || '',
-  destination_lat: formStore.formStep2Data.destination_lat || '',
-  destination_lng: formStore.formStep2Data.destination_lng || '',
-  distance: formStore.formStep2Data.distance || '',
-  vehicle_number: formStore.formStep2Data.vehicle_number || '',
-  driver_name: formStore.formStep2Data.driver_name || '',
-  driver_phone: formStore.formStep2Data.driver_phone || '',
-  transport_cost: formStore.formStep2Data.transport_cost || '',
+    source_district: props.form.source_district || "",
+    source_locality: props.form.source_locality || "",
+    source_lat: props.form.source_lat || "",
+    source_lng: props.form.source_lng || "",
+    destination_district: props.form.destination_district || "",
+    destination_locality: props.form.destination_locality || "",
+    destination_lat: props.form.destination_lat || "",
+    destination_lng: props.form.destination_lng || "",
+    distance: props.form.distance || "",
+    vehicle_number: props.form.vehicle_number || "",
+    vehicle_name: props.form.vehicle_name || "",
+    driver_name: props.form.driver_name || "",
+    driver_phone: props.form.driver_phone || "",
+    transport_cost: props.form.transport_cost || "",
 });
 
 const district = ref(props.districts || []);
 
 const submitForm = () => {
-  // Save form data to Pinia store
-  formStore.setFormStep2Data(form);
+    form.post(route("form.storeStep2"), {
+        onError: (errors) => {
+            console.log(errors); // Log errors to check the format
+            form.errors = errors; // Assign errors to form.errors
+            preview.value = false;
+        },
+        onSuccess: () => {
+            preview.value = false; // Close the preview dialog if open
 
-  form.post(route('form.storeStep2'), {
-    onError: (errors) => {
-      console.log(errors); // Log errors to check the format
-      form.errors = errors; // Assign errors to form.errors
-      preview.value = false;
-    },
-    onSuccess: () => {
-      preview.value = false; // Close the preview dialog if open
-
-      // Optional: Display a success notification
-      $q.notify({
-        type: 'positive',
-        message: 'Form 2 submitted successfully!',
-        position: 'top-right',
-      });
-    },
-  });
+            // Optional: Display a success notification
+            $q.notify({
+                type: "positive",
+                message: "Form 2 submitted successfully!",
+                position: "top-right",
+            });
+        },
+    });
 };
 
 const searchLocation = (query, type) => {
@@ -677,6 +684,20 @@ const getCoordsFromPlaceId = (placeId, type) => {
     });
 };
 
+// const handleMapClick = (event, type) => {
+//   const clickedLocation = {
+//     lat: event.latLng.lat(),
+//     lng: event.latLng.lng(),
+//   };
+
+//   if (type === "source") {
+//     sourceCoords.value = clickedLocation;
+//     getAddressFromCoords(clickedLocation, "source");
+//   } else if (type === "destination") {
+//     destinationCoords.value = clickedLocation;
+//     getAddressFromCoords(clickedLocation, "destination");
+//   }
+// };
 
 const getAddressFromCoords = (coords, type) => {
     if (geocoder.value) {

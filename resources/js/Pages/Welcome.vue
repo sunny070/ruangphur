@@ -29,7 +29,7 @@
                                 </q-card-section>
                                 <q-separator dark />
                                 <q-card-actions>
-                                    <q-btn flat :to="route('form.step1')" label="Get Started" class="full-width" />
+                                    <q-btn flat :href="route('form.step1')" label="Get Started" class="full-width" />
                                 </q-card-actions>
                             </q-card>
                         </div>
@@ -45,7 +45,7 @@
                                 </q-card-section>
                                 <q-separator dark />
                                 <q-card-actions>
-                                    <q-btn flat :to="route('track')" label="Track Now" class="full-width" />
+                                    <q-btn flat :href="route('track')" label="Track Now" class="full-width" />
                                 </q-card-actions>
                             </q-card>
                         </div>
