@@ -14,17 +14,17 @@ class ApplicationController extends Controller
         return Inertia::render('Track/Index');
     }
 
+
     public function view($id)
     {
         $application = Application::where('application_no', $id)
             ->with([
                 'applicant',
                 'deceased',
-
-                'transport',
-
-            ])
+                'transport', 
+                ])
             ->first();
+            // dd($application);
 
         if (!$application) {
             return redirect()->back()->with('error', 'Application not found.');
@@ -53,12 +53,14 @@ class ApplicationController extends Controller
         ]);
     }
 
+
+
     public function viewApplication($id)
     {
         $application = Application::where('application_no', $id)
             ->with(['applicant', 'deceased', 'transport'])
             ->first();
-
+        
         if (!$application) {
             return response()->json([
                 'message' => 'Application not found.',

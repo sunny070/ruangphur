@@ -20,7 +20,7 @@ class AdminController extends Controller
             'Approved' => Application::where('status', 'Approved')->count(),
             'Rejected' => Application::where('status', 'Rejected')->count(),
             'Pending' => Application::where('status', 'Pending')->count(), // Adjust if needed
-            'Completed' => Application::where('status', 'Completed')->count(),
+            'Paid' => Application::where('status', 'Paid')->count(),
         ];
         return Inertia::render('Admin/Application', [
             'applications' => $applications,
@@ -255,7 +255,7 @@ class AdminController extends Controller
             $application->applicant->update([
                 'name' => $request->input('applicant.name'),
                 'mobile' => $request->input('applicant.mobile'),
-                'district' => $request->input('applicant.district'),
+                'district_id' => $request->input('applicant.district_id'),
                 'locality' => $request->input('applicant.locality'),
                 'bank_name' => $request->input('applicant.bank_name'),
                 'account_no' => $request->input('applicant.account_no'),
@@ -267,7 +267,7 @@ class AdminController extends Controller
         if ($application->deceased) {
             $application->deceased->update([
                 'name' => $request->input('deceased.name'),
-                'relative' => $request->input('deceased.relative'),
+                // 'relative' => $request->input('deceased.relative'),
                 'relative_name' => $request->input('deceased.relative_name'),
                 'dob' => $request->input('deceased.dob'),
                 'gender' => $request->input('deceased.gender'),

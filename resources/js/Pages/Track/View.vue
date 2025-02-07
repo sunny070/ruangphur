@@ -50,7 +50,7 @@
                     </div>
                     <div class="q-mt-md">
                         <p class="text-grey-7">District</p>
-                        <p>{{ application.deceased.name }}</p>
+                        <p>{{ application?.deceased?.district_id?.name }}</p>
                     </div>
                     <div class="q-mt-md">
                         <p class="text-grey-7">Veng/Khua</p>
@@ -187,6 +187,38 @@ defineOptions({
 });
 
 const application = ref(usePage().props.application);
+
+
+// Function to calculate age
+// Computed property for calculating age at death
+const ageAtDeath = computed(() => {
+  const deceased = application.value?.deceased;
+  if (!deceased?.dob || !deceased?.time_of_death) {
+    return '';
+  }
+
+  const dob = new Date(deceased.dob);
+  const deathDate = new Date(deceased.time_of_death);
+
+  if (isNaN(dob) || isNaN(deathDate)) {
+    return '';
+  }
+
+  let age = deathDate.getFullYear() - dob.getFullYear();
+  const deathMonth = deathDate.getMonth();
+  const birthMonth = dob.getMonth();
+  const deathDay = deathDate.getDate();
+  const birthDay = dob.getDate();
+
+  // Adjust age if the deceased has not had their birthday yet in the year of death
+  if (deathMonth < birthMonth || (deathMonth === birthMonth && deathDay < birthDay)) {
+    age--;
+  }
+
+  return age;
+});
+
+
 
 const goToTrackPage = () => {
     Inertia.visit(route("track"));

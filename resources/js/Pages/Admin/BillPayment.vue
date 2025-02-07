@@ -119,8 +119,8 @@
                         <td>{{ application?.transport?.transport_cost }}</td>
                         <td>{{ application?.applicant?.name }}</td>
                         <td>{{ application?.applicant?.mobile }}</td>
-                        <td>
-                        <td>
+                        
+                        
                         <td>
                             <div :class="{
                                 'status-incoming': application?.status === 'Pending',
@@ -131,8 +131,7 @@
                                 {{ application?.status }}
                             </div>
                         </td>
-                        </td>
-                        </td>
+                        
                         <td>{{ application?.created_at }}</td>
                         <td>
                             <q-btn flat icon="more_vert" :style="buttonStyle" />
