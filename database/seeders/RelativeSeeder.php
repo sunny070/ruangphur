@@ -13,7 +13,7 @@ class RelativeSeeder extends Seeder
      */
     public function run(): void
     {
-        $relatives = ['Pa', 'Nu', 'Unau', 'Pi', 'Pu'];
+        $relatives = ['s/o', 'f/o', 'w/o', 'd/o', 'c/o'];
 
         foreach ($relatives as $relative) {
             DB::table('relatives')->insert([

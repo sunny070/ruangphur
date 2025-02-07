@@ -11,7 +11,7 @@ class Deceased extends Model
     use HasFactory;
 
     protected $fillable = [
-         'name','relative_id', 'relative_name', 'dob', 'gender',
+        'name','relative_id', 'relative_name', 'dob', 'gender',
         'district_id', 'locality', 'constituency_id', 'time_of_death', 'place_of_death',
     ];
 
