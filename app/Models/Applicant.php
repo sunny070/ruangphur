@@ -11,8 +11,7 @@ class Applicant extends Model
     use HasFactory;
     protected $fillable = [
         'name', 'mobile', 'district_id', 'locality',
-    'bank_name', 'account_no', 'ifsc_code', 'relation',
-    'id_proof', 'receipt', 'death_certificate', 'additional_document',];
+    'bank_name', 'account_no', 'ifsc_code',];
 
     public function applications()
     {
