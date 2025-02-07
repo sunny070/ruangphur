@@ -1,22 +1,33 @@
 <template>
     <q-page padding>
         <div class="flex flex-center column q-mt-md">
-            <div class="q-pa-md rounded-borders bg-blue-1" style="max-width: 845px; width: 100%;">
+            <div
+                class="q-pa-md rounded-borders bg-blue-1"
+                style="max-width: 845px; width: 100%"
+            >
                 <div class="text-center">
                     <h5 class="text-h5">{{ application.applicant.name }}</h5>
-                    <p class="text-caption q-mb-md">s/o {{ application.deceased.name }}</p>
+                    <p class="text-caption q-mb-md">
+                        s/o {{ application.deceased.name }}
+                    </p>
                     <q-separator />
                     <div class="row q-mt-md">
                         <div class="col-4 text-center">
-                            <h5 class="text-weight-bold">{{ application.transport.distance }}</h5>
+                            <h5 class="text-weight-bold">
+                                {{ application?.transport?.distance }}
+                            </h5>
                             <p class="text-grey-7">Kilometre</p>
                         </div>
                         <div class="col-4 text-center">
-                            <h5 class="text-weight-bold">{{ application.transport.vehicle_number }}</h5>
+                            <h5 class="text-weight-bold">
+                                {{ application?.transport?.vehicle_number }}
+                            </h5>
                             <p class="text-grey-7">Motor Reg.</p>
                         </div>
                         <div class="col-4 text-center">
-                            <h5 class="text-weight-bold">{{ application.transport.transport_cost }}</h5>
+                            <h5 class="text-weight-bold">
+                                {{ application?.transport?.transport_cost }}
+                            </h5>
                             <p class="text-grey-7">Amount (Rs)</p>
                         </div>
                     </div>
@@ -27,7 +38,9 @@
         <div class="row q-mt-lg q-col-gutter-md justify-center">
             <div class="col-12 col-md-6">
                 <q-card class="q-pa-md">
-                    <p class="text-center q-pa-sm bg-grey-3 rounded-borders">Mitthi Chungchang</p>
+                    <p class="text-center q-pa-sm bg-grey-3 rounded-borders">
+                        Mitthi Chungchang
+                    </p>
                     <div class="q-mt-md">
                         <p class="text-grey-7">Mitthi pianni leh thla</p>
                         <p>{{ application.deceased.dob }}</p>
@@ -50,7 +63,7 @@
                     </div>
                     <div class="q-mt-md">
                         <p class="text-grey-7">District</p>
-                        <p>{{ application?.deceased?.district_id?.name }}</p>
+                        <p>{{ application?.deceased?.district.name }}</p>
                     </div>
                     <div class="q-mt-md">
                         <p class="text-grey-7">Veng/Khua</p>
@@ -58,63 +71,83 @@
                     </div>
                     <div class="q-mt-md">
                         <p class="text-grey-7">Assembly Constituency</p>
-                        <p>{{ application.deceased.constituency?.name }}</p>
+                        <p>{{ application.deceased.constituency.name }}</p>
                     </div>
                 </q-card>
 
                 <q-card class="q-mt-md q-pa-md">
-                    <p class="text-center q-pa-sm bg-grey-3 rounded-borders">Ruang Phurh leh Motor Chungchang</p>
+                    <p class="text-center q-pa-sm bg-grey-3 rounded-borders">
+                        Ruang Phurh leh Motor Chungchang
+                    </p>
                     <p class="q-mt-md">Ruang phurh tanna</p>
                     <div class="q-mt-md">
                         <p class="text-grey-7">District</p>
-                        <p>{{ application.transport.source_district.name }}</p>
+                        <p>
+                            {{ application?.transport?.source_district?.name }}
+                        </p>
                     </div>
                     <div class="q-mt-md">
                         <p class="text-grey-7">Veng/Khua</p>
-                        <p>{{ application.transport.source_locality }}</p>
+                        <p>{{ application?.transport?.source_locality }}</p>
                     </div>
                     <p class="q-mt-md">Ruang dahna tur hmun</p>
                     <div class="q-mt-md">
                         <p class="text-grey-7">District</p>
-                        <p>{{ application.transport.destination_district.name }}</p>
+                        <p>
+                            {{
+                                application?.transport?.destination_district
+                                    ?.name
+                            }}
+                        </p>
                     </div>
                     <div class="q-mt-md">
                         <p class="text-grey-7">Veng/Khua</p>
-                        <p>{{ application.transport.destination_locality }}</p>
+                        <p>
+                            {{ application?.transport?.destination_locality }}
+                        </p>
                     </div>
                     <div class="q-mt-md">
                         <p class="text-grey-7">Kilometer</p>
-                        <p>{{ application.transport.distance }}</p>
+                        <p>{{ application?.transport?.distance }}</p>
                     </div>
                     <p class="q-mt-md">Ruang phurhna motor</p>
                     <div class="q-mt-md">
                         <p class="text-grey-7">Motor registration number</p>
-                        <p>{{ application.transport.vehicle_number }}</p>
+                        <p>{{ application?.transport?.vehicle_number }}</p>
                     </div>
                     <div class="q-mt-md">
                         <p class="text-grey-7">Motor hming</p>
-                        <p>{{ application.transport.vehicle_name }}</p>
+                        <p>{{ application?.transport?.vehicle_name }}</p>
                     </div>
                     <div class="q-mt-md">
                         <p class="text-grey-7">Motor neitu/khalhtu hming</p>
-                        <p>{{ application.transport.driver_name }}</p>
+                        <p>{{ application?.transport?.driver_name }}</p>
                     </div>
                     <div class="q-mt-md">
-                        <p class="text-grey-7">Motor neitu/khalhtu phone number</p>
-                        <p>{{ application.transport.driver_phone }}</p>
+                        <p class="text-grey-7">
+                            Motor neitu/khalhtu phone number
+                        </p>
+                        <p>{{ application?.transport?.driver_phone }}</p>
                     </div>
                     <div class="q-mt-md">
                         <p class="text-grey-7">Motor hman man (Rs)</p>
-                        <p>{{ application.transport.transport_cost }}</p>
+                        <p>{{ application?.transport?.transport_cost }}</p>
                     </div>
                 </q-card>
 
-                <q-btn class="q-mt-lg" color="black" label="Back to Track" @click="goToTrackPage" />
+                <q-btn
+                    class="q-mt-lg"
+                    color="black"
+                    label="Back to Track"
+                    @click="goToTrackPage"
+                />
             </div>
 
             <div class="col-12 col-md-6">
                 <q-card class="q-pa-md">
-                    <p class="text-center q-pa-sm bg-grey-3 rounded-borders">Ruang Phurh Diltu</p>
+                    <p class="text-center q-pa-sm bg-grey-3 rounded-borders">
+                        Ruang Phurh Diltu
+                    </p>
                     <div class="q-mt-md">
                         <p class="text-grey-7">Hming</p>
                         <p>{{ application?.applicant?.name }}</p>
@@ -134,7 +167,9 @@
                 </q-card>
 
                 <q-card class="q-mt-md q-pa-md">
-                    <p class="text-center q-pa-sm bg-grey-3 rounded-borders">Bank Details</p>
+                    <p class="text-center q-pa-sm bg-grey-3 rounded-borders">
+                        Bank Details
+                    </p>
                     <div class="q-mt-md">
                         <p class="text-grey-7">Bank hming</p>
                         <p>{{ application.applicant.bank_name }}</p>
@@ -150,22 +185,38 @@
                 </q-card>
 
                 <q-card class="q-mt-md q-pa-md">
-                    <p class="text-center q-pa-sm bg-grey-3 rounded-borders">Document Thiltel te</p>
-                    <q-chip v-for="(doc, index) in documents" :key="index" clickable @click="handleOpenApplicant(doc.url)">
+                    <p class="text-center q-pa-sm bg-grey-3 rounded-borders">
+                        Document Thiltel te
+                    </p>
+                    <q-chip
+                        v-for="(doc, index) in documents"
+                        :key="index"
+                        clickable
+                        @click="handleOpenApplicant(doc.url)"
+                    >
                         <q-icon name="check_circle" class="q-mr-sm" />
                         {{ doc.label }}
                     </q-chip>
                 </q-card>
 
                 <q-card class="q-mt-md q-pa-md">
-                    <p class="text-center q-pa-sm bg-grey-3 rounded-borders">Track Application</p>
+                    <p class="text-center q-pa-sm bg-grey-3 rounded-borders">
+                        Track Application
+                    </p>
                     <q-timeline class="q-mt-md">
-                        <q-timeline-entry v-for="(status, key) in statusMessages" :key="key"
+                        <q-timeline-entry
+                            v-for="(status, key) in statusMessages"
+                            :key="key"
                             :title="status.title"
                             :subtitle="status.description"
-                            :color="status.completed ? 'green' : 'grey'">
+                            :color="status.completed ? 'green' : 'grey'"
+                        >
                             <template v-if="status.timestamp">
-                                <q-icon name="schedule" size="xs" class="q-mr-sm" />
+                                <q-icon
+                                    name="schedule"
+                                    size="xs"
+                                    class="q-mr-sm"
+                                />
                                 <span>{{ status.timestamp }}</span>
                             </template>
                         </q-timeline-entry>
@@ -188,37 +239,37 @@ defineOptions({
 
 const application = ref(usePage().props.application);
 
-
 // Function to calculate age
 // Computed property for calculating age at death
 const ageAtDeath = computed(() => {
-  const deceased = application.value?.deceased;
-  if (!deceased?.dob || !deceased?.time_of_death) {
-    return '';
-  }
+    const deceased = application.value?.deceased;
+    if (!deceased?.dob || !deceased?.time_of_death) {
+        return "";
+    }
 
-  const dob = new Date(deceased.dob);
-  const deathDate = new Date(deceased.time_of_death);
+    const dob = new Date(deceased.dob);
+    const deathDate = new Date(deceased.time_of_death);
 
-  if (isNaN(dob) || isNaN(deathDate)) {
-    return '';
-  }
+    if (isNaN(dob) || isNaN(deathDate)) {
+        return "";
+    }
 
-  let age = deathDate.getFullYear() - dob.getFullYear();
-  const deathMonth = deathDate.getMonth();
-  const birthMonth = dob.getMonth();
-  const deathDay = deathDate.getDate();
-  const birthDay = dob.getDate();
+    let age = deathDate.getFullYear() - dob.getFullYear();
+    const deathMonth = deathDate.getMonth();
+    const birthMonth = dob.getMonth();
+    const deathDay = deathDate.getDate();
+    const birthDay = dob.getDate();
 
-  // Adjust age if the deceased has not had their birthday yet in the year of death
-  if (deathMonth < birthMonth || (deathMonth === birthMonth && deathDay < birthDay)) {
-    age--;
-  }
+    // Adjust age if the deceased has not had their birthday yet in the year of death
+    if (
+        deathMonth < birthMonth ||
+        (deathMonth === birthMonth && deathDay < birthDay)
+    ) {
+        age--;
+    }
 
-  return age;
+    return age;
 });
-
-
 
 const goToTrackPage = () => {
     Inertia.visit(route("track"));
@@ -290,10 +341,22 @@ const statusMessages = computed(() => {
 });
 
 const documents = [
-    { label: "Motor hman man Voucher/Receipt", url: application.value?.applicant?.id_proof },
-    { label: "Motor hman man Voucher/Receipt", url: application.value?.applicant?.receipt },
-    { label: "Death Certificate", url: application.value?.applicant?.death_certificate },
-    { label: "Diltu Aadhar card/voter ID", url: application.value?.applicant?.additional_document },
+    {
+        label: "Motor hman man Voucher/Receipt",
+        url: application.value?.applicant?.id_proof,
+    },
+    {
+        label: "Motor hman man Voucher/Receipt",
+        url: application.value?.applicant?.receipt,
+    },
+    {
+        label: "Death Certificate",
+        url: application.value?.applicant?.death_certificate,
+    },
+    {
+        label: "Diltu Aadhar card/voter ID",
+        url: application.value?.applicant?.additional_document,
+    },
 ];
 
 const handleOpenApplicant = (url) => {

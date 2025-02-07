@@ -59,7 +59,7 @@ class Application extends Model
         return $this->belongsTo(Deceased::class);
     }
 
-    public function transports():BelongsTo
+    public function transport():BelongsTo
     {
         return $this->belongsTo(Transport::class);
     }

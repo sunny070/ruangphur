@@ -20,8 +20,12 @@ class ApplicationController extends Controller
         $application = Application::where('application_no', $id)
             ->with([
                 'applicant',
-                'deceased',
-                'transport', 
+                'deceased.district',
+                'deceased.constituency',
+                
+                'transport.sourceDistrict', // Eager load source district relation
+                'transport.destinationDistrict', // Eager load destination district relation
+
                 ])
             ->first();
             // dd($application);
