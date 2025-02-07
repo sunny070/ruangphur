@@ -10,14 +10,14 @@
 
         <!-- Status Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        <div v-for="status in statusCards" :key="status.label"
-            :class="`w-full h-[78px] ${status.bgClass} ${status.textClass} text-center`">
-            <h6 class="text-sm sm:text-base font-bold">
-                {{ status.count }}
-            </h6>
-            <p class="text-xs sm:text-sm">{{ status.label }}</p>
+            <div v-for="status in statusCards" :key="status.label"
+                :class="`w-full h-[78px] ${status.bgClass} ${status.textClass} text-center`">
+                <h6 class="text-sm sm:text-base font-bold">
+                    {{ status.count }}
+                </h6>
+                <p class="text-xs sm:text-sm">{{ status.label }}</p>
+            </div>
         </div>
-    </div>
 
         <!-- Filter Buttons and Search Bar -->
         <div class="q-my-md grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -40,7 +40,7 @@
                     " @click="setFilter('Rejected')" />
             </div>
             <div class="flex justify-end">
-                <q-input rounded="lg" outlined clearable dense bottom-slots v-model="searchQuery" label="Search"
+                <q-input rounded="lg" outlined dense bottom-slots v-model="searchQuery" label="Search"
                     class="w-full max-w-md">
                     <template v-slot:append>
                         <q-icon v-if="searchQuery !== ''" name="close" @click="searchQuery = ''"
@@ -76,6 +76,18 @@
                         <q-icon name="cancel" size="16px" class="q-mr-xs" />
                         <span>Reject All</span>
                     </q-btn>
+                    <!-- <q-btn style="border-radius: 8px" size="md" flat outlined
+                        class="q-btn-custom flex items-center justify-center hover:bg-[#3A424A] hover:text-white"
+                        @click="approveAll" :disabled="!selectedApplications.length">
+                        <q-icon name="check_circle" size="16px" class="q-mr-xs" />
+                        <span>Approve All</span>
+                    </q-btn>
+                    <q-btn style="border-radius: 8px" size="md" flat outlined
+                        class="q-btn-custom flex items-center justify-center hover:bg-[#3A424A] hover:text-white"
+                        @click="rejectAll" :disabled="!selectedApplications.length">
+                        <q-icon name="cancel" size="16px" class="q-mr-xs" />
+                        <span>Reject All</span>
+                    </q-btn> -->
                 </div>
             </div>
             <div class="flex justify-end pr-16">
@@ -402,16 +414,43 @@ const editApplication = (applicationId) => {
     // Navigate to edit page or show edit form
 };
 
-
 // Handle the "Approve All" action
-const approveAll = () => {
-    // Implement the logic for approving all selected applications
+const approveAll = async () => {
+    if (selectedApplications.value.length > 0) {
+        try {
+            await $inertia.post('/admin/applications/approve-all', {
+                ids: selectedApplications.value,
+            }, {
+                onSuccess: () => {
+                    // Optionally, show a success message or refresh the data
+                    selectedApplications.value = []; // Clear the selection
+                },
+            });
+        } catch (error) {
+            console.error('Error approving applications:', error);
+        }
+    }
 };
 
 // Handle the "Reject All" action
-const rejectAll = () => {
-    // Implement the logic for rejecting all selected applications
+const rejectAll = async () => {
+    if (selectedApplications.value.length > 0) {
+        try {
+            await $inertia.post('/admin/applications/reject-all', {
+                ids: selectedApplications.value,
+            }, {
+                onSuccess: () => {
+                    // Optionally, show a success message or refresh the data
+                    selectedApplications.value = []; // Clear the selection
+                },
+            });
+        } catch (error) {
+            console.error('Error rejecting applications:', error);
+        }
+    }
 };
+
+
 
 // Print the table
 const printTable = () => {

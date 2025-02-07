@@ -27,26 +27,41 @@ class Application extends Model
     'processed_at',
     ];
 
-    public function transport()
-    {
-        return $this->hasOneThrough(
-            Transport::class,
-            Deceased::class,
-            'application_id', // Foreign key on the `deceaseds` table
-            'deceased_id',    // Foreign key on the `transports` table
-            'id',             // Local key on the `applications` table
-            'id'              // Local key on the `deceaseds` table
-        );
-    }
-
     public function applicant()
     {
         return $this->belongsTo(Applicant::class);
     }
+
     public function deceased()
     {
-        return $this->hasOne(Deceased::class);
+        return $this->belongsTo(Deceased::class);
     }
+
+    public function transport()
+    {
+        return $this->belongsTo(Transport::class);
+    }
+
+    // public function transport()
+    // {
+    //     return $this->hasOneThrough(
+    //         Transport::class,
+    //         Deceased::class,
+    //         'application_id', // Foreign key on the `deceaseds` table
+    //         'deceased_id',    // Foreign key on the `transports` table
+    //         'id',             // Local key on the `applications` table
+    //         'id'              // Local key on the `deceaseds` table
+    //     );
+    // }
+
+    // public function applicant()
+    // {
+    //     return $this->belongsTo(Applicant::class);
+    // }
+    // public function deceased()
+    // {
+    //     return $this->hasOne(Deceased::class);
+    // }
 
     
 }

@@ -28,5 +28,9 @@ class Deceased extends Model
     {
         return  $this->belongsTo(Relative::class);
     }
+    public function application()
+    {
+        return $this->belongsTo(Application::class);
+    }
 
 }

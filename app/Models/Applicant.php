@@ -23,5 +23,10 @@ class Applicant extends Model
     {
        return $this->belongsTo(District::class,'district');
     }
+
+    // public function district()
+    // {
+    //     return $this->belongsTo(District::class, 'district_id');
+    // }
 }
 

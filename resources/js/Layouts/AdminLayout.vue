@@ -11,16 +11,21 @@
                 <q-toolbar-title></q-toolbar-title>
 
                 <!-- User Dropdown -->
-                <q-btn-dropdown flat :label="$page.props.auth.user.name" class="bg-primary text-white">
-                    <q-list>
-                        <q-item clickable v-close-popup :to="route('profile.edit')">
-                            <q-item-section>Profile</q-item-section>
-                        </q-item>
-                        <q-item clickable v-close-popup :to="route('logout')" method="post" as="button">
-                            <q-item-section>Log Out</q-item-section>
-                        </q-item>
-                    </q-list>
-                </q-btn-dropdown>
+                <div class="flex justify-center items-center gap-2">
+                    <p class="text-black font-bold m-0">Welcome! {{ $page.props.auth.user.name }}</p>
+                    <q-btn-dropdown flat icon="account_box" class="bg-white text-black q-pa-sm" dense>
+                        <q-list>
+                            <q-item clickable v-close-popup :to="route('profile.edit')">
+                                <q-item-section>Profile</q-item-section>
+                            </q-item>
+                            <Link :href="route('logout')" method="post">
+                            <q-item clickable v-close-popup>
+                                <q-item-section>Log Out</q-item-section>
+                            </q-item>
+                            </Link>
+                        </q-list>
+                    </q-btn-dropdown>
+                </div>
             </q-toolbar>
         </q-header>
 
@@ -35,36 +40,36 @@
                 <!-- Menu Section -->
                 <q-item-label header class="text-weight-bold">Menu</q-item-label>
                 <Link :href="route('admin.dashboard')">
-                    <q-item clickable v-ripple>
-                        <q-item-section avatar>
-                            <q-icon name="dashboard" />
-                        </q-item-section>
-                        <q-item-section>
-                            <q-item-label>Dashboard</q-item-label>
-                        </q-item-section>
-                    </q-item>
+                <q-item clickable v-ripple>
+                    <q-item-section avatar>
+                        <q-icon name="dashboard" />
+                    </q-item-section>
+                    <q-item-section>
+                        <q-item-label>Dashboard</q-item-label>
+                    </q-item-section>
+                </q-item>
                 </Link>
 
                 <Link :href="route('admin.application')">
-                    <q-item clickable v-ripple>
-                        <q-item-section avatar>
-                            <q-icon name="description" />
-                        </q-item-section>
-                        <q-item-section>
-                            <q-item-label>Form</q-item-label>
-                        </q-item-section>
-                    </q-item>
+                <q-item clickable v-ripple>
+                    <q-item-section avatar>
+                        <q-icon name="description" />
+                    </q-item-section>
+                    <q-item-section>
+                        <q-item-label>Form</q-item-label>
+                    </q-item-section>
+                </q-item>
                 </Link>
 
                 <Link :href="route('admin.bill')">
-                    <q-item clickable v-ripple>
-                        <q-item-section avatar>
-                            <q-icon name="receipt" />
-                        </q-item-section>
-                        <q-item-section>
-                            <q-item-label>Bill Pek Tur</q-item-label>
-                        </q-item-section>
-                    </q-item>
+                <q-item clickable v-ripple>
+                    <q-item-section avatar>
+                        <q-icon name="receipt" />
+                    </q-item-section>
+                    <q-item-section>
+                        <q-item-label>Bill Pek Tur</q-item-label>
+                    </q-item-section>
+                </q-item>
                 </Link>
 
                 <!-- <q-item clickable v-ripple :to="route('report')">
@@ -85,24 +90,26 @@
                                 <q-item clickable v-close-popup :to="route('profile.edit')">
                                     <q-item-section>Profile</q-item-section>
                                 </q-item>
-                                <q-item clickable v-close-popup :to="route('logout')" method="post" as="button">
+                                <Link :href="route('logout')" method="post">
+                                <q-item clickable v-close-popup>
                                     <q-item-section>Log Out</q-item-section>
                                 </q-item>
+                                </Link>
                             </q-list>
                         </q-btn-dropdown>
                     </q-item-section>
                 </q-item>
                 <Link :href="route('user.index')">
-                    <q-item clickable v-ripple>
-                        <q-item-section avatar>
-                            <q-icon name="people" />
-                        </q-item-section>
-                        <q-item-section>
-                            <q-item-label>User</q-item-label>
-                        </q-item-section>
-                    </q-item>
+                <q-item clickable v-ripple>
+                    <q-item-section avatar>
+                        <q-icon name="people" />
+                    </q-item-section>
+                    <q-item-section>
+                        <q-item-label>User</q-item-label>
+                    </q-item-section>
+                </q-item>
                 </Link>
-                
+
 
                 <!-- <q-item clickable v-ripple :to="route('settings')">
                     <q-item-section avatar>
@@ -133,7 +140,8 @@
                     </q-item-section>
                 </q-item>
 
-                <q-item clickable v-ripple :to="route('verifier.application')">
+                <Link :href="route('verifier.application')">
+                <q-item clickable v-ripple>
                     <q-item-section avatar>
                         <q-icon name="description" />
                     </q-item-section>
@@ -141,15 +149,16 @@
                         <q-item-label>Applications</q-item-label>
                     </q-item-section>
                 </q-item>
+                </Link>
 
-                <q-item clickable v-ripple :to="route('verifier.verified-list')">
+                <!-- <q-item clickable v-ripple :to="route('verifier.verified-list')">
                     <q-item-section avatar>
                         <q-icon name="task" />
                     </q-item-section>
                     <q-item-section>
                         <q-item-label>Verified List</q-item-label>
                     </q-item-section>
-                </q-item>
+                </q-item> -->
 
                 <!-- <q-item clickable v-ripple :to="route('verifier.settings')">
                     <q-item-section avatar>

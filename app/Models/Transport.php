@@ -37,4 +37,9 @@ class Transport extends Model
     {
         return $this->belongsTo(District::class, 'destination_district');
     }
+
+    public function application()
+    {
+        return $this->belongsTo(Application::class);
+    }
 }

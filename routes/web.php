@@ -60,8 +60,19 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/admin/application', [AdminController::class, 'index'])->name('admin.application');
     Route::get('/admin/bill', [AdminController::class, 'bill'])->name('admin.bill');
+
+    
+    // Approve Routed
     Route::post('/admin/application/{application}/approve', [AdminController::class, 'approve'])->name('admin.application.approve');
+    Route::post('/admin/applications/approve-all', [AdminController::class, 'approveAll']);
     Route::post('/admin/application/{application}/reject', [AdminController::class, 'reject'])->name('admin.application.reject');
+    Route::post('/admin/applications/reject-all', [AdminController::class, 'rejectAll']);
+
+    // Bills routes
+Route::post('/admin/bill/paymet-all', [AdminController::class, 'paymetAll']);
+Route::post('/admin/bill/reject-all', [AdminController::class, 'rejectAllBill']);
+
+
     Route::get('/admin/application/{application}', [AdminController::class, 'show'])->name('applications.show');
     Route::put('/application/{application}', [AdminController::class, 'update'])->name('applications.update');
     Route::delete('/applications/{application}', [AdminController::class, 'destroy'])->name('applications.destroy');
