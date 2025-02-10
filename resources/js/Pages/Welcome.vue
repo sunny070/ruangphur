@@ -71,21 +71,26 @@
                                 <div class="text-h6 text-weight-bold">FAQs</div>
                             </q-card-section>
 
-                            <q-list bordered separator>
-                                <q-expansion-item v-for="(faq, index) in faqs" :key="index" expand-separator
-                                    expand-icon="keyboard_arrow_down" label="FAQ" :header-class="'text-weight-bold'">
+                            <q-list bordered separator v-if="faqs.length">
+                                <q-expansion-item v-for="(faq, index) in faqs" :key="faq.id" expand-separator
+                                    expand-icon="add" :header-class="'text-weight-bold'">
                                     <template v-slot:header>
                                         <q-item-section>
-                                            {{ index + 1 }}. {{ faq.question }}
+                                            {{ index + 1 }}. {{ faq.title }}
                                         </q-item-section>
                                     </template>
                                     <q-card>
                                         <q-card-section>
-                                            {{ faq.answer }}
+                                            {{ faq.content }}
                                         </q-card-section>
                                     </q-card>
+                                    
                                 </q-expansion-item>
                             </q-list>
+                            <div v-else class="text-center text-grey-6 q-pa-md">
+                                        No FAQs available at the moment
+                                    </div>
+
                         </q-card>
                     </div>
                 </div>
@@ -100,12 +105,8 @@ import WebLayout from '@/Layouts/WebLayout.vue';
 defineOptions({
     layout: WebLayout,
 });
-const faqs = [
-    { question: "Ruang Phurh tu hi te in nge di thei?", answer: "Ruang Phurh chungchang hriat duh chuan helpline-ah dil rawh." },
-    { question: "Lorem ipsum zawnha lorem ipsum zawnha?", answer: "Lorem ipsum answer for question 2." },
-    { question: "Lorem ipsum zawnha lorem?", answer: "Lorem ipsum answer for question 3." },
-    { question: "Lorem ipsum zawnha lorem 4?", answer: "Lorem ipsum answer for question 4." },
-    { question: "Lorem ipsum zawnha lorem zawnha lorem 6?", answer: "Lorem ipsum answer for question 5." },
-    { question: "Lorem ipsum zawnha lorem zawnha lorem 67?", answer: "Lorem ipsum answer for question 6." },
-];
+const props = defineProps({
+    faqs: Array,
+});
+
 </script>

@@ -90,9 +90,9 @@
                                 <q-item clickable v-close-popup :to="route('profile.edit')">
                                     <q-item-section>Profile</q-item-section>
                                 </q-item>
-                                <Link :href="route('logout')" method="post">
+                                <Link :href="route('note.index')">
                                 <q-item clickable v-close-popup>
-                                    <q-item-section>Log Out</q-item-section>
+                                    <q-item-section>Note</q-item-section>
                                 </q-item>
                                 </Link>
                             </q-list>

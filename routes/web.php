@@ -22,6 +22,7 @@ Route::get('/', function () {
         'canRegister' => true,
         'laravelVersion' => app()->version(),
         'phpVersion' => PHP_VERSION,
+        'faqs' => \App\Models\Note::where('status', 'published')->get()
     ]);
 })->name('home');
 Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -55,13 +56,13 @@ Route::group(['prefix' => 'user'], function () {
 // Amin login
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-   
 
-    
+
+
     Route::get('/admin/application', [AdminController::class, 'index'])->name('admin.application');
     Route::get('/admin/bill', [AdminController::class, 'bill'])->name('admin.bill');
 
-    
+
     // Approve Routed
     Route::post('/admin/application/{application}/approve', [AdminController::class, 'approve'])->name('admin.application.approve');
     Route::post('/admin/applications/approve-all', [AdminController::class, 'approveAll']);
@@ -69,8 +70,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/admin/applications/reject-all', [AdminController::class, 'rejectAll']);
 
     // Bills routes
-Route::post('/admin/bill/paymet-all', [AdminController::class, 'paymetAll']);
-Route::post('/admin/bill/reject-all', [AdminController::class, 'rejectAllBill']);
+    Route::post('/admin/bill/paymet-all', [AdminController::class, 'paymetAll']);
+    Route::post('/admin/bill/reject-all', [AdminController::class, 'rejectAllBill']);
 
 
     Route::get('/admin/application/{application}', [AdminController::class, 'show'])->name('applications.show');
@@ -80,6 +81,14 @@ Route::post('/admin/bill/reject-all', [AdminController::class, 'rejectAllBill'])
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    // Note
+    Route::get('/admin/note', [DashboardController::class, 'note'])->name('note.index');
+    // Route::get('/admin/notes', [NoteController::class, 'index'])->name('admin.notes.index');
+    Route::get('/admin/notes/create', [DashboardController::class, 'create'])->name('admin.notes.create');
+    Route::post('/admin/notes', [DashboardController::class, 'store'])->name('admin.notes.store');
+    Route::patch('/admin/notes/{note}', [DashboardController::class, 'update'])->name('admin.notes.update');
+    Route::delete('/admin/notes/{note}', [DashboardController::class, 'destroy'])->name('admin.notes.destroy');
 });
 
 // Route::get('/ruang-phur-report-form',[DeceasedController::class,'index'])->name('form-fill');

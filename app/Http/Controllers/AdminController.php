@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use App\Models\Constituency;
+use App\Models\District;
+use App\Models\Relative;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -11,9 +14,21 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $applications = Application::with(['applicant', 'deceased.district', 'transport']) // Eager load related models
-
-            ->get();
+        $applications = Application::with([
+            
+            'applicant.district',
+            'deceased.district',
+            'deceased.constituency',
+            'transport.sourceDistrict',
+            'transport.destinationDistrict',
+        ])->get();
+        // dd($applications);
+        // Fetch dropdown options
+        $dropdowns = [
+            'districts' => District::all(),
+            'constituencies' => Constituency::all(),
+            'relatives' => Relative::all(),
+        ];
 
         $statusCounts = [
             'Incoming' => Application::where('status', 'Pending')->count(),
@@ -25,6 +40,8 @@ class AdminController extends Controller
         return Inertia::render('Admin/Application', [
             'applications' => $applications,
             'statusCounts' => $statusCounts,
+            'districts' => District::all(),
+            'dropdowns' => $dropdowns,
             'flash' => [
                 'success' => session('success'),
                 'error' => session('error')
@@ -177,10 +194,15 @@ class AdminController extends Controller
 
     public function show(Application $application)
     {
-        // Eager load related models to avoid N+1 query problem
-        return Inertia::render('Admin/ApplicationDetails', [
-            'application' => $application->load(['applicant', 'deceased.district', 'transport']),
-        ]);
+       // Eager load related models to avoid N+1 query problem
+    $application->load(['applicant', 'deceased.district', 'transport', 'attachment']);
+
+    // Log or dd the file URLs for debugging
+    // dd($application->attachment->id_proof, $application->attachment->receipt, $application->attachment->death_certificate, $application->attachment->additional_document);
+
+    return Inertia::render('Admin/ApplicationDetails', [
+        'application' => $application,
+    ]);
     }
 
 
@@ -213,7 +235,7 @@ class AdminController extends Controller
             // Applicant fields
             'applicant.name' => 'required|string',
             'applicant.mobile' => 'required|string',
-            'applicant.district' => 'required|string',
+            'applicant.district_id' => 'required',
             'applicant.locality' => 'nullable|string',
             'applicant.bank_name' => 'nullable|string',
             'applicant.account_no' => 'nullable|string',
@@ -221,19 +243,23 @@ class AdminController extends Controller
 
             // Deceased fields
             'deceased.name' => 'required|string',
-            'deceased.relative' => 'required|string',
+
+            'deceased.relative_id' => 'required',
             'deceased.relative_name' => 'required|string',
             'deceased.dob' => 'required|date',
             'deceased.gender' => 'required|string',
+            'deceased.district_id' => 'nullable',
             'deceased.locality' => 'nullable|string',
-            'deceased.constituency' => 'nullable|string',
+            'deceased.constituency_id' => 'nullable',
             'deceased.time_of_death' => 'nullable|string',
             'deceased.place_of_death' => 'nullable|string',
 
             // Transport fields
-            'transport.source_district' => 'nullable|string',
-            'transport.source_locality' => 'nullable|string',
-            'transport.destination_district' => 'nullable|string',
+            'transport.source_district' => 'nullable',
+            'transport.destination_district' => 'nullable',
+            // 'transport.source_district' => 'nullable',
+            'transport.source_locality' => 'nullable',
+            // 'transport.destination_district' => 'nullable',
             'transport.destination_locality' => 'nullable|string',
             'transport.vehicle_number' => 'nullable|string',
             'transport.driver_name' => 'nullable|string',
@@ -267,23 +293,23 @@ class AdminController extends Controller
         if ($application->deceased) {
             $application->deceased->update([
                 'name' => $request->input('deceased.name'),
-                // 'relative' => $request->input('deceased.relative'),
                 'relative_name' => $request->input('deceased.relative_name'),
                 'dob' => $request->input('deceased.dob'),
                 'gender' => $request->input('deceased.gender'),
                 'locality' => $request->input('deceased.locality'),
-                'constituency' => $request->input('deceased.constituency'),
+                'constituency_id' => $request->input('deceased.constituency_id'),
                 'time_of_death' => $request->input('deceased.time_of_death'),
                 'place_of_death' => $request->input('deceased.place_of_death'),
             ]);
         }
 
+        // dd($request->input('transport'));
         // Update the Transport record
         if ($application->transport) {
             $application->transport->update([
-                'source_district' => $request->input('transport.source_district'),
+                'source_district' => $request->input('transport.source_district.id'),
+                'destination_district' => $request->input('transport.destination_district.id'),
                 'source_locality' => $request->input('transport.source_locality'),
-                'destination_district' => $request->input('transport.destination_district'),
                 'destination_locality' => $request->input('transport.destination_locality'),
                 'vehicle_number' => $request->input('transport.vehicle_number'),
                 'driver_name' => $request->input('transport.driver_name'),
@@ -291,6 +317,8 @@ class AdminController extends Controller
                 'transport_cost' => $request->input('transport.transport_cost'),
             ]);
         }
+      
+    
 
         return redirect()->route('admin.application')->with('success', 'Application updated successfully.');
     }

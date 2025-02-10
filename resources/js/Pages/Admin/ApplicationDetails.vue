@@ -2,57 +2,36 @@
     <q-page padding>
         <div class="grid grid-cols-2">
             <div class="flex items-center">
-                <Link :href="route('admin.application')"
-                    size="sm"
-                    flat
-                    outlined
-                    class=" flex items-center justify-center"
-                   
-                >
-                
-                    <q-icon name="arrow_back" size="16px" class="q-mr-xs" />
-                    <span>Back</span>
+                <Link :href="route('admin.application')" size="sm" flat outlined
+                    class=" flex items-center justify-center">
+
+                <q-icon name="arrow_back" size="16px" class="q-mr-xs" />
+                <span>Back</span>
                 </Link>
             </div>
             <div class="flex justify-end pr-28">
-                <q-btn
-                    size="sm"
-                    flat
-                    outlined
-                    class="q-btn-custom flex items-center justify-center"
-                    style="
+                <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center" style="
                         color: #000;
                         width: 100px;
                         height: 40px;
                         border-radius: 8px;
-                    "
-                    @click="printTable"
-                >
+                    " @click="printTable">
                     <q-icon name="print" size="16px" class="q-mr-xs" />
                     <span>Print</span>
                 </q-btn>
-                <q-btn
-                    size="sm"
-                    flat
-                    outlined
-                    class="q-btn-custom flex items-center justify-center"
-                    style="
+                <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center" style="
                         color: #000;
                         width: 100px;
                         height: 40px;
                         border-radius: 8px;
-                    "
-                    @click="exportToExcel"
-                >
+                    " @click="exportToExcel">
                     <q-icon name="ios_share" size="16px" class="q-mr-xs" />
                     <span>Export</span>
                 </q-btn>
             </div>
         </div>
         <div class="flex flex-col justify-center items-center pr-32">
-            <div
-                class="w-full h-[263px] flex-shrink-0 rounded-[10px] border border-[#EEE] bg-[#E9F4FF] p-5 mt-6"
-            >
+            <div class="w-full h-[263px] flex-shrink-0 rounded-[10px] border border-[#EEE] bg-[#E9F4FF] p-5 mt-6">
                 <div class="flex flex-col text-center">
                     <h5 class="text-2xl">
                         {{ application.applicant.name }}
@@ -83,15 +62,10 @@
                         </div>
                     </div>
                     <div class="flex justify-center items-center gap-20">
-                        <q-btn
-                            v-if="
-                                props.application &&
-                                props.application.status === 'Pending'
-                            "
-                            @click="approveApplication(props.application.id)"
-                            label="Approve"
-                            size="sm"
-                            style="
+                        <q-btn v-if="
+                            props.application &&
+                            props.application.status === 'Pending'
+                        " @click="approveApplication(props.application.id)" label="Approve" size="sm" style="
                                 color: #fff;
                                 width: 144px;
                                 height: 40px;
@@ -99,18 +73,12 @@
                                 border-radius: 8px;
                                 border: 1px solid #5b656f;
                                 background: #000;
-                            "
-                        />
+                            " />
 
-                        <q-btn
-                            v-if="
-                                props.application &&
-                                props.application.status === 'Pending'
-                            "
-                            @click="rejectApplication(props.application.id)"
-                            label="Reject"
-                            size="sm"
-                            style="
+                        <q-btn v-if="
+                            props.application &&
+                            props.application.status === 'Pending'
+                        " @click="rejectApplication(props.application.id)" label="Reject" size="sm" style="
                                 color: #000;
                                 width: 144px;
                                 height: 40px;
@@ -118,8 +86,7 @@
                                 border-radius: 8px;
                                 border: 1px solid #5b656f;
                                 background: transparent;
-                            "
-                        />
+                            " />
                     </div>
                 </div>
             </div>
@@ -130,12 +97,8 @@
             <!-- Deceased Details -->
 
             <div class="flex flex-col gap-3">
-                <div
-                    class="border-2 lg:w-full md:w-[494px] h-[641px] pl-[52px] pt-[31px] rounded-md"
-                >
-                    <p
-                        class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
-                    >
+                <div class="border-2 lg:w-full md:w-[494px] h-[641px] pl-[52px] pt-[31px] rounded-md">
+                    <p class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8">
                         Mitthi Chungchang
                     </p>
                     <div class="leading-[2px]">
@@ -175,12 +138,8 @@
                         <p>{{ application?.deceased?.constituency }}</p>
                     </div>
                 </div>
-                <div
-                    class="border-2 lg:w-full w-[494px] h-[337px] pl-[52px] pt-[31px] rounded-md"
-                >
-                    <p
-                        class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
-                    >
+                <div class="border-2 lg:w-full w-[494px] h-[337px] pl-[52px] pt-[31px] rounded-md">
+                    <p class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8">
                         Ruang Phurh Diltu
                     </p>
                     <div class="leading-[2px]">
@@ -200,69 +159,36 @@
                         <p>{{ application?.applicant?.mobile }}</p>
                     </div>
                 </div>
-                <div
-                    class="border-2 rounded-md lg:w-full w-[494px] h-[337px] pl-[52px] pt-[31px]"
-                >
-                    <p
-                        class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
-                    >
+                <div class="border-2 rounded-md lg:w-full w-[494px] h-[337px] pl-[52px] pt-[31px]">
+                    <p class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8">
                         Document Thiltel te
                     </p>
 
-                    <q-chip
-                        dense
-                        class="transparent text-black"
-                        icon="check_circle"
-                        clickable
-                        @click="
-                            handleOpenApplicant(application.applicant?.id_proof)
-                        "
-                        >Motor hman man Voucher/Receipt</q-chip
-                    >
-                    <q-chip
-                        dense
-                        class="transparent text-black"
-                        icon="check_circle"
-                        clickable
-                        @click="
-                            handleOpenApplicant(application.applicant?.receipt)
-                        "
-                        >Motor hman man Voucher/Receipt</q-chip
-                    >
-                    <q-chip
-                        dense
-                        class="transparent text-black"
-                        icon="check_circle"
-                        clickable
-                        @click="
-                            handleOpenApplicant(
-                                application.applicant?.death_certificate
-                            )
-                        "
-                        >Death Certificate</q-chip
-                    >
-                    <q-chip
-                        dense
-                        class="transparent text-black"
-                        icon="check_circle"
-                        clickable
-                        @click="
-                            handleOpenApplicant(
-                                application.applicant?.additional_document
-                            )
-                        "
-                        >Diltu Aadhar card/voter ID</q-chip
-                    >
+                    <q-chip v-if="application?.attachment?.id_proof" dense class="transparent text-black"
+                        icon="check_circle" clickable
+                        @click="handleOpenFile('/storage/' + application.attachment.id_proof)">
+                        ID Proof
+                    </q-chip>
+                    <q-chip v-if="application?.attachment?.receipt" dense class="transparent text-black"
+                        icon="check_circle" clickable @click="handleOpenFile(application.attachment.receipt)">
+                        Receipt
+                    </q-chip>
+                    <q-chip v-if="application?.attachment?.death_certificate" dense class="transparent text-black"
+                        icon="check_circle" clickable @click="handleOpenFile(application.attachment.death_certificate)">
+                        Death Certificate
+                    </q-chip>
+                    <q-chip v-if="application?.attachment?.additional_document" dense class="transparent text-black"
+                        icon="check_circle" clickable
+                        @click="handleOpenFile(application.attachment.additional_document)">
+                        Additional Document
+                    </q-chip>
+
                 </div>
             </div>
 
             <div class="flex flex-col gap-3">
-                <div
-                    class="border-2 lg:w-full w-[494px] h-[836px] pl-[52px] pt-[31px] rounded-md"
-                >
-                    <p
-                        class="text-center w-[242px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
-                    >
+                <div class="border-2 lg:w-full w-[494px] h-[836px] pl-[52px] pt-[31px] rounded-md">
+                    <p class="text-center w-[242px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8">
                         Ruang Phurh leh Motor Chungchang
                     </p>
                     <p class="mb-8">Ruang phurh tanna</p>
@@ -315,12 +241,8 @@
                         <p>{{ application?.transport?.transport_cost }}</p>
                     </div>
                 </div>
-                <div
-                    class="border-2 rounded-md lg:w-full w-[413px] h-[337px] pl-[52px] pt-[31px]"
-                >
-                    <p
-                        class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
-                    >
+                <div class="border-2 rounded-md lg:w-full w-[413px] h-[337px] pl-[52px] pt-[31px]">
+                    <p class="text-center w-[128px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8">
                         Bank Details
                     </p>
                     <div class="leading-[2px]">
@@ -340,14 +262,9 @@
         </div>
         <hr class="my-4 border-border" />
         <div class="flex justify-center items-center gap-20">
-            <q-btn
-                v-if="
-                    props.application && props.application.status === 'Pending'
-                "
-                @click="approveApplication(props.application.id)"
-                label="Approve"
-                size="sm"
-                style="
+            <q-btn v-if="
+                props.application && props.application.status === 'Pending'
+            " @click="approveApplication(props.application.id)" label="Approve" size="sm" style="
                     color: #fff;
                     width: 144px;
                     height: 40px;
@@ -355,17 +272,11 @@
                     border-radius: 8px;
                     border: 1px solid #5b656f;
                     background: #000;
-                "
-            />
+                " />
 
-            <q-btn
-                v-if="
-                    props.application && props.application.status === 'Pending'
-                "
-                @click="rejectApplication(props.application.id)"
-                label="Reject"
-                size="sm"
-                style="
+            <q-btn v-if="
+                props.application && props.application.status === 'Pending'
+            " @click="rejectApplication(props.application.id)" label="Reject" size="sm" style="
                     color: #000;
                     width: 144px;
                     height: 40px;
@@ -373,8 +284,7 @@
                     border-radius: 8px;
                     border: 1px solid #5b656f;
                     background: transparent;
-                "
-            />
+                " />
         </div>
     </q-page>
 </template>
@@ -411,6 +321,17 @@ const rejectApplication = async (applicationId) => {
             console.error(error);
         }
     }
+};
+const handleOpenFile = (fileUrl) => {
+  if (fileUrl) {
+    // Open the file URL in a new tab
+    window.open(fileUrl, '_blank');
+  } else {
+    $q.notify({
+      type: 'negative',
+      message: 'File not found',
+    });
+  }
 };
 
 // Function to calculate the age at death

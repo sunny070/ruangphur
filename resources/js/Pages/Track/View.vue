@@ -95,8 +95,7 @@
                         <p class="text-grey-7">District</p>
                         <p>
                             {{
-                                application?.transport?.destination_district
-                                    ?.name
+                                application?.transport?.destination_district?.name
                             }}
                         </p>
                     </div>
@@ -343,21 +342,23 @@ const statusMessages = computed(() => {
 const documents = [
     {
         label: "Motor hman man Voucher/Receipt",
-        url: application.value?.applicant?.id_proof,
+        url: application.value?.attachments?.id_proof,
     },
     {
         label: "Motor hman man Voucher/Receipt",
-        url: application.value?.applicant?.receipt,
+        url: application.value?.attachments?.receipt,
     },
     {
         label: "Death Certificate",
-        url: application.value?.applicant?.death_certificate,
+        url: application.value?.attachments?.death_certificate,
     },
     {
         label: "Diltu Aadhar card/voter ID",
-        url: application.value?.applicant?.additional_document,
+        url: application.value?.attachments?.additional_document,
     },
 ];
+
+
 
 const handleOpenApplicant = (url) => {
     let a = document.createElement("a");

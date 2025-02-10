@@ -1,10 +1,10 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import { Head } from "@inertiajs/vue3";
-import BarChart from "@/Components/BarChart.vue"; // Import the chart component
+import BarChart from "@/Components/BarChart.vue";
 import CircularChart from '@/Components/CircularChart.vue';
 
 defineOptions({
@@ -12,30 +12,83 @@ defineOptions({
 });
 const props = defineProps({
     applications: Object,
-  statusCounts: Object,
-  topApplicants: Array,
-  chartData: Object, // For the grouped bar chart
-  mitthiRecordChartData: Object, // For the circular chart
+    statusCounts: Object,
+    topApplicants: Array,
+    chartData: Object,
+    labels: Array,
+    data: Array,
+    totalDisbursed: Number,
+    amountDisbursedData: Array,
+    months: Array,
 });
 
-// const { props } = usePage();
-const statusCounts = ref(props.statusCounts);
-const topApplicants = ref(props.topApplicants);
+const statusCards = computed(() => [
+    {
+        label: "Incoming",
+        count: props.statusCounts.Incoming || 0,
+        bgClass: "bg-[#FFF7EF]",
+        textClass: "text-[#FD7900]",
+    },
+    {
+        label: "Approved",
+        count: props.statusCounts.Approved || 0,
+        bgClass: "bg-[#EEFFF8]",
+        textClass: "text-[#00AA68]",
+    },
+    {
+        label: "Rejected",
+        count: props.statusCounts.Rejected || 0,
+        bgClass: "bg-[#FFF2F2]",
+        textClass: "text-[#FE6262]",
+    },
+    {
+        label: "Pending",
+        count: props.statusCounts.Pending || 0,
+        bgClass: "bg-[#F2F8FF]",
+        textClass: "text-[#404CF1]",
+    },
+    {
+        label: "Amount Disbursed",
+        count: `₹${new Intl.NumberFormat('en-IN').format(props.totalDisbursed)}`,
+        bgClass: "bg-[#F2FBFF]",
+        textClass: "text-[#00AEFF]",
+    }
+]);
+// const statusCounts = ref(props.statusCounts);
 const amountDisbursedChartOptions = ref({
     chart: {
-        type: "bar",
+        type: 'bar',
+        height: 350,
+        toolbar: { show: false }
     },
-    series: [
-        {
-            name: "Amount Disbursed",
-            data: props.amountDisbursedData,
-        },
-    ],
+    plotOptions: {
+        bar: {
+            borderRadius: 4,
+            columnWidth: '70%',
+        }
+    },
+    dataLabels: { enabled: false },
+    series: [{
+        name: "Amount Disbursed",
+        data: props.amountDisbursedData
+    }],
     xaxis: {
         categories: props.months,
+        labels: { style: { fontSize: '12px' } }
     },
+    yaxis: {
+        labels: {
+            formatter: (value) => `₹${new Intl.NumberFormat('en-IN').format(value)}`
+        }
+    },
+    colors: ['#00AA68'],
+    grid: { borderColor: '#f1f1f1' }
 });
-
+const topApplicants = ref(props.topApplicants);
+onMounted(() => {
+    console.log('Disbursement Data:', props.amountDisbursedData);
+    console.log('Months:', props.months);
+});
 const applicantColumns = [
     { name: "name", label: "Name", field: "name" },
     { name: "count", label: "Applications", field: "count" },
@@ -47,49 +100,69 @@ const applicantColumns = [
     <Head title="Dashboard" />
 
     <q-page class="q-pa-md">
-        <div class="row q-col-gutter-md">
-            <!-- Status Cards -->
+        <!-- Status Cards -->
+
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div v-for="status in statusCards" :key="status.label"
+                :class="`w-full h-[78px] ${status.bgClass} ${status.textClass} text-center`">
+                <h6 class="text-sm sm:text-base font-bold">
+                    {{ status.count }}
+                </h6>
+                <p class="text-xs sm:text-sm">{{ status.label }}</p>
+            </div>
+        </div>
+        <!-- <div class="row q-col-gutter-md">
             <div class="col-12 col-md-3" v-for="(count, status) in statusCounts" :key="status">
-                <q-card>
+                <q-card class="q-pa-md">
                     <q-card-section>
                         <div class="text-h6">{{ status }}</div>
                         <div class="text-h4">{{ count }}</div>
                     </q-card-section>
                 </q-card>
             </div>
-        </div>
-        <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900">
+        </div> -->
+
+        <!-- Charts Section -->
+        <div class="row q-col-gutter-md q-mt-md">
+            <div class="col-12">
+                <q-card class="q-pa-md">
+                    <q-card-section>
                         <h3 class="text-lg font-semibold">Ruangphur Dil dan</h3>
-                        <p class="text-sm text-gray-600">
-                            District tin a dil dan
-                        </p>
-                        <BarChart :labels="chartData.labels" :pendingData="chartData.pendingData" :approvedData="chartData.approvedData" />
-                        <!-- <div class="mt-8">
-                            <h3 class="text-lg font-semibold">Mitthi Record</h3>
-                            <p class="text-sm text-gray-600">Ruangphur portal/app atanga dilna lut te (Pending
-                                Applications by District)</p>
-                            <CircularChart :labels="mitthiRecordChartData.labels" :data="mitthiRecordChartData.data" />
-                        </div> -->
-                    </div>
-                </div>
+                        <p class="text-sm text-gray-600">District tin a dil dan</p>
+                        <div class="row q-col-gutter-md">
+                            <div class="col-12 col-md-6">
+                                <BarChart :labels="chartData.labels" :pendingData="chartData.pendingData"
+                                    :approvedData="chartData.approvedData" />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <CircularChart :labels="chartData.labels" :data="chartData.pendingData" />
+                            </div>
+                        </div>
+                    </q-card-section>
+                </q-card>
             </div>
         </div>
-        <!-- Charts and Tables -->
+
+        <!-- Amount Disbursed and Top Applicants -->
         <div class="row q-col-gutter-md q-mt-md">
-            <div class="col-12 col-md-6">
-                <q-card>
+            <div class="col-12">
+                <q-card class="q-pa-md">
                     <q-card-section>
-                        <div class="text-h6">Amount Disbursed</div>
-                        <q-chart :options="amountDisbursedChartOptions" />
+                        <div class="text-h6">Monthly Amount Disbursed</div>
+                        <div v-if="amountDisbursedData.length" class="chart-container">
+                            <q-chart :options="amountDisbursedChartOptions"
+                                :series="amountDisbursedChartOptions.series" />
+                        </div>
+                        <div v-else class="text-caption text-grey">
+                            No disbursement data available
+                        </div>
                     </q-card-section>
                 </q-card>
             </div>
 
             <div class="col-12 col-md-6">
-                <q-card>
+                <q-card class="q-pa-md">
                     <q-card-section>
                         <div class="text-h6">Top 10 Applicants</div>
                         <q-table :rows="topApplicants" :columns="applicantColumns" />
@@ -99,3 +172,42 @@ const applicantColumns = [
         </div>
     </q-page>
 </template>
+
+<style scoped>
+/* Custom styles for charts */
+.q-card {
+    height: 100%;
+}
+
+.q-chart,
+.BarChart,
+.CircularChart {
+    height: 200px;
+    /* Adjust height as needed */
+    width: 50%;
+}
+
+.chart-container {
+    height: 350px;
+    width: 100%;
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .q-card {
+        margin-bottom: 16px;
+    }
+
+    .q-chart,
+    .BarChart,
+    .CircularChart {
+        height: 200px;
+        /* Smaller height for mobile */
+    }
+
+    .chart-container {
+        height: 250px;
+    }
+}
+</style>

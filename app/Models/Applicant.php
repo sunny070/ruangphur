@@ -10,8 +10,14 @@ class Applicant extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name', 'mobile', 'district_id', 'locality',
-    'bank_name', 'account_no', 'ifsc_code',];
+        'name',
+        'mobile',
+        'district_id',
+        'locality',
+        'bank_name',
+        'account_no',
+        'ifsc_code',
+    ];
 
     public function applications()
     {
@@ -20,12 +26,10 @@ class Applicant extends Model
 
     public function district(): BelongsTo
     {
-       return $this->belongsTo(District::class,'district');
+        return $this->belongsTo(District::class, 'district_id');
     }
-
     // public function district()
     // {
     //     return $this->belongsTo(District::class, 'district_id');
     // }
 }
-

@@ -37,18 +37,7 @@ class Application extends Model
             $application->application_no = $applicationId;
         });
     }
-//    public function transport()
-//    {
-//        return $this->hasOneThrough(
-//            Transport::class,
-//            Deceased::class,
-//            'application_id', // Foreign key on the `deceaseds` table
-//            'deceased_id',    // Foreign key on the `transports` table
-//            'id',             // Local key on the `applications` table
-//            'id'              // Local key on the `deceaseds` table
-//        );
-//    }
-//
+
     public function applicant()
     {
         return $this->belongsTo(Applicant::class);
@@ -64,10 +53,12 @@ class Application extends Model
         return $this->belongsTo(Transport::class);
     }
 
-    public function attachments():BelongsTo
-    {
-        return $this->belongsTo(Attachment::class);
-    }
+    public function attachment()
+{
+    return $this->hasOne(Attachment::class);
+}
 
+    
+    
 
 }

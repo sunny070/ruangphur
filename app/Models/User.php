@@ -25,7 +25,7 @@ class User extends Authenticatable
         'email',
         'password',
         'phone',
-        'district_id'
+       
     ];
 
     /**
@@ -53,8 +53,13 @@ class User extends Authenticatable
 
     
 
-    public function district(): BelongsTo
+    public function districts()
     {
-        return $this->belongsTo(District::class, 'district_id');
+        return $this->belongsToMany(District::class);
+    }
+
+    public function notes()
+    {
+        return $this->hasMany(Note::class);
     }
 }

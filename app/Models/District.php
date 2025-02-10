@@ -27,10 +27,20 @@ class District extends Model
         return $this->hasMany(Deceased::class, 'district');
     }
     
-    public function user(): HasMany
+    // public function user(): HasMany
+    // {
+    //     return $this->hasMany(User::class);
+    // }
+
+    public function users()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsToMany(User::class);
     }
+    public function applicant(): HasMany
+    {
+        return $this->hasMany(Applicant::class);
+    }
+
 
     
 

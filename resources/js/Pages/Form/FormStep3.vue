@@ -552,6 +552,8 @@ const submitForm = () => {
         }
     });
 
+    formData.append("district_id", form.district_id); // Ensure district_id is added
+
     form.post(route("form.storeStep3"), {
         data: formData,
         onError: (errors) => {
@@ -559,8 +561,10 @@ const submitForm = () => {
             form.errors = errors; // Assign errors to form.errors
             preview.value = false;
         },
-        onSuccess: () => {
+        onSuccess: (response) => {
             preview.value = false; // Close the preview dialog if open
+            // You can now access the file URLs from the response
+            console.log(response.files); // Example response with file URLs
 
             // Optional: Display a success notification
             $q.notify({
@@ -571,6 +575,7 @@ const submitForm = () => {
         },
     });
 };
+
 
 const openDialog = () => {
     preview.value = true;
