@@ -300,14 +300,14 @@
                                 " label="Account No" outlined dense class="q-mb-md" />
                             <q-input v-model="editableApplication.applicant.ifsc_code
                                 " label="IFSC Code" outlined dense class="q-mb-md" />
-                                <q-file v-model="editableApplication.attachment.id_proof" label="ID Proof" outlined dense
+                                <!-- <q-file v-model="editableApplication.attachment.id_proof" label="ID Proof" outlined dense
                                 class="q-mb-md" />
                             <q-file v-model="editableApplication.attachment.receipt" label="Receipt" outlined dense
                                 class="q-mb-md" />
                             <q-file v-model="editableApplication.attachment.death_certificate" label="Death Certificate"
                                 outlined dense class="q-mb-md" />
                             <q-file v-model="editableApplication.attachment.additional_document"
-                                label="Additional Document" outlined dense class="q-mb-md" />
+                                label="Additional Document" outlined dense class="q-mb-md" /> -->
                         </div>
                         
 
@@ -333,6 +333,7 @@ import { defineProps, ref, computed, onMounted } from "vue";
 import { router as $inertia } from "@inertiajs/vue3";
 import * as XLSX from "xlsx"; // Import SheetJS library
 import AdminLayout from "@/Layouts/AdminLayout.vue";
+// import useForm from "@inertiajs/vue3";
 
 defineOptions({
     layout: AdminLayout,
@@ -353,14 +354,14 @@ const editableApplication = ref({
     deceased: {},
     transport: {},
     applicant: {},
-    attachment: {
-    id_proof: null,
-    receipt: null,
-    death_certificate: null,
-    additional_document: null,
-  },
 
 });
+    //attachment: {
+    //id_proof: null,
+    //receipt: null,
+    //death_certificate: null,
+    //additional_document: null,
+  //},
 
 // Function to open the edit dialog and populate the data
 const openEditDialog = (application) => {
@@ -368,6 +369,7 @@ const openEditDialog = (application) => {
     currentStep.value = 1; // Reset step to first
     editDialog.value = true;
 };
+
 // const handleSubmit = () => {
 //   useForm(editableApplication.value).put(`/admin/applications/${editableApplication.value.id}`, {
 //     onSuccess: () => {
@@ -376,32 +378,8 @@ const openEditDialog = (application) => {
 //   });
 // };
 // Function to handle form submission
-// const handleSubmit = () => {
-//     $inertia.put(
-//         `/application/${editableApplication.value.id}`,
-//         editableApplication.value,
-//         {
-//             onSuccess: () => {
-//                 editDialog.value = false;
-//             },
-//         }
-//     );
-// };
-
 const handleSubmit = () => {
-  // Handle file uploads and form submission
-  // You can use FormData to send files to the server
-  const formData = new FormData();
-  formData.append('id_proof', editableApplication.value.attachment.id_proof);
-  formData.append('receipt', editableApplication.value.attachment.receipt);
-  formData.append('death_certificate', editableApplication.value.attachment.death_certificate);
-  formData.append('additional_document', editableApplication.value.attachment.additional_document);
-
-  // Append other fields as needed
-  // ...
-
-  // Submit the form data to the server
-  $inertia.put(
+    $inertia.put(
         `/application/${editableApplication.value.id}`,
         editableApplication.value,
         {
@@ -411,6 +389,30 @@ const handleSubmit = () => {
         }
     );
 };
+
+// const handleSubmit = () => {
+//   // Handle file uploads and form submission
+//   // You can use FormData to send files to the server
+//   const formData = new FormData();
+//   formData.append('id_proof', editableApplication.value.attachment.id_proof);
+//   formData.append('receipt', editableApplication.value.attachment.receipt);
+//   formData.append('death_certificate', editableApplication.value.attachment.death_certificate);
+//   formData.append('additional_document', editableApplication.value.attachment.additional_document);
+
+//   // Append other fields as needed
+//   // ...
+
+//   // Submit the form data to the server
+//   $inertia.put(
+//         `/application/${editableApplication.value.id}`,
+//         editableApplication.value,
+//         {
+//             onSuccess: () => {
+//                 editDialog.value = false;
+//             },
+//         }
+//     );
+// };
 
 // Step navigation functions
 const nextStep = () => {

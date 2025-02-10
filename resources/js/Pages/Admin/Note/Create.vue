@@ -15,7 +15,9 @@
               required
             />
   
-            <q-editor
+            <q-input
+            outlined
+            type="textarea"
               v-model="form.content"
               min-height="250px"
               label="Content"

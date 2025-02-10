@@ -132,53 +132,60 @@ class DashboardController extends Controller
     }
 
     public function note()
-{
-    return Inertia::render('Admin/Note/Index', [
-        'notes' => Note::with('user')
-            ->latest()
-            ->paginate(10)
-    ]);
-}
-public function create()
-{
-    return Inertia::render('Admin/Note/Create');
-}
+    {
+        $query = Note::with('user')->latest();
 
-public function store(Request $request)
-{
-    $validated = $request->validate([
-        'title' => 'required|string|max:255',
-        'content' => 'required|string',
-        'status' => 'required|in:draft,published,archived',
-    ]);
+        if (request()->has('search')) {
+            $search = request('search');
+            $query->where('title', 'like', "%{$search}%")
+                ->orWhere('content', 'like', "%{$search}%");
+        }
 
-    // Add authenticated user ID
-    $validated['user_id'] = auth()->id();
+        return Inertia::render('Admin/Note/Index', [
+            'notes' => $query->paginate(10)->withQueryString(),
+            'filters' => request()->only('search'),
+        ]);
+    }
+    public function create()
+    {
+        return Inertia::render('Admin/Note/Create');
+    }
 
-    Note::create($validated);
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'status' => 'required|in:draft,published,archived',
+        ]);
 
-    return redirect()->route('note.index')
-        ->with('success', 'Note created successfully');
-}
+        // Add authenticated user ID
+        $validated['user_id'] = auth()->id();
 
-public function update(Request $request, Note $note)
-{
-    $validated = $request->validate([
-        'title' => 'required|string|max:255',
-        'content' => 'required|string',
-        'status' => 'required|in:draft,published,archived',
-    ]);
+        Note::create($validated);
 
-    $note->update($validated);
+        return redirect()->route('note.index')
+            ->with('success', 'Note created successfully');
+    }
 
-    return redirect()->back()
-        ->with('success', 'Note updated successfully');
-}
+    public function update(Request $request, Note $note)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'status' => 'required|in:draft,published,archived',
+        ]);
 
-public function destroy(Note $note)
-{
-    $note->delete();
-    return redirect()->back()
-        ->with('success', 'Note deleted successfully');
-}
+        $note->update($validated);
+
+        return redirect()->back()
+            ->with('success', 'Note updated successfully');
+    }
+
+    public function destroy(Note $note)
+    {
+        $note->delete();
+        return redirect()->back()
+            ->with('success', 'Note deleted successfully');
+    }
 }

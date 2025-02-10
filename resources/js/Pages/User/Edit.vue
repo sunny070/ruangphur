@@ -157,7 +157,7 @@ const form = useForm({
     phone: props.data?.phone,
     email: props.data?.email,
     roles: props.data?.roles.map(item => item.name) || [],
-    district: props.data?.district_id.map(item => item.district_id) || [],
+    district: props.data?.districts.map(item => item.district_id) || [],
     password: '',
     password_confirmation: '',
 })

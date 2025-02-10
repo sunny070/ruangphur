@@ -15,7 +15,7 @@ class AdminController extends Controller
     public function index()
     {
         $applications = Application::with([
-            
+
             'applicant.district',
             'deceased.district',
             'deceased.constituency',
@@ -194,15 +194,23 @@ class AdminController extends Controller
 
     public function show(Application $application)
     {
-       // Eager load related models to avoid N+1 query problem
-    $application->load(['applicant', 'deceased.district', 'transport', 'attachment']);
+        // Eager load related models to avoid N+1 query problem
+        $application->load([
+            'applicant.district',
+            'deceased.district',
+            'deceased.constituency',
+            'deceased.relative',
+            'transport.sourceDistrict', // Eager load source district relation
+            'transport.destinationDistrict', // Eager load destination district relation
+            'attachment'
+        ]);
 
-    // Log or dd the file URLs for debugging
-    // dd($application->attachment->id_proof, $application->attachment->receipt, $application->attachment->death_certificate, $application->attachment->additional_document);
+        // Log or dd the file URLs for debugging
+        // dd($application->attachment->id_proof, $application->attachment->receipt, $application->attachment->death_certificate, $application->attachment->additional_document);
 
-    return Inertia::render('Admin/ApplicationDetails', [
-        'application' => $application,
-    ]);
+        return Inertia::render('Admin/ApplicationDetails', [
+            'application' => $application,
+        ]);
     }
 
 
@@ -317,8 +325,8 @@ class AdminController extends Controller
                 'transport_cost' => $request->input('transport.transport_cost'),
             ]);
         }
-      
-    
+
+
 
         return redirect()->route('admin.application')->with('success', 'Application updated successfully.');
     }

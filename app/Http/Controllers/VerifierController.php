@@ -11,9 +11,20 @@ class VerifierController extends Controller
     public function index()
     {
         $applications = Application::with(['applicant', 'deceased.district', 'transport']) // Eager load related models
-           ->where('status','Pending')
+            ->where('status', 'Pending')
             ->get();
 
+        $userDistrictIds = auth()->user()->districts()->pluck('district_id');
+        $applications = Application::with(['applicant', 'deceased.district', 'transport'])
+            ->where('status', 'Pending')
+            ->whereHas('deceased', function ($query) use ($userDistrictIds) {
+                $query->whereIn('district_id', $userDistrictIds);
+            })
+
+            ->get();
+
+
+        // dd($applications);
         return Inertia::render('Verifier/Application', [
             'applications' => $applications,
             'flash' => [

@@ -85,7 +85,8 @@
                 <q-item-label header class="text-weight-bold">Setting</q-item-label>
                 <q-item>
                     <q-item-section>
-                        <q-btn-dropdown flat label="Post Information" class="full-width">
+                        
+                        <q-btn-dropdown  flat label="Post Information" class="full-width">
                             <q-list>
                                 <q-item clickable v-close-popup :to="route('profile.edit')">
                                     <q-item-section>Profile</q-item-section>
