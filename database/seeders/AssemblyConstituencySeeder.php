@@ -28,7 +28,7 @@ class AssemblyConstituencySeeder extends Seeder
             'Serchhip' => ['Serchhip', 'Tuikum', 'Hrangturzo'],
             'Kolasib' => ['Tuirial', 'Kolasib', 'Serlui'],
             'Lawngtlai' => ['Tuichawng', 'Lawngtlai West', 'Lawngtlai East'],
-            'Saiha' => ['Saiha', 'Palak'],
+            'Siaha' => ['Siaha', 'Palak'],
             'Champhai' => ['Lengteng', 'Tuichang', 'Champhai North', 'Champhai South', 'East Tuipui'],
             'Mamit' => ['Hachhek', 'Dampa', 'Mamit'],
             'Saitual' => ['Chalfilh', 'Lengteng', 'Tawi Round'],
