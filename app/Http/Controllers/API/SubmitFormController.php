@@ -119,58 +119,60 @@ class SubmitFormController extends Controller
 
     public function submitForm(Request $request)
     {
+
       $request->validate([
-            'deceaseds.name'=>'required',
-            'deceaseds.relative_id'=>'required',
-            'deceaseds.dob'=>'required',
-            'deceaseds.gender'=>'required',
-            'deceaseds.district_id'=>'required',
-            'deceaseds.locality'=>'required',
-            'deceaseds.constituency_id'=>'required',
-            'deceaseds.time_of_death'=>'required',
-            'deceaseds.place_of_death'=>'required',
+          'deceaseds.name'=>'required',
+          'deceaseds.relative_id'=>'required',
+          'deceaseds.dob'=>'required',
+          'deceaseds.gender'=>'required',
+          'deceaseds.district_id'=>'required',
+          'deceaseds.locality'=>'required',
+          'deceaseds.constituency_id'=>'required',
+          'deceaseds.time_of_death'=>'required',
+          'deceaseds.place_of_death'=>'required',
+          //TRANSPORT
+          'transports.source_district'=>'required',
+          'transports.source_locality'=>'required',
+          'transports.destination_district'=>'required',
+          'transports.destination_locality'=>'required',
+          'transports.vehicle_number'=>'required',
+          'transports.driver_name'=>'required',
+          'transports.driver_phone'=>'required',
+          'transports.source_lat'=>'required',
+          'transports.source_lng'=>'required',
+          'transports.destination_lat'=>'required',
+          'transports.destination_lng'=>'required',
+          'transports.distance'=>'required',
+          'transports.transport_cost'=>'required',
 
-            //TRANSPORT
-            'transports.source_district'=>'required',
-            'transports.source_locality'=>'required',
-            'transports.destination_district'=>'required',
-            'transports.destination_locality'=>'required',
-            'transports.vehicle_number'=>'required',
-            'transports.driver_name'=>'required',
-            'transports.driver_phone'=>'required',
-            'transports.source_lat'=>'required',
-            'transports.source_lng'=>'required',
-            'transports.destination_lat'=>'required',
-            'transports.destination_lng'=>'required',
-            'transports.distance'=>'required',
-            'transports.transport_cost'=>'required',
-
-            //APPLICANT
-            'applicants.name'=>'required',
-            'applicants.mobile'=>'required',
-            'applicants.district_id'=>'required',
-            'applicants.locality'=>'required',
-            'applicants.bank_name'=>'required',
-            'applicants.account_no'=>'required',
-            'applicants.ifsc_code'=>'required',
+          //APPLICANT
+          'applicants.name'=>'required',
+          'applicants.mobile'=>'required',
+          'applicants.district_id'=>'required',
+          'applicants.locality'=>'required',
+          'applicants.bank_name'=>'required',
+          'applicants.account_no'=>'required',
+          'applicants.ifsc_code'=>'required',
 //
-            //FILE
-            'attachments.id_proof'=>'required',
-            'attachments.receipt'=>'required',
-            'attachments.death_certificate'=>'required',
-            'attachments.additional_document'=>'required',
+          //FILE
+          'attachments.id_proof'=>'required',
+          'attachments.receipt'=>'required',
+          'attachments.death_certificate'=>'required',
+          'attachments.additional_document'=>'required',
+
+
 
         ]);
+
         try{
             DB::beginTransaction();
             $deceased=Deceased::query()->create($request->input('deceaseds'));
             $transport=Transport::query()->create($request->input('transports'));
             $applicant=Applicant::query()->create($request->input('applicants'));
             $attachments=Attachment::query()->create($request->input('attachments'));
-            info($transport->id);
-            Application::query()->create(['applicant_id'=>$applicant->id,'deceased_id'=>$deceased->id,'transport_id'=>$transport->id,'attachment_id'=>$attachments->id,'status'=>'Pending']);
+            $application=Application::query()->create(['applicant_id'=>$applicant->id,'deceased_id'=>$deceased->id,'transport_id'=>$transport->id,'attachment_id'=>$attachments->id,'status'=>'Pending']);
             DB::commit();
-            return response()->json(['message' => 'Data saved successfully!'], 201);
+            return response()->json(['message' => 'Data saved successfully!','status'=>201,'data'=>$application->application_no], 200);
         }catch (\Exception $e){
             info($e);
             DB::rollBack();

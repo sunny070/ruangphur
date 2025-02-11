@@ -11,28 +11,32 @@ class District extends Model
     use HasFactory;
 
     protected $fillable = [
-      
+
       'name',
     ];
-  
-    
+
+
 
     public function constituency()
     {
         return $this->hasMany(Constituency::class, 'district_id');
     }
 
+    public function applicant()
+    {
+        return $this->hasMany(Applicant::class);
+    }
     public function deceased(): HasMany
     {
         return $this->hasMany(Deceased::class, 'district');
     }
-    
+
     public function user(): HasMany
     {
         return $this->hasMany(User::class);
     }
 
-    
 
-    
+
+
 }

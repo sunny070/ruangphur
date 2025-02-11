@@ -9,4 +9,8 @@ Route::middleware('api')->group(function () {
     Route::get('/send-otp',[\App\Http\Controllers\API\SubmitFormController::class,'sendOtp']);
     Route::get('/verify-otp',[\App\Http\Controllers\API\SubmitFormController::class,'verifyOtp']);
     Route::post('/submit-form',[\App\Http\Controllers\API\SubmitFormController::class,'submitForm']);
+
+    //TRACKING
+    Route::get('/track-by-id',[\App\Http\Controllers\API\TrackingController::class,'trackById']);
+    Route::get('/get-all-application',[\App\Http\Controllers\API\TrackingController::class,'getAllApplication']);
 });

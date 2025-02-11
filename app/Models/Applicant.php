@@ -18,9 +18,9 @@ class Applicant extends Model
         return $this->hasMany(Application::class);
     }
 
-    public function district(): BelongsTo
+    public function district()
     {
-       return $this->belongsTo(District::class,'district');
+       return $this->belongsTo(District::class);
     }
 }
 
