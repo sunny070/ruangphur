@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignIdFor(\App\Models\Applicant::class);
             $table->foreignIdFor(\App\Models\Deceased::class);
             $table->foreignIdFor(\App\Models\Transport::class);
-            // $table->foreignIdFor(\App\Models\Attachment::class);
+            $table->foreignIdFor(\App\Models\Attachment::class);
             $table->string('status')->nullable();
             $table->string('application_no')->unique();
             $table->timestamp('verified_at')->nullable();

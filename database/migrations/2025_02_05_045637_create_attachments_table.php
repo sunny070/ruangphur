@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('attachments', function (Blueprint $table) {
             $table->id();
-           $table->foreignIdFor(\App\Models\Application::class);
             $table->string('id_proof')->nullable();
             $table->string('receipt')->nullable();
             $table->string('death_certificate')->nullable();

@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Attachment extends Model
 {
     protected $fillable = [
-        'application_id',
         'id_proof',
         'receipt',
         'death_certificate',

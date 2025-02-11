@@ -13,4 +13,5 @@ Route::middleware('api')->group(function () {
     //TRACKING
     Route::get('/track-by-id',[\App\Http\Controllers\API\TrackingController::class,'trackById']);
     Route::get('/get-all-application',[\App\Http\Controllers\API\TrackingController::class,'getAllApplication']);
+    Route::get('/get-faq',[\App\Http\Controllers\API\FaqController::class,'getFaq']);
 });
