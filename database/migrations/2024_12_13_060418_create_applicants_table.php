@@ -21,8 +21,12 @@ return new class extends Migration
             $table->string('locality');
             $table->string('bank_name');
             $table->string('account_no');
-            $table->string('relation')->nullable();
+            
             $table->string('ifsc_code');
+            $table->string('id_proof')->nullable();
+            $table->string('receipt')->nullable();
+            $table->string('death_certificate')->nullable();
+            $table->string('additional_document')->nullable();
             $table->timestamps();
         });
     }

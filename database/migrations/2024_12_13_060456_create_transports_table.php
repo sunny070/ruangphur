@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('transports', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\District::class,'source_district');
+           
+            $table->foreignIdFor(\App\Models\District::class, 'source_district');
+            $table->foreignIdFor(\App\Models\District::class, 'destination_district');
             $table->string('source_locality');
-            $table->foreignIdFor(\App\Models\District::class,'destination_district');
             $table->string('destination_locality');
-            // $table->string('distance');
+            
             $table->string('vehicle_number');
             $table->string('driver_name');
             $table->string('driver_phone');

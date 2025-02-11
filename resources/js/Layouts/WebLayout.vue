@@ -1,223 +1,76 @@
 <template>
-    <q-layout>
-        <q-container>
-            <header
-                class="bg-[#E9F4FF] grid grid-cols-2  gap-2 py-10 lg:grid-cols-3"
-            >
-                <div class="md:pl-[223px] md:pr-[55px]">
-                    <img
-                        id="background"
-                        class="w-[194px] h-[72px]"
-                        src="/image/Group 1321315097.png"
-                    />
-                    <!-- <img
-                            id="background"
-                            class=""
-                            src="image/Group 1321315089.png"
-                        /> -->
-                </div>
-                <nav class="">
-                    <q-tabs class="text-black">
-                        <Link :href="route('home')"
-                            ><q-tab
-                                name="Home"
-                                label="Home"
-                                :to="{ name: 'home' }"
-                        /></Link>
-                        <Link :href="route('form.step1')"
-                            ><q-tab
-                                name="Dilna Form"
-                                label="Dilna Form"
-                                :to="{ name: 'form.step1' }"
-                        /></Link>
+  <q-layout view="lHh Lpr lFf">
+    <q-header elevated class="bg-[#E9F4FF] text-black">
+      <q-toolbar>
+        <q-toolbar-title class="q-ml-md">
+          <img
+            src="/image/Group 1321315097.png"
+            style="width: 194px; height: 72px"
+            alt="Logo"
+          />
+        </q-toolbar-title>
 
-                        <Link :href="route('track')"
-                            ><q-tab
-                                name="Bill Chuina"
-                                label="Bill Chuina"
-                                :to="{ name: 'track' }"
-                            />
-                        </Link>
-                        <Link :href="route('application.faqs')"
-                            ><q-tab
-                                name="fAQs"
-                                label="fAQs"
-                                :to="{ name: 'application.faqs' }"
-                            />
-                        </Link>
-                        <Link :href="route('application.download')"
-                            ><q-tab
-                                name="Downloads"
-                                label="Downloads"
-                                :to="{ name: 'application.download' }"
-                            />
-                        </Link>
+        <q-tabs v-if="$q.screen.gt.sm" active-color="black" indicator-color="black" class="text-black">
+          <q-tab v-for="nav in navigation" :key="nav.name">
+            <Link :href="nav.route">{{ nav.label }}</Link>
+          </q-tab>
+        </q-tabs>
 
-                        
-                    </q-tabs>
-                </nav>
+        <q-btn v-if="$q.screen.lt.md" flat dense round icon="menu" @click="toggleRightDrawer" />
+      </q-toolbar>
+    </q-header>
 
-                <nav v-if="canLogin" class="flex flex-1 justify-end">
-                    <Link
-                        v-if="$page.props.auth.user"
-                        :href="route('dashboard')"
-                        class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                    >
-                        Dashboard
-                    </Link>
+    <q-drawer v-model="rightDrawerOpen" side="right" bordered>
+      <q-list>
+        <q-item-label header>Navigation</q-item-label>
+        <q-item v-for="nav in navigation" :key="nav.name" clickable>
+          <Link :href="nav.route">
+            <q-item-section>{{ nav.label }}</q-item-section>
+          </Link>
+        </q-item>
+      </q-list>
+    </q-drawer>
 
-                    <template v-else>
-                        <!-- <Link
-                            :href="route('login')"
-                            class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                        >
-                            Log in
-                        </Link> -->
+    <q-page-container>
+      <slot />
+    </q-page-container>
 
-                        <!-- <Link
-                            v-if="canRegister"
-                            :href="route('register')"
-                            class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                        >
-                            Register
-                        </Link> -->
-
-                        <!-- <Link :href="route('form.step1')">Home</Link>
-                            <Link :href="route('form.step1')">Dilna Form</Link>
-                            <Link :href="route('form.step1')">Bill Chhuina</Link>
-                            <Link :href="route('form.step1')">FAQs</Link>
-                            <Link :href="route('form.step1')">Download</Link> -->
-                    </template>
-                </nav>
-            </header>
-
-
-<!-- 
-            <header class="bg-[#E9F4FF] py-10">
-        <div class="flex justify-between items-center">
-            <div class="md:pl-[223px] md:pr-[55px]">
-                <img id="background" class="w-[194px] h-[72px]" src="/image/Group 1321315097.png" />
-            </div>
-            
-            <div class="md:hidden">
-                <button @click="toggleMenu" class="text-black focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                    </svg>
-                </button>
-            </div>
+    <q-footer class="bg-white text-black q-pa-lg">
+      <div class="column items-center q-gutter-y-md">
+        <img src="/image/Group.png" style="width: 95px; height: 52px" alt="Logo">
+        <div class="text-caption text-center text-grey-8" style="max-width: 403px">
+          An initiative of Department of Social Welfare & Tribal Affairs, 
+          Government of Mizoram
         </div>
-
-        <nav class="hidden md:block">
-            <q-tabs class="text-black">
-                <Link :href="route('home')">
-                    <q-tab name="Home" label="Home" :to="{ name: 'home' }" />
-                </Link>
-                <Link :href="route('form.step1')">
-                    <q-tab name="Dilna Form" label="Dilna Form" :to="{ name: 'form.step1' }" />
-                </Link>
-                <Link :href="route('track')">
-                    <q-tab name="Bill Chuina" label="Bill Chuina" :to="{ name: 'track' }" />
-                </Link>
-                <Link :href="route('application.faqs')">
-                    <q-tab name="FAQs" label="FAQs" :to="{ name: 'application.faqs' }" />
-                </Link>
-                <Link :href="route('application.download')">
-                    <q-tab name="Downloads" label="Downloads" :to="{ name: 'application.download' }" />
-                </Link>
-            </q-tabs>
-        </nav>
-
-        <nav v-if="isMenuOpen" class="md:hidden">
-            <div class="flex flex-col">
-                <Link :href="route('home')" class="py-2 text-black">Home</Link>
-                <Link :href="route('form.step1')" class="py-2 text-black">Dilna Form</Link>
-                <Link :href="route('track')" class="py-2 text-black">Bill Chuina</Link>
-                <Link :href="route('application.faqs')" class="py-2 text-black">FAQs</Link>
-                <Link :href="route('application.download')" class="py-2 text-black">Downloads</Link>
-            </div>
-        </nav>
-
-        <nav v-if="canLogin" class="flex flex-1 justify-end">
-            <Link v-if="$page.props.auth.user" :href="route('dashboard')" class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
-                Dashboard
-            </Link>
-            <template v-else>
-                
-            </template>
-        </nav>
-    </header> -->
-
-            <!-- <div class=" ">
-                <q-slot />
-            </div> -->
-            <q-page-container>
-                <slot />
-            </q-page-container>
-            <footer
-                class="py-16 text-center text-sm text-black dark:text-white/70"
-            >
-                <div class="flex justify-center items-center flex-col">
-                    <img id="background" class="w-[95px] h-[52px]" src="/image/Group.png" />
-                    <p
-                        class="text-[#5B656F] text-center font-[Noto Sans] text-[12px] font-medium leading-[18px] w-[403px] h-[36px]"
-                    >
-                        An initiative of Department of Social Welfare & Tribal
-                        Affairs, Government of Mizoram
-                    </p>
-                </div>
-                <div
-                    class="flex justify-center items-center gap-16 text-[12px] text-[#5B656F]"
-                >
-                    <Link>About Us</Link>
-                    <Link>Contact Us</Link>
-                    <Link  :href="route('login')">Login for Officials</Link>
-                </div>
-                <p class="text-[12px] text-[#5B656F]">
-                    Crafted with care by Mizoram State e-Governance Society
-                    (MSeGS)
-                </p>
-            </footer>
-        </q-container>
-    </q-layout>
+        
+        <div class="row q-gutter-x-lg">
+          <q-btn flat label="About Us" />
+          <q-btn flat label="Contact Us" />
+          <q-btn flat :href="route('login')" label="Login for Officials" />
+        </div>
+        
+        <div class="text-caption text-grey-8">
+          Crafted with care by Mizoram State e-Governance Society (MSeGS)
+        </div>
+      </div>
+    </q-footer>
+  </q-layout>
 </template>
 
 <script setup>
-import { Head, Link } from "@inertiajs/vue3";
+import { ref } from 'vue';
+import { Link } from '@inertiajs/vue3';
 
+const rightDrawerOpen = ref(false);
+const navigation = [
+  { label: 'Home', route: route('home') },
+  { label: 'Dilna Form', route: route('form.step1') },
+  { label: 'Bill Chuina', route: route('track') },
+  { label: 'FAQs', route: route('application.faqs') },
+  { label: 'Downloads', route: route('application.download') },
+];
 
-// import { ref } from "vue";
-
-
-
-// const isMenuOpen = ref(false);
-
-// const toggleMenu = () => {
-//     isMenuOpen.value = !isMenuOpen.value;
-// };
-defineProps({
-    canLogin: {
-        type: Boolean,
-    },
-    canRegister: {
-        type: Boolean,
-    },
-    laravelVersion: {
-        type: String,
-        required: true,
-    },
-    phpVersion: {
-        type: String,
-        required: true,
-    },
-});
-
-function handleImageError() {
-    document.getElementById("screenshot-container")?.classList.add("!hidden");
-    document.getElementById("docs-card")?.classList.add("!row-span-1");
-    document.getElementById("docs-card-content")?.classList.add("!flex-row");
-    document.getElementById("background")?.classList.add("!hidden");
-}
+const toggleRightDrawer = () => {
+  rightDrawerOpen.value = !rightDrawerOpen.value;
+};
 </script>
-
-<style scoped></style>

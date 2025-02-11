@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('attachments', function (Blueprint $table) {
+        Schema::create('notes', function (Blueprint $table) {
             $table->id();
-           $table->foreignIdFor(\App\Models\Application::class);
-            $table->string('id_proof')->nullable();
-            $table->string('receipt')->nullable();
-            $table->string('death_certificate')->nullable();
-            $table->string('additional_document')->nullable();
+            $table->string('title');
+            $table->text('content');
+            $table->enum('status', ['draft', 'published', 'archived'])->default('published');
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('attachments');
+        Schema::dropIfExists('notes');
     }
 };

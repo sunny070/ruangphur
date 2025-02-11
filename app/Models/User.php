@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -25,7 +26,7 @@ class User extends Authenticatable
         'email',
         'password',
         'phone',
-        'district_id'
+       
     ];
 
     /**
@@ -52,9 +53,18 @@ class User extends Authenticatable
     }
 
     
+public function districts(): BelongsToMany
+{
+    return $this->belongsToMany(District::class, 'district_user');
+}
 
-    public function district(): BelongsTo
+    // public function districts()
+    // {
+    //     return $this->belongsToMany(District::class);
+    // }
+
+    public function notes()
     {
-        return $this->belongsTo(District::class, 'district_id');
+        return $this->hasMany(Note::class);
     }
 }

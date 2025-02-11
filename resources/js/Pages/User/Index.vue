@@ -4,7 +4,17 @@
 
         <div class="row q-gutter-md">
             <div class="flex zcard justify-between flex-inline col-12 q-pa-md">
-                <q-btn @click="$inertia.get(route('user.create'))" rounded label="New user" color="primary"/>
+                <!-- <q-btn @click="$inertia.get(route('user.create'))" rounded label="New user" color="primary"/> -->
+                <q-btn size="sm" flat outlined class=" flex items-center justify-center" style="
+                        color: #fff;
+                        width: 100px;
+                        height: 40px;
+                        border-radius: 8px;
+                        background: #3a424a;
+                    "@click="$inertia.get(route('user.create'))">
+                    <q-icon name="person_add" size="16px" class="q-mr-xs" />
+                    <span>New User</span>
+                </q-btn>
                 <q-tabs
                     stretch
                     shrink

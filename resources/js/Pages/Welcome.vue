@@ -1,152 +1,112 @@
-<script setup>
-import { Head, Link } from "@inertiajs/vue3";
-import WebLayout from "@/Layouts/WebLayout.vue";
-
-defineOptions({
-    layout: WebLayout,
-});
-
-
-const faqs = [
-    "Ruang Phurh tu hi te in nge di thei?",
-    "Lorem ipsum zawnha lorem ipsum zawnha?",
-    "Lorem ipsum zawnha lorem?",
-    "Lorem ipsum zawnha lorem 4?",
-    "Lorem ipsum zawnha lorem zawnha lorem 6?",
-    "Lorem ipsum zawnha lorem zawnha lorem 67?",
-];
-
-
-
-</script>
-
 <template>
-    <Head title="Ruangphur" />
-    
-
-    
-    <div class="text-black/50 dark:bg-black dark:text-white/50">
-        <div
-            class="bg-[#E9F4FF] relative min-h-screen flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white"
-        >
-            <div class="m-0 bg-[#E9F4FF]">
-                
-
-                <!-- <WebLayout> -->
-                    <section
-                    class="bg-[#E9F4FF] grid grid-cols-1 gap-14 md:grid-cols-2 mb-6 text-foreground p-4 md:pl-[223px] md:pt-[119px] md:pb-[65px]"
-                >
-                    <!-- Button for Dilna -->
-                    <div class="mb-6 w-[420px] h-[120px]">
-                        <h2
-                            class="font-semibold w-[100%] h-auto text-2xl text-black"
-                        >
+    <q-page class="bg-[#E9F4FF]">
+        <div class="q-pa-md q-pa-lg-xl">
+            <div class="row q-col-gutter-xl">
+                <div class="col-12 col-md-6">
+                    <div class="q-mb-lg">
+                        <h2 class="text-h4 text-weight-bold q-mb-sm">
                             Chibai! In chhiattawhn naah Mizoram Sorkar a awm e.
                         </h2>
-                        <p class="text-muted-foreground text-sm text-[#5B656F]">
+                        <p class="text-grey-8 q-mb-md">
                             Mithiin ruang chu i duhna huna taka phur thleng
                             turin dilna document dik tak upload turin leh
                             hriatirii ni e.
                         </p>
-                        <Link
-                            class="px-4 py-2 bg-black text-white font-medium text-sm rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
-                        >
-                            Download Circular
-                        </Link>
+                        <q-btn color="black" label="Download Circular" class="q-px-lg" />
                     </div>
-                    <div class="flex gap-3">
-                        
-                        <Link
-                            :href="route('form.step1')"
-                            class="bg-[#202429] w-[171px] shrink-0 h-[167px] p-4 rounded-lg shadow-md hover:bg-[#3a3f45] transition duration-300 flex items-center space-x-4"
-                        >
-                            <div>
-                                <h3 class="font-semibold text-white text-base">
-                                    Dilna
-                                </h3>
-                                <p
-                                    class="text-muted-foreground text-white text-xs"
-                                >
-                                    Application form fill-up
-                                </p>
-                            </div>
-                            <img
-                                id="background"
-                                class="w-[58px] h-[81px]"
-                                src="image/Group 1321315146.png"
-                            />
-                        </Link>
-                        <Link
-                            :href="route('track')"
-                            class="bg-[#202429] w-[171px] shrink-0 h-[167px] p-4 rounded-lg shadow-md hover:bg-[#3a3f45] transition duration-300 flex items-center space-x-4"
-                        >
-                            <div>
-                                <h3 class="font-semibold text-white text-base">
-                                    Chhuina
-                                </h3>
-                                <p
-                                    class="text-muted-foreground text-white text-xs"
-                                >
-                                    Track your bill!
-                                </p>
-                            </div>
-                            <img
-                                id="background"
-                                class="w-[58px] h-[81px]"
-                                src="/image/Group 1321315147.png"
-                            />
-                        </Link>
-                    </div>
-                </section>
-
-                <div
-                    class="bg-[#F8F8F8] text-foreground md:pl-[223px] md:pt-[119px] md:pr-[55px]"
-                >
-                    <section class="md:grid-cols-2 grid gap-9 bg-[#F8F8F8]">
-                        <!-- Image -->
-                        <div>
-                            <img
-                                class="w-[412px] h-[473px]"
-                                id="background"
-                                src="image/Group 1321315121.png"
-                            />
-                        </div>
-                        <!-- Content -->
-                        <div
-                            class="rounded-[10px] border border-[#EEE] bg-[#FFF] md:p-4 w-[412px] h-[545px]"
-                        >
-                            <h2
-                                class="text-[#000] text-center font-[Noto Sans] text-[20px] font-semibold leading-[24px] tracking-[0.15px]"
-                            >
-                                Ruang Phurh chungchang a <br />
-                                zawhna leh chhana tlanglawn
-                            </h2>
-                            <h3 class="font-semibold text-base text-[#000]">
-                                FAQs
-                            </h3>
-                            <div class="space-y-4">
-                                <div
-                                    class="border-b border-border py-2 text-[#000]"
-                                    v-for="(faq, index) in faqs"
-                                    :key="index"
-                                >
-                                    <button
-                                        class="flex justify-between w-full text-left"
-                                    >
-                                        <span>{{ index + 1 }}. {{ faq }}</span>
-                                        <span>+</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
                 </div>
-                <!-- </WebLayout> -->
 
-                
+                <div class="col-12 col-md-6">
+                    <div class="row q-col-gutter-md">
+                        <div class="col-12 col-sm-6">
+                            <q-card class="bg-black text-white q-pa-md">
+                                <q-card-section class="row items-center justify-between">
+                                    <div>
+                                        <div class="text-h6 q-mb-xs">Dilna</div>
+                                        <div class="text-caption">Application form fill-up</div>
+                                    </div>
+                                    <img src="/image/Group 1321315146.png" style="width: 58px; height: 81px" />
+                                </q-card-section>
+                                <q-separator dark />
+                                <q-card-actions>
+                                    <q-btn flat :href="route('form.step1')" label="Get Started" class="full-width" />
+                                </q-card-actions>
+                            </q-card>
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                            <q-card class="bg-black text-white q-pa-md">
+                                <q-card-section class="row items-center justify-between">
+                                    <div>
+                                        <div class="text-h6 q-mb-xs">Chhuina</div>
+                                        <div class="text-caption">Track your bill!</div>
+                                    </div>
+                                    <img src="/image/Group 1321315147.png" style="width: 58px; height: 81px" />
+                                </q-card-section>
+                                <q-separator dark />
+                                <q-card-actions>
+                                    <q-btn flat :href="route('track')" label="Track Now" class="full-width" />
+                                </q-card-actions>
+                            </q-card>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
+        <div class="bg-grey-1 q-py-xl">
+            <div class="q-pa-md q-pa-lg-xl">
+                <div class="row q-col-gutter-xl">
+                    <div class="col-12 col-md-6">
+                        <img src="/image/Group 1321315121.png" class="full-width" style="max-width: 412px" />
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <q-card class="q-pa-md">
+                            <q-card-section class="text-center">
+                                <div class="text-h5 q-mb-md">
+                                    Ruang Phurh chungchang a<br>
+                                    zawhna leh chhana tlanglawn
+                                </div>
+                                <div class="text-h6 text-weight-bold">FAQs</div>
+                            </q-card-section>
+
+                            <q-list bordered separator v-if="faqs.length">
+                                <q-expansion-item v-for="(faq, index) in faqs" :key="faq.id" expand-separator
+                                    expand-icon="add" :header-class="'text-weight-bold'">
+                                    <template v-slot:header>
+                                        <q-item-section>
+                                            {{ index + 1 }}. {{ faq.title }}
+                                        </q-item-section>
+                                    </template>
+                                    <q-card>
+                                        <q-card-section>
+                                            {{ faq.content }}
+                                        </q-card-section>
+                                    </q-card>
+                                    
+                                </q-expansion-item>
+                            </q-list>
+                            <div v-else class="text-center text-grey-6 q-pa-md">
+                                        No FAQs available at the moment
+                                    </div>
+
+                        </q-card>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </q-page>
 </template>
-<style scoped></style>
+
+<script setup>
+import WebLayout from '@/Layouts/WebLayout.vue';
+
+defineOptions({
+    layout: WebLayout,
+});
+const props = defineProps({
+    faqs: Array,
+});
+
+</script>

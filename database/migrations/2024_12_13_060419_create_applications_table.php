@@ -14,10 +14,10 @@ return new class extends Migration
     {
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\Applicant::class)->constrained()->onDelete('cascade');
-            $table->foreignIdFor(\App\Models\Deceased::class)->constrained()->onDelete('cascade');
-            $table->foreignIdFor(\App\Models\Transport::class)->constrained()->onDelete('cascade');
-            $table->foreignIdFor(\App\Models\Attachment::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(\App\Models\Applicant::class);
+            $table->foreignIdFor(\App\Models\Deceased::class);
+            $table->foreignIdFor(\App\Models\Transport::class);
+            // $table->foreignIdFor(\App\Models\Attachment::class);
             $table->string('status')->nullable();
             $table->string('application_no')->unique();
             $table->timestamp('verified_at')->nullable();

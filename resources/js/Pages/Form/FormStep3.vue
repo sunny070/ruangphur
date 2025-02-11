@@ -65,9 +65,11 @@
                                     dense
                                     v-model="form.district_id"
                                     label="Select District"
-                                    :options="districts"
+                                    :options="district"
                                     :error="form.errors.district_id"
-                                    :error-message="form.errors.district_id || ''"
+                                    :error-message="
+                                        form.errors.district_id || ''
+                                    "
                                 />
                                 <div
                                     v-if="$page.props.errors.district"
@@ -217,37 +219,7 @@
                             >
                                 Document Upload
                             </div>
-                            <div>
-                                <div
-                                    class="text-sm font-medium text-black q-mb-xs"
-                                >
-                                    Mitthi/Chhungte Aadhaar Neitu
-                                </div>
-                                <q-select
-                                    outlined
-                                    dense
-                                    v-model="form.relation"
-                                    label="Select Relation"
-                                    :options="[
-                                        'Mitthi',
-                                        'Mitthi Nu',
-                                        'Mitthi Pa',
-                                    ]"
-                                    :error="form.errors.relation"
-                                    :error-message="form.errors.relation || ''"
-                                />
-                                <p class="text-[#61646B]">
-                                    Mitthi hi naupang emaw aadhaar la neilo a
-                                    nih chuan a chhungte aadhaar upload tur a
-                                    ni.
-                                </p>
-                                <div
-                                    v-if="$page.props.errors.relation"
-                                    class="text-red"
-                                >
-                                    {{ $page.props.errors.relation }}
-                                </div>
-                            </div>
+
                             <div>
                                 <div
                                     class="text-sm font-medium text-black q-mb-xs"
@@ -362,7 +334,7 @@
                                 text-color="black"
                                 label="Preview"
                                 color="white"
-                                @click=openDialog
+                                @click="openDialog"
                             />
                             <q-btn
                                 label="Submit & Send OTP"
@@ -463,11 +435,11 @@
                                 <div class="flex items-start space-x-2">
                                     <input type="checkbox" class="mt-1" />
                                     <p class="text-[#757575]">
-                                        Kei {{ form.name }} hian heng dilna
-                                        leh document upload-te hi thu diktak a
-                                        ni tih ka nemnghet e, diklo emaw felhlel
-                                        a awm anih chuan a tul angin mawh ka
-                                        phur ang.
+                                        Kei {{ form.name }} hian heng dilna leh
+                                        document upload-te hi thu diktak a ni
+                                        tih ka nemnghet e, diklo emaw felhlel a
+                                        awm anih chuan a tul angin mawh ka phur
+                                        ang.
                                     </p>
                                 </div>
                             </q-card-section>
@@ -501,10 +473,10 @@ import { useQuasar } from "quasar";
 
 defineOptions({ layout: WebLayout });
 
+
+const districts = ref([])
 const props = defineProps(["form", "districts"]);
 const preview = ref(false);
-
-
 const $q = useQuasar();
 // Text fields for dynamic input rendering (excluding district)
 const textFields = [
@@ -548,19 +520,21 @@ const fileFields = [
     },
 ];
 
-// District options
-const districts = ref(props.districts || []);
+
+
+
+const district = ref(props.districts || []);
 
 // Form setup
 const form = useForm({
-    name: "",
-    mobile: "",
-    district_id: "",
-    locality: "",
-    bank_name: "",
-    account_no: "",
-    ifsc_code: "",
-    relation: "",
+    name: props.form.name || "",
+    mobile: props.form.mobile || "",
+    district_id: props.form.district_id || "",
+    locality: props.form.locality || "",
+    bank_name: props.form.bank_name || "",
+    account_no: props.form.account_no || "",
+    ifsc_code: props.form.ifsc_code || "",
+
     id_proof: null,
     receipt: null,
     death_certificate: null,
@@ -578,6 +552,8 @@ const submitForm = () => {
         }
     });
 
+    formData.append("district_id", form.district_id); // Ensure district_id is added
+
     form.post(route("form.storeStep3"), {
         data: formData,
         onError: (errors) => {
@@ -585,8 +561,10 @@ const submitForm = () => {
             form.errors = errors; // Assign errors to form.errors
             preview.value = false;
         },
-        onSuccess: () => {
+        onSuccess: (response) => {
             preview.value = false; // Close the preview dialog if open
+            // You can now access the file URLs from the response
+            console.log(response.files); // Example response with file URLs
 
             // Optional: Display a success notification
             $q.notify({
@@ -600,7 +578,7 @@ const submitForm = () => {
 
 
 const openDialog = () => {
-    preview.value = true
+    preview.value = true;
 };
 
 // Back to previous step

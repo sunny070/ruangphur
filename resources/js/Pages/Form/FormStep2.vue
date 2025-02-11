@@ -37,6 +37,7 @@
                                         District
                                     </div>
                                     <q-select
+                                    
                                         dense
                                         outlined=""
                                         v-model.number="form.source_district"
@@ -466,20 +467,28 @@
                                     </p>
                                 </div>
                                 <hr class="my-4 border-border" />
-                                <div class="flex gap-10 justify-evenly items-center">
-
+                                <div
+                                    class="flex gap-10 justify-evenly items-center"
+                                >
                                     <div class="leading-[2px] pt-4">
-                                        <p class="text-bold text-[18px] text-center">{{ form.distance }}</p>
+                                        <p
+                                            class="text-bold text-[18px] text-center"
+                                        >
+                                            {{ form.distance }}
+                                        </p>
                                         <p class="text-[#61646B]">Kilometer</p>
                                     </div>
                                     <div class="leading-[2px] pt-4">
-                                        <p class="text-bold text-[18px] text-center">{{ form.transport_cost }}</p>
+                                        <p
+                                            class="text-bold text-[18px] text-center"
+                                        >
+                                            {{ form.transport_cost }}
+                                        </p>
                                         <p class="text-[#61646B]">
                                             Motor hman man
                                         </p>
                                     </div>
                                 </div>
-
 
                                 <hr class="my-4 border-border" />
                                 <p class="mb-8 mt-8">Ruang phurhna motor</p>
@@ -505,19 +514,24 @@
                                     </p>
                                     <p>{{ form.driver_phone }}</p>
                                 </div>
-                                
                             </q-card-section>
 
                             <q-card-actions class="ml-[22px] pt-[35px]">
                                 <q-btn
-                                style="padding: 10px 28px; border-radius: 12px"
+                                    style="
+                                        padding: 10px 28px;
+                                        border-radius: 12px;
+                                    "
                                     class="text-black"
                                     color="white"
                                     label="Edit"
                                     v-close-popup
                                 />
                                 <q-btn
-                                 style="padding: 10px 80px; border-radius: 12px"
+                                    style="
+                                        padding: 10px 80px;
+                                        border-radius: 12px;
+                                    "
                                     label="Approve & Next"
                                     color="black"
                                     @click="submitForm"

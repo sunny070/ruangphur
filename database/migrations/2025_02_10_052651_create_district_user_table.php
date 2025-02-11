@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('attachments', function (Blueprint $table) {
+        Schema::create('district_user', function (Blueprint $table) {
             $table->id();
-           $table->foreignIdFor(\App\Models\Application::class);
-            $table->string('id_proof')->nullable();
-            $table->string('receipt')->nullable();
-            $table->string('death_certificate')->nullable();
-            $table->string('additional_document')->nullable();
+            $table->foreignIdFor(\App\Models\User::class);
+            $table->foreignId(\App\Models\District::class);
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('attachments');
+        Schema::dropIfExists('district_user');
     }
 };
