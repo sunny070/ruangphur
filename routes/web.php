@@ -61,6 +61,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/admin/application', [AdminController::class, 'index'])->name('admin.application');
     Route::get('/admin/bill', [AdminController::class, 'bill'])->name('admin.bill');
+    // Route::get('/admin/report', [AdminController::class, 'report'])->name('admin.report');
+    Route::get('/admin/report', [AdminController::class, 'report'])->name('admin.report');
+Route::post('/admin/report/export', [AdminController::class, 'export'])->name('admin.report.export');
 
 
     // Approve Routed

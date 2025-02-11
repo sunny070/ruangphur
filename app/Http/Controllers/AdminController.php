@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AdminApplicationsExport;
 use App\Models\Application;
 use App\Models\Constituency;
 use App\Models\District;
 use App\Models\Relative;
+use App\Exports\ApplicationsExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -343,7 +346,56 @@ class AdminController extends Controller
     }
 
 
+    // Add at the top
 
+
+// Add new methods
+public function report(Request $request)
+{
+    $filters = $request->only(['status', 'district_id', 'constituency_id', 'start_date', 'end_date']);
+
+    $applications = Application::with([
+            'applicant.district',
+            'deceased.district',
+            'deceased.constituency',
+            'transport.sourceDistrict',
+            'transport.destinationDistrict',
+        ])
+        ->when($filters['status'] ?? null, fn($q) => $q->where('status', $filters['status']))
+        ->when($filters['district_id'] ?? null, function ($q) use ($filters) {
+            $q->whereHas('applicant', fn($q) => $q->where('district_id', $filters['district_id']));
+        })
+        ->when($filters['constituency_id'] ?? null, function ($q) use ($filters) {
+            $q->whereHas('deceased', fn($q) => $q->where('constituency_id', $filters['constituency_id']));
+        })
+        ->when($filters['start_date'] ?? null, fn($q) => $q->whereDate('created_at', '>=', $filters['start_date']))
+        ->when($filters['end_date'] ?? null, fn($q) => $q->whereDate('created_at', '<=', $filters['end_date']))
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+    return Inertia::render('Admin/Report', [
+        'applications' => $applications,
+        'filters' => $filters,
+        'dropdowns' => [
+            'statuses' => ['Pending', 'Approved', 'Rejected', 'Paid'],
+            'districts' => District::all(),
+            'constituencies' => Constituency::all(),
+        ]
+    ]);
+}
+
+public function export(Request $request)
+{
+    $filters = $request->validate([
+        'status' => 'nullable|string',
+        'district_id' => 'nullable|exists:districts,id',
+        'constituency_id' => 'nullable|exists:constituencies,id',
+        'start_date' => 'nullable|date',
+        'end_date' => 'nullable|date|after_or_equal:start_date',
+    ]);
+
+    return Excel::download(new AdminApplicationsExport($filters), 'applications-'.now()->format('YmdHis').'.xlsx');
+}
 
 
     // public function update(Request $request, Application $application)

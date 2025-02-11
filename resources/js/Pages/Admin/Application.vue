@@ -718,18 +718,7 @@ th {
     border-radius: 8px;
 }
 
-/* .action-btn {
-    width: 120px;
-    height: 34px;
-    flex-shrink: 0;
-    border-radius: 12px;
-    border: 1px solid #eee;
-    background: #fff;
-}
 
-.action-btn:hover {
-    background: #e9f4ff;
-} */
 
 .status-badge {
     width: 80px;
