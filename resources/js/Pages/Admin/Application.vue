@@ -165,7 +165,7 @@
                                 {{ application?.status }}
                             </div>
                         </td>
-                        <td>{{ application?.created_at }}</td>
+                        <td>{{ formatDate(application?.created_at) }}</td>
                         <td>
                             <q-btn flat icon="more_vert" />
                             <q-menu>
@@ -333,6 +333,7 @@ import { defineProps, ref, computed, onMounted } from "vue";
 import { router as $inertia } from "@inertiajs/vue3";
 import * as XLSX from "xlsx"; // Import SheetJS library
 import AdminLayout from "@/Layouts/AdminLayout.vue";
+import dayjs from 'dayjs';
 // import useForm from "@inertiajs/vue3";
 
 defineOptions({
@@ -346,7 +347,9 @@ const props = defineProps({
     flash: Object,
     dropdowns: Object,
 });
-
+const formatDate = (date) => {
+  return dayjs(date).format('dddd, MMMM D, YYYY h:mm A'); // Change this to your desired format
+};
 // Reactive references
 const editDialog = ref(false);
 const currentStep = ref(1);

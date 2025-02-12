@@ -68,7 +68,10 @@
                         flex-shrink: 0;
                         border-radius: 8px;
                         background: transparent;
-                    ">
+                        
+                    "
+                    @click="printTable"
+                    >
                     <q-icon name="print" size="16px" class="q-mr-xs" />
                     <span>Print</span>
                 </q-btn>
@@ -80,7 +83,9 @@
                         border-radius: 8px;
 
                         background: transparent;
-                    ">
+                    "
+                    @click="exportToExcel"
+                    >
                     <q-icon name="ios_share" size="16px" class="q-mr-xs" />
                     <span>Export</span>
                 </q-btn>
@@ -88,7 +93,7 @@
             </div>
         </div>
         <!-- Applications Table -->
-        <div class="table-responsive">
+        <div ref="printSection"  class="table-responsive">
             <table class="q-table q-table__grid q-mb-lg">
                 <thead class="bg-[#3A424A] text-white font-bold h-[30px] w-full text-[11px]">
                     <tr>
@@ -132,7 +137,7 @@
                             </div>
                         </td>
                         
-                        <td>{{ application?.created_at }}</td>
+                        <td>{{formatDate(application?.created_at)  }}</td>
                         <td>
                             <q-btn flat icon="more_vert" :style="buttonStyle" />
                             <q-menu>
@@ -162,6 +167,8 @@
 import { defineProps, ref, computed, onMounted } from "vue";
 import { router as $inertia } from "@inertiajs/vue3";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
+import dayjs from 'dayjs';
+import * as XLSX from "xlsx"; // Import SheetJS library
 
 defineOptions({
     layout: AdminLayout,
@@ -195,7 +202,9 @@ const filterByDistrict = () => {
         filteredApplications.value = props.applications;
     }
 };
-
+const formatDate = (date) => {
+  return dayjs(date).format('dddd, MMMM D, YYYY h:mm A'); // Change this to your desired format
+};
 const loadDistrictOptions = () => {
     // Assuming applications have a district field
     const districts = [
@@ -242,7 +251,7 @@ const setFilter = (filter) => {
 };
 
 const viewApplication = (applicationId) => {
-    $inertia.get(route("applications.show", applicationId));
+    $inertia.get(route("bill.show", applicationId));
 };
 
 const editApplication = (applicationId) => {
@@ -301,6 +310,61 @@ const rejectAll = async () => {
             console.error('Error rejecting applications:', error);
         }
     }
+};
+
+
+
+// Print the table
+const printTable = () => {
+    const printContents = document.querySelector(".table-responsive").innerHTML;
+    const printWindow = window.open("", "", "width=800,height=600");
+    printWindow.document.write(`
+        <html>
+            <head>
+                <title>Print Table</title>
+                <style>
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+                    th, td {
+                        padding: 8px 12px;
+                        text-align: left;
+                        border-bottom: 1px solid #ddd;
+                    }
+                    th {
+                        background-color: #3A424A;
+                        color: white;
+                        font-weight: bold;
+                    }
+                </style>
+            </head>
+            <body>${printContents}</body>
+        </html>
+    `);
+    printWindow.document.close();
+    printWindow.print();
+};
+
+const exportToExcel = () => {
+    const data = filteredApplications.value.map((app) => ({
+        "Applicant ID": app?.application_no,
+        "Deceased Name": app?.deceased?.name,
+        "Deceased District": app?.deceased?.district?.name,
+        Kilometer: app?.transport?.distance,
+        Amount: app?.transport?.transport_cost,
+        "Applicant Name": app?.applicant?.name,
+        "Applicant Phone": app?.applicant?.mobile,
+        Status: app?.status,
+        "Date Created": app?.created_at,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Applications");
+
+    const timestamp = new Date().toISOString().slice(0, 10); // Add timestamp
+    XLSX.writeFile(workbook, `Applications_${timestamp}.xlsx`);
 };
 
 </script>

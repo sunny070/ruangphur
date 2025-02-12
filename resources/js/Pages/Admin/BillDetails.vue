@@ -4,7 +4,7 @@
             <!-- Back Button -->
             <div class="flex items-center order-1 md:order-none">
                 <Link
-                    :href="route('admin.application')"
+                    :href="route('admin.bill')"
                     size="sm"
                     flat
                     outlined
@@ -100,7 +100,7 @@
                     <q-btn
                         v-if="application?.status === 'Approved'"
                         @click="approveApplication(application.id)"
-                        label="Approve"
+                        label="Deposit to Bank"
                         size="sm"
                         class="w-full md:w-36"
                         style="

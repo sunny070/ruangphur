@@ -4,85 +4,94 @@
 
         <div class="row q-gutter-md">
             <div class="flex zcard justify-between flex-inline col-12 q-pa-md">
-                <!-- <q-btn @click="$inertia.get(route('user.create'))" rounded label="New user" color="primary"/> -->
-                <q-btn size="sm" flat outlined class=" flex items-center justify-center" style="
+                <q-btn size="sm" flat outlined class="flex items-center justify-center" style="
                         color: #fff;
                         width: 100px;
                         height: 40px;
                         border-radius: 8px;
                         background: #3a424a;
-                    "@click="$inertia.get(route('user.create'))">
+                    " @click="$inertia.get(route('user.create'))">
                     <q-icon name="person_add" size="16px" class="q-mr-xs" />
                     <span>New User</span>
                 </q-btn>
-                <q-tabs
-                    stretch
-                    shrink
-                    v-model="state.tab"
-                    align="start"
-                    @update:model-value="handleNavigation"
-                >
-                    <q-space/>
-                    <q-input v-model="state.search"
-                             autofocus
-                             outlined
-                             dense
-                             @keyup.enter="handleSearch"
-                             bg-color="white"
-                             placeholder="Search"
-                    >
+                <q-tabs stretch shrink v-model="state.tab" align="start" @update:model-value="handleNavigation">
+                    <q-space />
+                    <q-input v-model="state.search" autofocus outlined dense @keyup.enter="handleSearch"
+                        bg-color="white" placeholder="Search">
                         <template v-slot:append>
-                            <q-icon name="search"/>
+                            <q-icon name="search" />
                         </template>
                     </q-input>
                 </q-tabs>
             </div>
 
             <div class="col-12 zcard q-pa-md">
-                <q-list  separator>
-                    <q-item v-for="item in users.data" :key="item.id" >
-                        <q-item-section>
-                            <q-item-label class="ztext">{{item?.name ?? '--'}} </q-item-label>
-                            <q-item-label class="ztext" caption>{{item?.email ?? '--' }}</q-item-label>
-                        </q-item-section>
-                        <q-item-section side>
-                            <div class="flex flex-inline items-center q-gutter-sm">
-                                <q-chip v-for="role in item.roles"  :key="name" :label="role.name" />
-                                <q-separator size="sm" vertical/>
-                                <q-btn-dropdown class="q-ma-none q-pa-sm" flat rounded dropdown-icon="more_vert">
-                                    <q-list separator>
-                                        <q-item @click="$inertia.get(route('user.edit', item))" clickable>
-                                            <q-item-section><q-item-label class="ztext">Edit</q-item-label></q-item-section>
-                                        </q-item>
-                                        <q-item @click="handleDelete(item)" clickable>
-                                            <q-item-section><q-item-label class="ztext">Delete</q-item-label></q-item-section>
-                                        </q-item>
-                                    </q-list>
+                <div class="responsive-table">
+                    <table class="q-table w-full">
+                        <thead>
+                            <tr class="bg-[#3A424A] text-white">
+                                <th class="text-left">NAME</th>
+                                <th class="text-left">ROLES</th>
+                                <th class="text-left">DISTRICT</th>
+                                <th class="text-center">ACTIONS</th>
+                            </tr>
+                        </thead>
+                        <tbody v-if="users && users.data && users.data.length">
+                            <tr v-for="user in users.data" :key="user.id">
+                                <td>{{ user?.name ?? '--' }}</td>
+                                <td>
+                                    <div class="flex">
+                                        <q-chip v-for="role in user.roles" :key="role.name" :label="role.name"
+                                            class="q-mr-xs" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="flex flex-col">
+                                        <q-chip v-for="district in user.districts" :key="district.name"
+                                            :label="district.name" class="q-mr-xs" />
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <q-btn-dropdown flat rounded dropdown-icon="more_vert" class="q-pa-none">
+                                        <q-list separator>
+                                            <q-item @click="$inertia.get(route('user.edit', user))" clickable>
+                                                <q-item-section><q-item-label>Edit</q-item-label></q-item-section>
+                                            </q-item>
+                                            <q-item @click="handleDelete(user)" clickable>
+                                                <q-item-section><q-item-label>Delete</q-item-label></q-item-section>
+                                            </q-item>
+                                        </q-list>
+                                    </q-btn-dropdown>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody v-else>
+                            <tr>
+                                <td colspan="4" class="text-center text-gray-500">
+                                    No users found.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-                                </q-btn-dropdown>
-                            </div>
-                        </q-item-section>
-                    </q-item>
-                </q-list>
                 <div class="col-12">
-
-                    <div class="flex q-gutter-sm">
-                        <q-btn :disable="!!!users.prev_page_url" @click="$inertia.get(users.prev_page_url)" flat round icon="chevron_left"/>
-                        <q-btn :disable="!!!users.next_page_url" @click="$inertia.get(users.next_page_url)" flat round icon="chevron_right"/>
+                    <div class="flex q-gutter-sm justify-center">
+                        <q-btn :disable="!!!users.prev_page_url" @click="$inertia.get(users.prev_page_url)" flat round
+                            icon="chevron_left" />
+                        <q-btn :disable="!!!users.next_page_url" @click="$inertia.get(users.next_page_url)" flat round
+                            icon="chevron_right" />
                     </div>
                 </div>
             </div>
-
         </div>
-
-
     </q-page>
 </template>
 
 <script setup>
-import {ref, watch, reactive} from 'vue';
-import {router} from '@inertiajs/vue3'
-import {useQuasar} from "quasar";
+import { ref, watch, reactive } from 'vue';
+import { router } from '@inertiajs/vue3'
+import { useQuasar } from "quasar";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 
 defineOptions({
@@ -93,21 +102,21 @@ const q = useQuasar();
 const search = ref('');
 const props = defineProps(['users', 'search']);
 
-const state=reactive({
-    search:props?.search,
+const state = reactive({
+    search: props?.search,
     tab: route().current(),
 })
-const handleSearch=e=>{
+const handleSearch = e => {
     router.get(route('user.index'), {
         search: state.search
     });
 
 }
 
-const handleNavigation=(value)=>{
+const handleNavigation = (value) => {
     router.get(route(value))
 }
-const handleDelete=(item)=>{
+const handleDelete = (item) => {
     q.dialog({
         title: 'Confirm',
         message: 'Would you like to delete?',
@@ -141,5 +150,39 @@ const handleDelete=(item)=>{
 </script>
 
 <style scoped>
+.responsive-table {
+    overflow-x: auto;
+}
 
+@media (max-width: 600px) {
+    .responsive-table table {
+        width: 100%;
+    }
+
+    .responsive-table th,
+    .responsive-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .responsive-table th {
+        text-align: left;
+    }
+
+    .responsive-table td {
+        text-align: left;
+        padding: 8px;
+    }
+
+    .responsive-table tr {
+        margin-bottom: 10px;
+        display: block;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .responsive-table .q-btn-dropdown {
+        width: 100%;
+        text-align: center;
+    }
+}
 </style>

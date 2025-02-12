@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use App\Models\Information;
 use App\Models\Note;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class ApplicationController extends Controller
@@ -86,8 +88,16 @@ class ApplicationController extends Controller
     ]);
 }
 
-    public function download()
-    {
-        return Inertia::render('Download');
-    }
+public function downloads()
+{
+    $informations = Information::all()->map(function ($info) {
+        return [
+            'id' => $info->id,
+            'file_url' => Storage::url($info->attachment_url),
+            'created_at' => $info->created_at->format('Y-m-d H:i:s'),
+        ];
+    });
+
+    return Inertia::render('Download', ['informations' => $informations]);
+}
 }

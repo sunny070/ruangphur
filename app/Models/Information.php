@@ -8,7 +8,7 @@ class Information extends Model
 {
     protected $fillable = [
 
-        'attachment_url',
+        'attachment',
       ];
   
 }

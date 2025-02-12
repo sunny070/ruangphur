@@ -9,7 +9,7 @@
                         <img
                             id="background"
                             class="text-white"
-                            src="/build/img/check.png"
+                            src="image/check.png"
                         />
                     </div>
                     <p class="text-[#5B656F]">

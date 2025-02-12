@@ -52,7 +52,7 @@
                                     dense
                                     v-model="form.relative"
                                     :options=relative
-                                    label="Pa"
+                                    label="s/o"
                                     lazy-rules
                                     :error="form.errors.relative"
                                     :error-message="

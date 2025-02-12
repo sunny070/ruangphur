@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Application;
 use App\Models\District;
+use App\Models\Information;
 use App\Models\Note;
+// use Illuminate\Container\Attributes\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
@@ -131,9 +134,12 @@ class DashboardController extends Controller
         ]);
     }
 
+
+    
+
     public function note()
     {
-        $query = Note::with('user')->latest();
+        $query = Note::latest();
 
         if (request()->has('search')) {
             $search = request('search');
@@ -160,7 +166,6 @@ class DashboardController extends Controller
         ]);
 
         // Add authenticated user ID
-        $validated['user_id'] = auth()->id();
 
         Note::create($validated);
 
@@ -188,4 +193,65 @@ class DashboardController extends Controller
         return redirect()->back()
             ->with('success', 'Note deleted successfully');
     }
+
+    
+    
+    public function createInfo()
+    {
+        return Inertia::render('Admin/Information/Create');
+    }
+
+    public function storeInfo(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:pdf,jpg,png|max:2048',
+        ]);
+
+        $path = $request->file('file')->store('uploads', 'public');
+
+        Information::create(['attachment' => $path]);
+
+        return redirect()->route('admin.info.index')->with('success', 'File uploaded successfully.');
+    }
+
+    public function info()
+    {
+        $informations = Information::all()->map(function ($info) {
+            return [
+                'id' => $info->id,
+                'file_url' => asset(Storage::url($info->attachment)),
+                'created_at' => $info->created_at->format('Y-m-d H:i:s'),
+            ];
+        });
+        // dd($informations);
+
+        return Inertia::render('Admin/Information/Index', ['informations' => $informations]);
+    }
+
+    public function updateInfo(Request $request, Information $info)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:pdf,jpg,png|max:2048'
+        ]);
+
+        if ($info->attachment) {
+            Storage::disk('public')->delete($info->attachment);
+        }
+
+        $path = $request->file('file')->store('uploads', 'public');
+        $info->update(['attachment' => $path]);
+
+        return redirect()->route('admin.info.index')->with('success', 'File updated successfully.');
+    }
+
+    public function destroyInfo(Information $info)
+    {
+        if ($info->attachment) {
+            Storage::disk('public')->delete($info->attachment);
+        }
+        $info->delete();
+
+        return redirect()->route('admin.info.index')->with('success', 'File deleted successfully.');
+    }
+
 }

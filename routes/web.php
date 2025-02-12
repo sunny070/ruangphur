@@ -62,8 +62,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/application', [AdminController::class, 'index'])->name('admin.application');
     Route::get('/admin/bill', [AdminController::class, 'bill'])->name('admin.bill');
     // Route::get('/admin/report', [AdminController::class, 'report'])->name('admin.report');
+
+    // Report
     Route::get('/admin/report', [AdminController::class, 'report'])->name('admin.report');
-Route::post('/admin/report/export', [AdminController::class, 'export'])->name('admin.report.export');
+    Route::get('/admin/report/export', [AdminController::class, 'export'])->name('admin.report.export');
+    // Route::post('/admin/report/export', [AdminController::class, 'export'])->name('admin.report.export');
 
 
     // Approve Routed
@@ -72,19 +75,27 @@ Route::post('/admin/report/export', [AdminController::class, 'export'])->name('a
     Route::post('/admin/application/{application}/reject', [AdminController::class, 'reject'])->name('admin.application.reject');
     Route::post('/admin/applications/reject-all', [AdminController::class, 'rejectAll']);
 
-    // Bills routes
+    // Bills routespaymet
+    Route::post('/admin/bill/{application}/processed', [AdminController::class, 'payment'])->name('admin.bill.approve');
     Route::post('/admin/bill/paymet-all', [AdminController::class, 'paymetAll']);
+    Route::post('/admin/bill/{application}/reject', [AdminController::class, 'reject'])->name('admin.bill.reject');
     Route::post('/admin/bill/reject-all', [AdminController::class, 'rejectAllBill']);
 
 
     Route::get('/admin/application/{application}', [AdminController::class, 'show'])->name('applications.show');
+    Route::get('/admin/bill/{application}', [AdminController::class, 'billShow'])->name('bill.show');
     Route::put('/application/{application}', [AdminController::class, 'update'])->name('applications.update');
     Route::delete('/applications/{application}', [AdminController::class, 'destroy'])->name('applications.destroy');
+
+
+
+
+
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
+
     // Note
     Route::get('/admin/note', [DashboardController::class, 'note'])->name('note.index');
     // Route::get('/admin/notes', [NoteController::class, 'index'])->name('admin.notes.index');
@@ -92,6 +103,12 @@ Route::post('/admin/report/export', [AdminController::class, 'export'])->name('a
     Route::post('/admin/notes', [DashboardController::class, 'store'])->name('admin.notes.store');
     Route::patch('/admin/notes/{note}', [DashboardController::class, 'update'])->name('admin.notes.update');
     Route::delete('/admin/notes/{note}', [DashboardController::class, 'destroy'])->name('admin.notes.destroy');
+
+    Route::get('/admin/info', [DashboardController::class, 'info'])->name('admin.info.index');
+    Route::get('/admin/info/create', [DashboardController::class, 'createInfo'])->name('admin.info.create');
+    Route::post('/admin/info/store', [DashboardController::class, 'storeInfo'])->name('admin.info.store');
+    Route::put('/admin/info/{info}', [DashboardController::class, 'updateInfo'])->name('admin.info.update');
+    Route::delete('/admin/info/{info}', [DashboardController::class, 'destroyInfo'])->name('admin.info.destroy');
 });
 
 // Route::get('/ruang-phur-report-form',[DeceasedController::class,'index'])->name('form-fill');
@@ -104,6 +121,12 @@ Route::group(['middleware' => [RoleMiddleware::using('approver')]], function () 
 
 Route::group([], function () {
     Route::get('/verifier/application', [VerifierController::class, 'index'])->name('verifier.application');
+    
+
+
+
+    Route::post('/verifier/applications/verify-all', [VerifierController::class, 'verifyAll']);
+    Route::post('/verifier/applications/reject-all', [VerifierController::class, 'rejectAll']);
 
     Route::post('/verifier/application/{application}/approve', [VerifierController::class, 'verify'])->name('verifier.application.approve');
     Route::post('/verifier/application/{application}/reject', [VerifierController::class, 'reject'])->name('verifier.application.reject');
@@ -144,7 +167,7 @@ Route::get('/application/{id}/view', [ApplicationController::class, 'view'])->na
 
 // FAQs
 Route::get('/application/faqs', [ApplicationController::class, 'faqs'])->name('application.faqs');
-Route::get('/application/download', [ApplicationController::class, 'download'])->name('application.download');
+Route::get('/application/download', [ApplicationController::class, 'downloads'])->name('application.download');
 
 
 require __DIR__ . '/auth.php';

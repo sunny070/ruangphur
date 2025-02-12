@@ -55,7 +55,7 @@ class User extends Authenticatable
     
 public function districts(): BelongsToMany
 {
-    return $this->belongsToMany(District::class, 'district_user');
+    return $this->belongsToMany(District::class);
 }
 
     // public function districts()

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('information', function (Blueprint $table) {
             $table->id();
-            $table->string('attachment_url');
+            $table->string('attachment')->nullable();
             $table->timestamps();
         });
     }

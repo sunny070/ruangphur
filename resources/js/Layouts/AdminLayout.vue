@@ -101,12 +101,14 @@
                     <q-expansion-item expand-icon="info" expand-icon-side="left" label="Post Information"
                         header-class="text-weight-bold">
                         <q-list>
-                            <q-item clickable :to="route('profile.edit')">
-                                <q-item-section avatar>
-                                    <q-icon name="person" />
-                                </q-item-section>
-                                <q-item-section>Profile</q-item-section>
-                            </q-item>
+                            <Link :href="route('admin.info.index')">
+                                <q-item clickable >
+                                    <q-item-section avatar>
+                                        <q-icon name="info" />
+                                    </q-item-section>
+                                    <q-item-section>Information</q-item-section>
+                                </q-item>
+                            </Link>
                             <Link :href="route('note.index')">
                             <q-item clickable>
                                 <q-item-section avatar>
@@ -151,14 +153,16 @@
 
                 <!-- Verifier Links -->
                 <q-item-label header class="text-weight-bold">Verifier Links</q-item-label>
-                <q-item clickable v-ripple :to="route('verifier.dashboard')">
-                    <q-item-section avatar>
-                        <q-icon name="dashboard" />
-                    </q-item-section>
-                    <q-item-section>
-                        <q-item-label>Dashboard</q-item-label>
-                    </q-item-section>
-                </q-item>
+                <Link :href="route('verifier.dashboard')">
+                    <q-item clickable v-ripple >
+                        <q-item-section avatar>
+                            <q-icon name="dashboard" />
+                        </q-item-section>
+                        <q-item-section>
+                            <q-item-label>Dashboard</q-item-label>
+                        </q-item-section>
+                    </q-item>
+                </Link>
 
                 <Link :href="route('verifier.application')">
                 <q-item clickable v-ripple>

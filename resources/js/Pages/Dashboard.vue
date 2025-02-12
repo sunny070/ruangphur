@@ -6,6 +6,11 @@ import { usePage } from "@inertiajs/vue3";
 import { Head } from "@inertiajs/vue3";
 import BarChart from "@/Components/BarChart.vue";
 import CircularChart from '@/Components/CircularChart.vue';
+import { watch } from "vue";
+import VueApexCharts from "vue3-apexcharts";
+
+
+
 
 defineOptions({
     layout: AdminLayout,
@@ -68,12 +73,9 @@ const amountDisbursedChartOptions = ref({
         }
     },
     dataLabels: { enabled: false },
-    series: [{
-        name: "Amount Disbursed",
-        data: props.amountDisbursedData
-    }],
+    series: [],
     xaxis: {
-        categories: props.months,
+        categories: [],
         labels: { style: { fontSize: '12px' } }
     },
     yaxis: {
@@ -84,6 +86,17 @@ const amountDisbursedChartOptions = ref({
     colors: ['#00AA68'],
     grid: { borderColor: '#f1f1f1' }
 });
+watch(() => props.amountDisbursedData, (newData) => {
+    if (newData && newData.length) {
+        amountDisbursedChartOptions.value.series = [{
+            name: "Amount Disbursed",
+            data: newData
+        }];
+        amountDisbursedChartOptions.value.xaxis.categories = props.months;
+    }
+}, { immediate: true });
+
+
 const topApplicants = ref(props.topApplicants);
 onMounted(() => {
     console.log('Disbursement Data:', props.amountDisbursedData);
@@ -150,9 +163,8 @@ const applicantColumns = [
                 <q-card class="q-pa-md">
                     <q-card-section>
                         <div class="text-h6">Monthly Amount Disbursed</div>
-                        <div v-if="amountDisbursedData.length" class="chart-container">
-                            <q-chart :options="amountDisbursedChartOptions"
-                                :series="amountDisbursedChartOptions.series" />
+                        <div  v-if="amountDisbursedChartOptions.series.length" class="chart-container">
+                            <q-chart :options="amountDisbursedChartOptions" :series="amountDisbursedChartOptions.series" />
                         </div>
                         <div v-else class="text-caption text-grey">
                             No disbursement data available

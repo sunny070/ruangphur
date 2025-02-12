@@ -72,10 +72,10 @@
                                     "
                                 />
                                 <div
-                                    v-if="$page.props.errors.district"
+                                    v-if="form.errors.district_id"
                                     class="text-red"
                                 >
-                                    {{ $page.props.errors.district }}
+                                    {{ form.errors.district_id }}
                                 </div>
                             </div>
 
@@ -238,10 +238,10 @@
                                     </template>
                                 </q-file>
                                 <div
-                                    v-if="$page.props.errors.id_proof"
+                                    v-if="form.errors.id_proof"
                                     class="text-red"
                                 >
-                                    {{ $page.props.errors.id_proof }}
+                                    {{ form.errors.id_proof }}
                                 </div>
                             </div>
                             <div>
@@ -366,7 +366,7 @@
                                     </div>
                                     <div class="leading-[2px] pt-4">
                                         <p class="text-[#61646B]">District</p>
-                                        <p>{{ form.district["label"] }}</p>
+                                        <p>{{ form.district }}</p>
                                     </div>
                                     <div class="leading-[2px] pt-4">
                                         <p class="text-[#61646B]">Veng/Khua</p>
@@ -444,14 +444,22 @@
                                 </div>
                             </q-card-section>
 
-                            <q-card-actions align="right">
+                            <q-card-actions class="ml-[22px] pt-[35px]">
                                 <q-btn
+                                style="
+                                        padding: 10px 28px;
+                                        border-radius: 12px;
+                                    "
                                     class="text-black"
                                     color="white"
                                     label="Edit"
                                     v-close-popup
                                 />
                                 <q-btn
+                                style="
+                                        padding: 10px 60px;
+                                        border-radius: 12px;
+                                    "
                                     label="Submit & Send OTP"
                                     color="black"
                                     @click="submitForm"

@@ -86,7 +86,31 @@ class AdminController extends Controller
         return redirect()->route('admin.application')->with('error', 'Application is already processed or invalid.');
     }
 
+    public function reject(Application $application)
+    {
+        if ($application && $application->status === 'Pending') {
+            $application->status = 'Rejected'; // Change the status to 'Rejected'
+            $application->save();
 
+            return redirect()->route('application')->with('success', 'Application rejected.');
+        }
+
+        return redirect()->route('application')->with('error', 'Application is already processed or invalid.');
+    }
+
+    public function rejectAll(Request $request)
+    {
+        $ids = $request->input('ids');
+
+        if (empty($ids)) {
+            return redirect()->back()->with('error', 'No applications selected.');
+        }
+
+        // Update the status of all selected applications to 'Rejected'
+        Application::whereIn('id', $ids)->update(['status' => 'Rejected']);
+
+        return redirect()->back()->with('success', 'Selected applications have been rejected.');
+    }
 
 
     public function approveAll(Request $request)
@@ -110,20 +134,30 @@ class AdminController extends Controller
 
 
 
-    public function paymet(Application $application)
+    public function payment(Application $application)
     {
         if ($application && $application->status === 'Approved') {
             $application->status = 'Paid'; // Change the status to 'Approved'
             $application->processed_at = now(); // Set the approved_at timestamp
             $application->save();
 
-            return redirect()->route('application')->with('success', 'Application approved.');
+            return redirect()->route('admin.bill')->with('success', 'Application approved.');
         }
 
-        return redirect()->route('application')->with('error', 'Application is already processed or invalid.');
+        return redirect()->route('admin.bill')->with('error', 'Application is already processed or invalid.');
     }
 
+    public function billReject(Application $application)
+    {
+        if ($application && $application->status === 'Approved') {
+            $application->status = 'Rejected'; // Change the status to 'Rejected'
+            $application->save();
 
+            return redirect()->route('admin.bill')->with('success', 'Application rejected.');
+        }
+
+        return redirect()->route('admin.bill')->with('error', 'Application is already processed or invalid.');
+    }
     public function paymetAll(Request $request)
     {
         $ids = $request->input('ids');
@@ -161,31 +195,7 @@ class AdminController extends Controller
 
 
 
-    public function reject(Application $application)
-    {
-        if ($application && $application->status === 'Pending') {
-            $application->status = 'Rejected'; // Change the status to 'Rejected'
-            $application->save();
-
-            return redirect()->route('application')->with('success', 'Application rejected.');
-        }
-
-        return redirect()->route('application')->with('error', 'Application is already processed or invalid.');
-    }
-
-    public function rejectAll(Request $request)
-    {
-        $ids = $request->input('ids');
-
-        if (empty($ids)) {
-            return redirect()->back()->with('error', 'No applications selected.');
-        }
-
-        // Update the status of all selected applications to 'Rejected'
-        Application::whereIn('id', $ids)->update(['status' => 'Rejected']);
-
-        return redirect()->back()->with('success', 'Selected applications have been rejected.');
-    }
+   
 
 
 
@@ -212,6 +222,27 @@ class AdminController extends Controller
         // dd($application->attachment->id_proof, $application->attachment->receipt, $application->attachment->death_certificate, $application->attachment->additional_document);
 
         return Inertia::render('Admin/ApplicationDetails', [
+            'application' => $application,
+        ]);
+    }
+
+    public function billShow(Application $application)
+    {
+        // Eager load related models to avoid N+1 query problem
+        $application->load([
+            'applicant.district',
+            'deceased.district',
+            'deceased.constituency',
+            'deceased.relative',
+            'transport.sourceDistrict', // Eager load source district relation
+            'transport.destinationDistrict', // Eager load destination district relation
+            'attachment'
+        ]);
+
+        // Log or dd the file URLs for debugging
+        // dd($application->attachment->id_proof, $application->attachment->receipt, $application->attachment->death_certificate, $application->attachment->additional_document);
+
+        return Inertia::render('Admin/BillDetails', [
             'application' => $application,
         ]);
     }
@@ -354,6 +385,7 @@ public function report(Request $request)
 {
     $filters = $request->only(['status', 'district_id', 'constituency_id', 'start_date', 'end_date']);
 
+    
     $applications = Application::with([
             'applicant.district',
             'deceased.district',

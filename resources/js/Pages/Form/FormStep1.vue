@@ -57,7 +57,7 @@
                                     option-value="value"
                                     map-options
                                     emit-value
-                                    label="Pa"
+                                    label="s/o"
                                     :error="form.errors.relative_id"
                                     :error-message="form.errors.relative_id"
                                 />

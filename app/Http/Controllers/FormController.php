@@ -284,23 +284,24 @@ class FormController extends Controller
     $transport = Transport::create([
         ...$transportData
     ]);
-    
-    // Create the Application record with the attachment_id
-    $application = Application::create([
-        'applicant_id' => $applicant->id,
-        'deceased_id' => $deceased->id,
-        'transport_id' => $transport->id,
-        'status' => 'Pending',
-    ]);
-    
-    // Create the Attachment record
     $attachment = Attachment::create([
-        'application_id' => $application->id,
+       
         'id_proof' => $applicantData['id_proof'] ?? null,
         'receipt' => $applicantData['receipt'] ?? null,
         'death_certificate' => $applicantData['death_certificate'] ?? null,
         'additional_document' => $applicantData['additional_document'] ?? null,
     ]);
+    // Create the Application record with the attachment_id
+    $application = Application::create([
+        'applicant_id' => $applicant->id,
+        'deceased_id' => $deceased->id,
+        'transport_id' => $transport->id,
+        'attachment_id' => $attachment->id,
+        'status' => 'Pending',
+    ]);
+    
+    // Create the Attachment record
+  
     
     // Clear session data
     session()->forget(['deceased', 'transport', 'applicant', 'otp']);

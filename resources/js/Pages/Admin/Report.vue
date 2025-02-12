@@ -27,10 +27,9 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Deceased Constituency</label>
-                        <select v-model="form.constituency_id"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <select v-model="form.constituency_id" class="...">
                             <option value="">All Constituencies</option>
-                            <option v-for="constituency in dropdowns.constituencies" :key="constituency.id"
+                            <option v-for="constituency in filteredConstituencies" :key="constituency.id"
                                 :value="constituency.id">
                                 {{ constituency.name }}
                             </option>
@@ -111,6 +110,7 @@
 import { reactive } from 'vue';
 import { router } from '@inertiajs/vue3';
 import AdminLayout from "@/Layouts/AdminLayout.vue";
+import { computed } from 'vue';
 // import useForm from "@inertiajs/vue3";
 
 defineOptions({
@@ -132,14 +132,22 @@ const form = reactive({
     end_date: props.filters.end_date || '',
 });
 
+const filteredConstituencies = computed(() => {
+    if (!form.district_id) return props.dropdowns.constituencies;
+    return props.dropdowns.constituencies.filter(c => c.district_id == form.district_id);
+});
 const applyFilters = () => {
     router.get('/admin/report', form);
 };
 
-const exportReport = () => {
-    router.post('/admin/report/export', form);
-};
+// const exportReport = () => {
+//     router.post('/admin/report/export', form);
+// };
 
+const exportReport = () => {
+    const query = new URLSearchParams(form).toString();
+    window.location.href = `/admin/report/export?${query}`;
+};
 const statusBadgeClass = (status) => {
     const classes = {
         'Pending': 'bg-yellow-100 text-yellow-800',
