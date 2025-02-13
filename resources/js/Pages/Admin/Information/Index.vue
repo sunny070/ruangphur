@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <q-btn color="primary" label="Upload New" :href="route('admin.info.create')" class="q-mb-md" />
+    <q-btn color="black" label="Upload New" :href="route('admin.info.create')" class="q-mb-md" />
 
     <q-card>
       <q-table flat :rows="informations" :columns="columns" row-key="id">
@@ -8,7 +8,7 @@
           <q-tr :props="props">
             <q-td>{{ props.row.id }}</q-td>
             <q-td>
-              <a v-if="props.row.file_url" :href="props.row.file_url" target="_blank" class="text-primary">
+              <a v-if="props.row.file_url" :href="props.row.file_url" target="_blank" class="text-black">
                 View File
               </a>
               <span v-else>No file attached</span>

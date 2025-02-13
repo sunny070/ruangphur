@@ -5,9 +5,16 @@
       <q-list bordered>
         <q-item v-for="info in informations" :key="info.id">
           <q-item-section>
-            <a :href="info.file_url" class="text-primary" download>
+            <!-- <q-btn
+                        label= 'OPEN' 
+                        color="black"
+                        flat
+                        @click="handleOpenApplicant(info.file_url)"
+                    /> -->
+            <a :href="info.file_url"  @click="handleOpenApplicant(info.file_url)" target="_blank" class="text-a">
               Download File - {{ info.id }}
             </a>
+            <!-- {{ info.file_url }} -->
           </q-item-section>
           <q-item-section side>
             <span class="text-caption">{{ info.created_at }}</span>
@@ -25,4 +32,12 @@ defineOptions({
 });
 
   defineProps({ informations: Array })
+
+  const handleOpenApplicant = (item) => {
+    let a = document.createElement("a");
+    a.target = "_blank";
+    a.href = `/storage/${item}`;
+    a.click();
+};
+
   </script>

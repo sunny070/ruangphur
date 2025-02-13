@@ -90,10 +90,11 @@ class ApplicationController extends Controller
 
 public function downloads()
 {
+    
     $informations = Information::all()->map(function ($info) {
         return [
             'id' => $info->id,
-            'file_url' => Storage::url($info->attachment_url),
+            'file_url' => $info->attachment,
             'created_at' => $info->created_at->format('Y-m-d H:i:s'),
         ];
     });

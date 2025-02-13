@@ -7,10 +7,10 @@
 
       <q-card-section>
         <q-form @submit.prevent="submitForm">
-          <q-file v-model="form.file" label="Choose File" />
+          <q-file outlined  v-model="form.file" label="Choose File" />
           <q-btn 
             type="submit" 
-            color="primary" 
+            color="black" 
             label="Upload" 
             class="q-mt-md"
             :loading="form.processing"
