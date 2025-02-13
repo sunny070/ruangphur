@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Information extends Model
 {
     protected $fillable = [
-
+      'title',
+      'sub_title',
         'attachment',
       ];
   

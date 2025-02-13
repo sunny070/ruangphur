@@ -7,6 +7,8 @@
 
       <q-card-section>
         <q-form @submit.prevent="submitForm">
+          <q-input outlined  v-model="form.title"/>
+          <q-input outlined  v-model="form.sub_title"/>
           <q-file outlined  v-model="form.file" label="Choose File" />
           <q-btn 
             type="submit" 
@@ -30,7 +32,9 @@ defineOptions({
 });
 
 const form = useForm({
-  file: null
+  file: null,
+  title: '',
+  sub_title: '',
 });
 
 const submitForm = () => {

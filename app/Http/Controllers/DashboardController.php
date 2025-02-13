@@ -204,13 +204,19 @@ class DashboardController extends Controller
     public function storeInfo(Request $request)
     {
         $request->validate([
+            'title' => 'required',
+            'sub_title' => 'required',
             'file' => 'required|file|mimes:pdf,jpg,png|max:2048',
         ]);
-
+    
         $path = $request->file('file')->store('uploads', 'public');
-
-        Information::create(['attachment' => $path]);
-
+    
+        Information::create([
+            'title' => $request->title,
+            'sub_title' => $request->sub_title,
+            'attachment' => $path,
+        ]);
+    
         return redirect()->route('admin.info.index')->with('success', 'File uploaded successfully.');
     }
 
@@ -219,12 +225,13 @@ class DashboardController extends Controller
         $informations = Information::all()->map(function ($info) {
             return [
                 'id' => $info->id,
-                'file_url' => asset(Storage::url($info->attachment)),
+                'title' => $info->title,  // Include title
+                'sub_title' => $info->sub_title,  // Include sub_title
+                'file_url' => $info->attachment ? asset(Storage::url($info->attachment)) : null,
                 'created_at' => $info->created_at->format('Y-m-d H:i:s'),
             ];
         });
-        // dd($informations);
-
+    
         return Inertia::render('Admin/Information/Index', ['informations' => $informations]);
     }
 
