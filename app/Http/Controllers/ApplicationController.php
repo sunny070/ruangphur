@@ -29,9 +29,9 @@ class ApplicationController extends Controller
                 'transport.destinationDistrict', // Eager load destination district relation
                 'attachment'
 
-                ])
+            ])
             ->first();
-            // dd($application);
+        // dd($application);
 
         if (!$application) {
             return redirect()->back()->with('error', 'Application not found.');
@@ -67,7 +67,7 @@ class ApplicationController extends Controller
         $application = Application::where('application_no', $id)
             ->with(['applicant', 'deceased', 'transport'])
             ->first();
-        
+
         if (!$application) {
             return response()->json([
                 'message' => 'Application not found.',
@@ -80,25 +80,27 @@ class ApplicationController extends Controller
     }
 
     public function faqs()
-{
-    return Inertia::render('Faqs', [
-        'faqs' => Note::where('status', 'published')
-            ->orderBy('created_at', 'desc')
-            ->get()
-    ]);
-}
+    {
+        return Inertia::render('Faqs', [
+            'faqs' => Note::where('status', 'published')
+                ->orderBy('created_at', 'desc')
+                ->get()
+        ]);
+    }
 
-public function downloads()
-{
+    public function downloads()
+    {
+
+        $informations = Information::all()->map(function ($info) {
+            return [
+                'id' => $info->id,
+                'title' => $info->title,
+                'sub_title' => $info->sub_title,
+                'file_url' => $info->attachment ? asset('storage/' . $info->attachment) : null, // Ensure correct storage path
+                'created_at' => $info->created_at->format('Y-m-d H:i:s'),
+            ];
+        });
     
-    $informations = Information::all()->map(function ($info) {
-        return [
-            'id' => $info->id,
-            'file_url' => $info->attachment,
-            'created_at' => $info->created_at->format('Y-m-d H:i:s'),
-        ];
-    });
-
-    return Inertia::render('Download', ['informations' => $informations]);
-}
+        return Inertia::render('Download', ['informations' => $informations]);
+    }
 }
