@@ -121,7 +121,7 @@ Route::group(['middleware' => [RoleMiddleware::using('approver')]], function () 
 
 Route::group([], function () {
     Route::get('/verifier/application', [VerifierController::class, 'index'])->name('verifier.application');
-    
+    Route::get('/verifier/application/{application}', [VerifierController::class, 'show'])->name('verifier.applications.show');
 
 
 

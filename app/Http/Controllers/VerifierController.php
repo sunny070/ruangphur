@@ -115,38 +115,84 @@ class VerifierController extends Controller
         'months' => $months,
     ]);
 }
-    public function index()
-    {
-        // $applications = Application::with(['applicant', 'deceased.district', 'transport']) // Eager load related models
-        //     ->where('status', 'Pending')
-        //     ->get();
+    // public function index()
+    // {
+    //     // $applications = Application::with(['applicant', 'deceased.district', 'transport']) // Eager load related models
+    //     //     ->where('status', 'Pending')
+    //     //     ->get();
 
-        $userDistrictIds = auth()->user()->districts()->pluck('district_id');
-        $applications = Application::with(['applicant', 'deceased.district', 'transport'])
-        ->whereIn('status',['Pending','Verified'])
+    //     $userDistrictIds = auth()->user()->districts()->pluck('district_id');
+    //     $applications = Application::with(['applicant', 'deceased.district', 'transport'])
+    //     ->whereIn('status',['Pending','Verified'])
+    //         ->whereHas('deceased', function ($query) use ($userDistrictIds) {
+    //             $query->whereIn('district_id', $userDistrictIds);
+    //         })->get();
+
+
+    //     $statusCounts = [
+    //         'Incoming' => Application::where('status', 'Pending')->count(),
+    //         'Verified' => Application::where('status', 'Verified')->count(),
+    //         'Rejected' => Application::where('status', 'Rejected')->count(),
+    //         'Pending' => Application::where('status', 'Pending')->count(), // Adjust if needed    
+    //     ];
+
+
+    //     // dd($applications);
+    //     return Inertia::render('Verifier/Application', [
+    //         'applications' => $applications,
+    //         'statusCounts' => $statusCounts,
+    //         'flash' => [
+    //             'success' => session('success'),
+    //             'error' => session('error')
+    //         ]
+    //     ]);
+    // }
+
+    public function index()
+{
+    $userDistrictIds = auth()->user()->districts()->pluck('district_id');
+
+    // Get applications based on the user's districts
+    $applications = Application::with(['applicant', 'deceased.district', 'transport'])
+        ->whereIn('status', ['Pending', 'Verified'])
+        ->whereHas('deceased', function ($query) use ($userDistrictIds) {
+            $query->whereIn('district_id', $userDistrictIds);
+        })
+        ->get();
+
+    // Count applications by status filtered by the user's districts
+    $statusCounts = [
+        'Incoming' => Application::where('status', 'Pending')
             ->whereHas('deceased', function ($query) use ($userDistrictIds) {
                 $query->whereIn('district_id', $userDistrictIds);
-            })->get();
+            })
+            ->count(),
+        'Verified' => Application::where('status', 'Verified')
+            ->whereHas('deceased', function ($query) use ($userDistrictIds) {
+                $query->whereIn('district_id', $userDistrictIds);
+            })
+            ->count(),
+        'Rejected' => Application::where('status', 'Rejected')
+            ->whereHas('deceased', function ($query) use ($userDistrictIds) {
+                $query->whereIn('district_id', $userDistrictIds);
+            })
+            ->count(),
+        'Pending' => Application::where('status', 'Pending') // Adjust if needed    
+            ->whereHas('deceased', function ($query) use ($userDistrictIds) {
+                $query->whereIn('district_id', $userDistrictIds);
+            })
+            ->count(),
+    ];
 
-
-        $statusCounts = [
-            'Incoming' => Application::where('status', 'Pending')->count(),
-            'Verified' => Application::where('status', 'Verified')->count(),
-            'Rejected' => Application::where('status', 'Rejected')->count(),
-            'Pending' => Application::where('status', 'Pending')->count(), // Adjust if needed    
-        ];
-
-
-        // dd($applications);
-        return Inertia::render('Verifier/Application', [
-            'applications' => $applications,
-            'statusCounts' => $statusCounts,
-            'flash' => [
-                'success' => session('success'),
-                'error' => session('error')
-            ]
-        ]);
-    }
+    return Inertia::render('Verifier/Application', [
+        'applications' => $applications,
+        'statusCounts' => $statusCounts,
+        'flash' => [
+            'success' => session('success'),
+            'error' => session('error')
+        ]
+    ]);
+}
 
     public function verify(Application $application)
     {
@@ -156,6 +202,30 @@ class VerifierController extends Controller
             $application->save();
 
             return redirect()->route('verifier.application')->with('success', 'Application verified.');
+        }
+
+        return redirect()->route('verifier.application')->with('error', 'Application is already processed or invalid.');
+    }
+    public function verifyAll(Request $request)
+    {
+        $ids = $request->input('ids');
+
+        if (empty($ids)) {
+            return redirect()->back()->with('error', 'No applications selected.');
+        }
+
+        // Update the status of all selected applications to 'Approved'
+        Application::whereIn('id', $ids)->update(['status' => 'Verified', 'verified_at' => now()]);
+
+        return redirect()->back()->with('success', 'Selected applications have been approved.');
+    }
+    public function reject(Application $application)
+    {
+        if ($application && $application->status === 'Pending') {
+            $application->status = 'Rejected'; // Change the status to 'Rejected'
+            $application->save();
+
+            return redirect()->route('verifier.application')->with('success', 'Application rejected.');
         }
 
         return redirect()->route('verifier.application')->with('error', 'Application is already processed or invalid.');
@@ -176,18 +246,25 @@ class VerifierController extends Controller
         return redirect()->back()->with('success', 'Selected applications have been rejected.');
     }
 
-
-    public function verifyAll(Request $request)
+    public function show(Application $application)
     {
-        $ids = $request->input('ids');
+        // Eager load related models to avoid N+1 query problem
+        $application->load([
+            'applicant.district',
+            'deceased.district',
+            'deceased.constituency',
+            'deceased.relative',
+            'transport.sourceDistrict', // Eager load source district relation
+            'transport.destinationDistrict', // Eager load destination district relation
+            'attachment'
+        ]);
 
-        if (empty($ids)) {
-            return redirect()->back()->with('error', 'No applications selected.');
-        }
+        // Log or dd the file URLs for debugging
+        // dd($application->attachment->id_proof, $application->attachment->receipt, $application->attachment->death_certificate, $application->attachment->additional_document);
 
-        // Update the status of all selected applications to 'Approved'
-        Application::whereIn('id', $ids)->update(['status' => 'Verified', 'verified_at' => now()]);
-
-        return redirect()->back()->with('success', 'Selected applications have been approved.');
+        return Inertia::render('Verifier/ApplicationDetails', [
+            'application' => $application,
+        ]);
     }
+    
 }

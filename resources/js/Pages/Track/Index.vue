@@ -125,28 +125,28 @@ const statusMessages = computed(() => {
             title: "Form Submitted",
             description: "I ruang phurh dilna chu thehluah fel a ni tawh e, District lama thuneitu ten verify turin a thang mek.",
             timestamp: application.value.created_at ? new Date(application.value.created_at).toLocaleString() : null,
-            completed: currentStatus === "Pending" || currentStatus === "Verified" || currentStatus === "Approved" || currentStatus === "Payment",
+            completed: currentStatus === "Pending" || currentStatus === "Verified" || currentStatus === "Approved" || currentStatus === "Processed",
         },
         Verified: {
             status: currentStatus,
             title: "Verified",
             description: "District thuneitu te atangin verify a ni a, Directorate lamah thawn a ni.",
             timestamp: application.value.verified_at ? new Date(application.value.verified_at).toLocaleString() : null,
-            completed: currentStatus === "Verified" || currentStatus === "Approved" || currentStatus === "Payment",
+            completed: currentStatus === "Verified" || currentStatus === "Approved" || currentStatus === "Processed",
         },
         Approved: {
             status: currentStatus,
             title: "Application under process",
             description: "Directorate kutah a awm mek a, bank lama deposit turin file tih kal a ni.",
             timestamp: application.value.approved_at ? new Date(application.value.approved_at).toLocaleString() : null,
-            completed: currentStatus === "Approved" || currentStatus === "Payment",
+            completed: currentStatus === "Approved" || currentStatus === "Processed",
         },
-        Payment: {
+        Processed: {
             status: currentStatus,
             title: "Bill Process",
             description: "I ruang phurh dilna chu bank lamah process mek a ni.",
             timestamp: application.value.processed_at ? new Date(application.value.processed_at).toLocaleString() : null,
-            completed: currentStatus === "Payment",
+            completed: currentStatus === "Processed",
         },
     };
 });

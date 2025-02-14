@@ -95,7 +95,8 @@
                         <p class="text-grey-7">District</p>
                         <p>
                             {{
-                                application?.transport?.destination_district?.name
+                                application?.transport?.destination_district
+                                    ?.name
                             }}
                         </p>
                     </div>
@@ -195,7 +196,6 @@
                     >
                         <q-icon name="check_circle" class="q-mr-sm" />
                         {{ doc.label }}
-                        
                     </q-chip>
                 </q-card>
 
@@ -345,8 +345,6 @@ const documents = [
     {
         label: "Motor hman man Voucher/Receipt",
         url: application.value?.attachment?.id_proof,
-        
-        
     },
     {
         label: "Motor hman man Voucher/Receipt",
@@ -362,7 +360,7 @@ const documents = [
     },
 ];
 
-console.log(application.value?.attachment)
+console.log(application.value?.attachment.id_proof);
 
 const handleOpenApplicant = (url) => {
     let a = document.createElement("a");

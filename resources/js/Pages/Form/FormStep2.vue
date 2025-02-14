@@ -134,8 +134,12 @@
                                 </q-list>
                             </div>
                             <GoogleMap :center="mapCenter" :zoom="7" style="height: 60vh"
-                                @click="(event) => handleMapClick(event, 'source')">
-                                <Marker v-if="sourceCoords" :position="sourceCoords" draggable
+                                @click="(event) => handleMapClick(event.latLng, 'source')"
+                               >
+                                <Marker v-if="sourceCoords" :position="sourceCoords" draggable :options="{
+        position: sourceCoords,
+        label: 'S',
+    }" 
                                     @dragend="(event) => handleMarkerDrag(event, 'source')" />
                             </GoogleMap>
                             <div class="distance-preview" v-if="form.source_locality">
@@ -167,9 +171,8 @@
                                     </q-item>
                                 </q-list>
                             </div>
-                            <GoogleMap :center="mapCenter" :zoom="7" class="map-container" @click="(event) =>
-                                handleMapClick(event, 'destination')
-                                ">
+                            <GoogleMap :center="mapCenter" :zoom="7" class="map-container" @click="(event) => handleMapClick(event.latLng, 'destination')" 
+                                >
                                 <Marker v-if="sourceCoords" :position="sourceCoords" :options="{
                                     position: sourceCoords,
                                     label: 'S',
@@ -344,15 +347,53 @@ const submitForm = () => {
         },
     });
 };
-const handleMapClick = async (event, type) => {
+// const handleMapClick = async (event, type) => {
+//     const clickedLocation = {
+//         lat: event.latLng.lat(),
+//         lng: event.latLng.lng(),
+//     };
+
+//     try {
+//         const response = await fetch(
+//             `https://maps.googleapis.com/maps/api/geocode/json?latlng=${clickedLocation.lat},${clickedLocation.lng}&key=YOUR_API_KEY`
+//         );
+//         const data = await response.json();
+
+//         if (data.results[0]) {
+//             const address = data.results[0].formatted_address;
+//             if (type === 'source') {
+//                 form.source_locality = address;
+//                 sourceCoords.value = clickedLocation;
+//             } else {
+//                 form.destination_locality = address;
+//                 destinationCoords.value = clickedLocation;
+//             }
+//             calculateDistanceAndCost();
+//         }
+//     } catch (error) {
+//         console.error('Geocoding error:', error);
+//         $q.notify('Error getting address from coordinates');
+//     }
+// };
+const handleMapClick = async (latLng, type) => {
+    if (!latLng) return;
+    
+    // Ensure latLng values are retrieved correctly
     const clickedLocation = {
-        lat: event.latLng.lat(),
-        lng: event.latLng.lng(),
+        lat: latLng.lat(), // Call the lat() function
+        lng: latLng.lng(), // Call the lng() function
     };
+
+    mapCenter.value = {
+        lat: latLng.lat(),
+        lng: latLng.lng(),
+    };
+
+    console.log("Clicked Location:", clickedLocation);
 
     try {
         const response = await fetch(
-            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${clickedLocation.lat},${clickedLocation.lng}&key=YOUR_API_KEY`
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${mapCenter.value.lat},${mapCenter.value.lng}&key=AIzaSyAGK-HMMYfseKAJY356jUJLnz2ILC5bN_g`
         );
         const data = await response.json();
 
@@ -360,16 +401,19 @@ const handleMapClick = async (event, type) => {
             const address = data.results[0].formatted_address;
             if (type === 'source') {
                 form.source_locality = address;
-                sourceCoords.value = clickedLocation;
+                sourceCoords.value = clickedLocation;  // Update source coordinates
             } else {
                 form.destination_locality = address;
-                destinationCoords.value = clickedLocation;
+                destinationCoords.value = clickedLocation;  // Update destination coordinates
             }
+
+            console.log("Updated Coordinates:", clickedLocation);
+
             calculateDistanceAndCost();
         }
     } catch (error) {
         console.error('Geocoding error:', error);
-        $q.notify('Error getting address from coordinates');
+        $q.notify({ type: 'negative', message: 'Error getting address from coordinates' });
     }
 };
 

@@ -137,7 +137,7 @@ class AdminController extends Controller
     public function payment(Application $application)
     {
         if ($application && $application->status === 'Approved') {
-            $application->status = 'Paid'; // Change the status to 'Approved'
+            $application->status = 'Processed'; // Change the status to 'Approved'
             $application->processed_at = now(); // Set the approved_at timestamp
             $application->save();
 
@@ -169,7 +169,7 @@ class AdminController extends Controller
         Application::whereIn('id', $ids)
             ->where('status', 'Approved') // Only process approved applications
             ->update([
-                'status' => 'Paid',
+                'status' => 'Processed',
                 'processed_at' => now()
             ]);
 
