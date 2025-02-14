@@ -60,7 +60,7 @@
                                 >
                                     District
                                 </div>
-                                <q-select
+                                <q-select color="dark"
                                     outlined
                                     dense
                                     v-model="form.district_id"
@@ -227,6 +227,7 @@
                                     Mitthi Aadhar card/Voter ID thlalak upload
                                 </div>
                                 <q-file
+                                color="dark"
                                     v-model="form.id_proof"
                                     outlined
                                     dense
@@ -250,7 +251,7 @@
                                 >
                                     Motor hman man Voucher/Receipt upload
                                 </div>
-                                <q-file
+                                <q-file color="dark"
                                     v-model="form.receipt"
                                     outlined
                                     dense
@@ -274,7 +275,7 @@
                                 >
                                     Death certificate/VC hriatpuina lehkha
                                 </div>
-                                <q-file
+                                <q-file color="dark"
                                     v-model="form.death_certificate"
                                     outlined
                                     dense
@@ -305,7 +306,7 @@
                                 >
                                     Diltu Aadhar card/Voter ID thlalak upload
                                 </div>
-                                <q-file
+                                <q-file color="dark"
                                     v-model="form.additional_document"
                                     outlined
                                     dense

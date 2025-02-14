@@ -55,60 +55,60 @@ Route::group(['prefix' => 'user'], function () {
 
 // Amin login
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['role:admin'])->name('admin.dashboard');
 
 
 
-    Route::get('/admin/application', [AdminController::class, 'index'])->name('admin.application');
-    Route::get('/admin/bill', [AdminController::class, 'bill'])->name('admin.bill');
+    Route::get('/admin/application', [AdminController::class, 'index'])->middleware(['role:admin'])->name('admin.application');
+    Route::get('/admin/bill', [AdminController::class, 'bill'])->middleware(['role:admin'])->name('admin.bill');
     // Route::get('/admin/report', [AdminController::class, 'report'])->name('admin.report');
 
     // Report
-    Route::get('/admin/report', [AdminController::class, 'report'])->name('admin.report');
-    Route::get('/admin/report/export', [AdminController::class, 'export'])->name('admin.report.export');
+    Route::get('/admin/report', [AdminController::class, 'report'])->middleware(['role:admin'])->name('admin.report');
+    Route::get('/admin/report/export', [AdminController::class, 'export'])->middleware(['role:admin'])->name('admin.report.export');
     // Route::post('/admin/report/export', [AdminController::class, 'export'])->name('admin.report.export');
 
 
     // Approve Routed
-    Route::post('/admin/application/{application}/approve', [AdminController::class, 'approve'])->name('admin.application.approve');
-    Route::post('/admin/applications/approve-all', [AdminController::class, 'approveAll']);
-    Route::post('/admin/application/{application}/reject', [AdminController::class, 'reject'])->name('admin.application.reject');
-    Route::post('/admin/applications/reject-all', [AdminController::class, 'rejectAll']);
+    Route::post('/admin/application/{application}/approve', [AdminController::class, 'approve'])->middleware(['role:admin'])->name('admin.application.approve');
+    Route::post('/admin/applications/approve-all', [AdminController::class, 'approveAll'])->middleware(['role:admin']);
+    Route::post('/admin/application/{application}/reject', [AdminController::class, 'reject'])->middleware(['role:admin'])->name('admin.application.reject');
+    Route::post('/admin/applications/reject-all', [AdminController::class, 'rejectAll'])->middleware(['role:admin']);
 
     // Bills routespaymet
-    Route::post('/admin/bill/{application}/processed', [AdminController::class, 'payment'])->name('admin.bill.approve');
-    Route::post('/admin/bill/paymet-all', [AdminController::class, 'paymetAll']);
-    Route::post('/admin/bill/{application}/reject', [AdminController::class, 'reject'])->name('admin.bill.reject');
-    Route::post('/admin/bill/reject-all', [AdminController::class, 'rejectAllBill']);
+    Route::post('/admin/bill/{application}/processed', [AdminController::class, 'payment'])->middleware(['role:admin'])->name('admin.bill.approve');
+    Route::post('/admin/bill/paymet-all', [AdminController::class, 'paymetAll'])->middleware(['role:admin']);
+    Route::post('/admin/bill/{application}/reject', [AdminController::class, 'reject'])->middleware(['role:admin'])->name('admin.bill.reject');
+    Route::post('/admin/bill/reject-all', [AdminController::class, 'rejectAllBill'])->middleware(['role:admin']);
 
 
-    Route::get('/admin/application/{application}', [AdminController::class, 'show'])->name('applications.show');
-    Route::get('/admin/bill/{application}', [AdminController::class, 'billShow'])->name('bill.show');
-    Route::put('/application/{application}', [AdminController::class, 'update'])->name('applications.update');
-    Route::delete('/applications/{application}', [AdminController::class, 'destroy'])->name('applications.destroy');
-
-
-
+    Route::get('/admin/application/{application}', [AdminController::class, 'show'])->middleware(['role:admin'])->name('applications.show');
+    Route::get('/admin/bill/{application}', [AdminController::class, 'billShow'])->middleware(['role:admin'])->name('bill.show');
+    Route::put('/application/{application}', [AdminController::class, 'update'])->middleware(['role:admin'])->name('applications.update');
+    Route::delete('/applications/{application}', [AdminController::class, 'destroy'])->middleware(['role:admin'])->name('applications.destroy');
 
 
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->middleware(['role:admin'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->middleware(['role:admin'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->middleware(['role:admin'])->name('profile.destroy');
 
     // Note
-    Route::get('/admin/note', [DashboardController::class, 'note'])->name('note.index');
+    Route::get('/admin/note', [DashboardController::class, 'note'])->middleware(['role:admin'])->name('note.index');
     // Route::get('/admin/notes', [NoteController::class, 'index'])->name('admin.notes.index');
-    Route::get('/admin/notes/create', [DashboardController::class, 'create'])->name('admin.notes.create');
-    Route::post('/admin/notes', [DashboardController::class, 'store'])->name('admin.notes.store');
-    Route::patch('/admin/notes/{note}', [DashboardController::class, 'update'])->name('admin.notes.update');
-    Route::delete('/admin/notes/{note}', [DashboardController::class, 'destroy'])->name('admin.notes.destroy');
+    Route::get('/admin/notes/create', [DashboardController::class, 'create'])->middleware(['role:admin'])->name('admin.notes.create');
+    Route::post('/admin/notes', [DashboardController::class, 'store'])->middleware(['role:admin'])->name('admin.notes.store');
+    Route::patch('/admin/notes/{note}', [DashboardController::class, 'update'])->middleware(['role:admin'])->name('admin.notes.update');
+    Route::delete('/admin/notes/{note}', [DashboardController::class, 'destroy'])->middleware(['role:admin'])->name('admin.notes.destroy');
 
-    Route::get('/admin/info', [DashboardController::class, 'info'])->name('admin.info.index');
-    Route::get('/admin/info/create', [DashboardController::class, 'createInfo'])->name('admin.info.create');
-    Route::post('/admin/info/store', [DashboardController::class, 'storeInfo'])->name('admin.info.store');
-    Route::put('/admin/info/{info}', [DashboardController::class, 'updateInfo'])->name('admin.info.update');
-    Route::delete('/admin/info/{info}', [DashboardController::class, 'destroyInfo'])->name('admin.info.destroy');
+    Route::get('/admin/info', [DashboardController::class, 'info'])->middleware(['role:admin'])->name('admin.info.index');
+    Route::get('/admin/info/create', [DashboardController::class, 'createInfo'])->middleware(['role:admin'])->name('admin.info.create');
+    Route::post('/admin/info/store', [DashboardController::class, 'storeInfo'])->middleware(['role:admin'])->name('admin.info.store');
+    Route::put('/admin/info/{info}', [DashboardController::class, 'updateInfo'])->middleware(['role:admin'])->name('admin.info.update');
+    Route::delete('/admin/info/{info}', [DashboardController::class, 'destroyInfo'])->middleware(['role:admin'])->name('admin.info.destroy');
 });
 
 // Route::get('/ruang-phur-report-form',[DeceasedController::class,'index'])->name('form-fill');

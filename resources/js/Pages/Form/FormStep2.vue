@@ -19,7 +19,7 @@
                                 <p class="text-[#61646B]">Ruang phurh tanna hmun</p>
                                 <div>
                                     <div class="text-sm font-medium text-black q-mb-xs">District</div>
-                                    <q-select dense outlined v-model.number="form.source_district"
+                                    <q-select color="dark" dense outlined v-model.number="form.source_district"
                                         label="Select Source District" :options="district" behavior="menu"
                                         :error="!!form.errors.source_district"
                                         :error-message="form.errors.source_district ? form.errors.source_district[0] : 'Source District is Required'" />
@@ -29,7 +29,7 @@
                             <!-- Source Locality -->
                             <div>
                                 <div class="text-sm font-medium text-black q-mb-xs">Veng/Khua</div>
-                                <q-input outlined v-model="form.source_locality" label="Source Locality" readonly
+                                <q-input color="dark" outlined v-model="form.source_locality" label="Source Locality" readonly
                                     @click="showSourceDialog = true" />
                                 <div v-if="form.errors.source_locality" class="text-red-500 text-sm">
                                     {{ form.errors.source_locality }}
@@ -39,7 +39,7 @@
                             <!-- Destination District -->
                             <div class="pt-5">
                                 <p class="text-[#61646B]">Ruang dahna tur hmun</p>
-                                <q-select dense outlined v-model.number="form.destination_district"
+                                <q-select color="dark" dense outlined v-model.number="form.destination_district"
                                     label="Select Destination District" :options="district" behavior="menu"
                                     :error="!!form.errors.destination_district"
                                     :error-message="form.errors.destination_district || ''" />
@@ -47,7 +47,7 @@
 
                             <!-- Destination Locality -->
                             <div>
-                                <q-input outlined v-model="form.destination_locality" label="Destination Locality"
+                                <q-input color="dark" outlined v-model="form.destination_locality" label="Destination Locality"
                                     readonly @click="showDestinationDialog = true" />
                                 <div v-if="form.errors.destination_locality" class="text-red-500 text-sm">
                                     {{ form.errors.destination_locality }}
@@ -57,7 +57,7 @@
                             <!-- Distance -->
                             <div class="pt-5">
                                 <div class="text-sm font-medium text-black q-mb-xs">Kilometer zat</div>
-                                <q-input v-model="form.distance" id="distance" type="number" outlined
+                                <q-input color="dark" v-model="form.distance" id="distance" type="number" outlined
                                     label="Distance (in km)" readonly />
                                 <div v-if="form.errors.distance" class="text-red-500 text-sm">
                                     {{ form.errors.distance }}
@@ -68,7 +68,7 @@
                             <div class="pt-5">
                                 <p class="text-[#61646B]">Ruang phurhna motor</p>
                                 <div class="text-sm font-medium text-black q-mb-xs">Motor hman man (Rs)</div>
-                                <q-input v-model="form.transport_cost" id="transport-cost" type="number" outlined
+                                <q-input color="dark" v-model="form.transport_cost" id="transport-cost" type="number" outlined
                                     label="Transport Cost (₹)" readonly />
                                 <div v-if="form.errors.transport_cost" class="text-red-500 text-sm">
                                     {{ form.errors.transport_cost }}
@@ -78,7 +78,7 @@
                             <!-- Driver Name -->
                             <div>
                                 <div class="text-sm font-medium text-black q-mb-xs">Motor neitu/khalhtu hming</div>
-                                <q-input outlined v-model="form.driver_name" label="Driver Name" />
+                                <q-input color="dark" outlined v-model="form.driver_name" label="Driver Name" />
                                 <div v-if="form.errors.driver_name" class="text-red-500 text-sm">
                                     {{ form.errors.driver_name }}
                                 </div>
@@ -88,7 +88,7 @@
                             <div>
                                 <div class="text-sm font-medium text-black q-mb-xs">Motor neitu/khalhtu phone number
                                 </div>
-                                <q-input outlined v-model="form.driver_phone" label="Driver Phone" mask="##########" />
+                                <q-input color="dark"  outlined v-model="form.driver_phone" label="Driver Phone" mask="##########" />
                                 <div v-if="form.errors.driver_phone" class="text-red-500 text-sm">
                                     {{ form.errors.driver_phone }}
                                 </div>
@@ -97,7 +97,7 @@
                             <!-- Vehicle Number -->
                             <div>
                                 <div class="text-sm font-medium text-black q-mb-xs">Motor registration number</div>
-                                <q-input outlined v-model="form.vehicle_number" label="Vehicle Number" />
+                                <q-input color="dark" outlined v-model="form.vehicle_number" label="Vehicle Number" />
                                 <div v-if="form.errors.vehicle_number" class="text-red-500 text-sm">
                                     {{ form.errors.vehicle_number }}
                                 </div>
@@ -116,7 +116,7 @@
 
                 <!-- Map Dialogs -->
                 <q-dialog v-model="showSourceDialog" maximized>
-                    <q-card style="width: 90vw; height: 90vh">
+                    <q-card style="width: 90vw; max-width: 600px;height: auto;" >
                         <q-card-section>
                             <div class="flex gap-4 mb-4">
                                 <q-input outlined v-model="sourceSearch" placeholder="Search location..."
@@ -133,7 +133,7 @@
                                     </q-item>
                                 </q-list>
                             </div>
-                            <GoogleMap :center="mapCenter" :zoom="14" style="height: 60vh"
+                            <GoogleMap :center="mapCenter" :zoom="7" style="height: 60vh"
                                 @click="(event) => handleMapClick(event, 'source')">
                                 <Marker v-if="sourceCoords" :position="sourceCoords" draggable
                                     @dragend="(event) => handleMarkerDrag(event, 'source')" />

@@ -33,7 +33,7 @@
                         </div>
                         <div class="flex gap-4">
                             <div>
-                                <q-select  class="w-24" outlined dense v-model="form.relative_id" :options="relative"
+                                <q-select color="dark"  class="w-24" outlined dense v-model="form.relative_id" :options="relative"
                                     option-label="label" option-value="value" map-options emit-value label="s/o"
                                     :error="form.errors.relative_id" :error-message="form.errors.relative_id" />
                                 <div v-if="$page.props.errors.relative" class="text-red">
@@ -73,7 +73,7 @@
                         <div class="text-sm font-medium text-black q-mb-xs">
                             Gender
                         </div>
-                        <q-select outlined dense v-model="form.gender" :options="genderOptions" label="Gender"
+                        <q-select color="dark" outlined dense v-model="form.gender" :options="genderOptions" label="Gender"
                             :error="form.errors.gender" :error-message="form.errors.gender ? form.errors.gender : ''
                                 " required />
                     </div>
@@ -86,7 +86,7 @@
                             District
                         </div>
                         <!-- District dropdown -->
-                        <q-select outlined dense v-model="form.district_id" label="Select District" :options="district"
+                        <q-select color="dark" outlined dense v-model="form.district_id" label="Select District" :options="district"
                             option-label="label" option-value="value" map-options emit-value
                             :error="form.errors.district_id" :error-message="form.errors.district_id" />
                         <div v-if="$page.props.errors.district" class="text-red">
@@ -113,7 +113,7 @@
                         <div class="text-sm font-medium text-black q-mb-xs">
                             Assembly constituency
                         </div>
-                        <q-select outlined dense label="Mitthi te awmna assembly constituency"
+                        <q-select color="dark" outlined dense label="Mitthi te awmna assembly constituency"
                             v-model="form.constituency_id" :options="filteredConstituencies" option-label="label"
                             option-value="value" map-options emit-value :error="form.errors.constituency_id"
                             :error-message="form.errors.constituency_id" />

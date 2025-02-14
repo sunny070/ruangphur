@@ -123,9 +123,12 @@ class VerifierController extends Controller
 
         $userDistrictIds = auth()->user()->districts()->pluck('district_id');
         $applications = Application::with(['applicant', 'deceased.district', 'transport'])
+        ->whereIn('status',['Pending','Verified'])
             ->whereHas('deceased', function ($query) use ($userDistrictIds) {
                 $query->whereIn('district_id', $userDistrictIds);
             })->get();
+
+
         $statusCounts = [
             'Incoming' => Application::where('status', 'Pending')->count(),
             'Verified' => Application::where('status', 'Verified')->count(),

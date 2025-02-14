@@ -96,7 +96,7 @@ class ApplicationController extends Controller
                 'id' => $info->id,
                 'title' => $info->title,
                 'sub_title' => $info->sub_title,
-                'file_url' => $info->attachment ? asset('storage/' . $info->attachment) : null, // Ensure correct storage path
+                'file_url' => $info->attachment,
                 'created_at' => $info->created_at->format('Y-m-d H:i:s'),
             ];
         });

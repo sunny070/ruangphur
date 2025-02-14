@@ -195,6 +195,7 @@
                     >
                         <q-icon name="check_circle" class="q-mr-sm" />
                         {{ doc.label }}
+                        
                     </q-chip>
                 </q-card>
 
@@ -237,6 +238,7 @@ defineOptions({
 });
 
 const application = ref(usePage().props.application);
+console.log(application);
 
 // Function to calculate age
 // Computed property for calculating age at death
@@ -342,23 +344,25 @@ const statusMessages = computed(() => {
 const documents = [
     {
         label: "Motor hman man Voucher/Receipt",
-        url: application.value?.attachments?.id_proof,
+        url: application.value?.attachment?.id_proof,
+        
+        
     },
     {
         label: "Motor hman man Voucher/Receipt",
-        url: application.value?.attachments?.receipt,
+        url: application.value?.attachment?.receipt,
     },
     {
         label: "Death Certificate",
-        url: application.value?.attachments?.death_certificate,
+        url: application.value?.attachment?.death_certificate,
     },
     {
         label: "Diltu Aadhar card/voter ID",
-        url: application.value?.attachments?.additional_document,
+        url: application.value?.attachment?.additional_document,
     },
 ];
 
-
+console.log(application.value?.attachment)
 
 const handleOpenApplicant = (url) => {
     let a = document.createElement("a");

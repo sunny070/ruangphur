@@ -1,6 +1,6 @@
 <template>
     <q-layout view="lHh Lpr lFf">
-        <q-header reveal class="text-black" position="sticky">
+        <q-header reveal class="text-black">
             <q-toolbar>
                 <q-toolbar-title class="q-ml-md">
                     <Link :href="route('home')">
