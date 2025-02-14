@@ -11,5 +11,5 @@ class Information extends Model
       'sub_title',
         'attachment',
       ];
-  
+
 }

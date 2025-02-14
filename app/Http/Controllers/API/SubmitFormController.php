@@ -61,10 +61,9 @@ class SubmitFormController extends Controller
     }
 
         // Store the image
-        $path = $request->file('image')->store('images', 'public');
-        info($path);
+        $path = $request->file('image')->store('documents', 'public');
         // Return the path or URL of the uploaded image
-        return response()->json(['url' => Storage::url($path),'status'=>201], 200);
+        return response()->json(['url' => $path,'status'=>201], 200);
     }
 
     public function sendOtp(Request $request)
