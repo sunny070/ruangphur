@@ -37,7 +37,7 @@
                         <div class="col-12 col-sm-6">
                             <q-card class="bg-black text-white q-pa-md">
                                 <q-card-section class="row items-center justify-between">
-                                    <div>
+                                    <div class="bg-black text-white q-pa-md">
                                         <div class="text-h6 q-mb-xs">Chhuina</div>
                                         <div class="text-caption">Track your bill!</div>
                                     </div>

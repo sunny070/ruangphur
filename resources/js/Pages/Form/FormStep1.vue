@@ -2,40 +2,26 @@
     <q-page padding>
         <div class="flex flex-col justify-center items-center gap-6">
             <!-- <h5>Step 1: Mitthi Chhungchang</h5> -->
-            <img
-                id="background"
-                class="w-[412px] h-[193px"
-                src="image/Vertical Stepper with numbers.png"
-            />
+            <img id="background" class="w-[412px] h-[193px" src="image/Vertical Stepper with numbers.png" />
 
             <div class="border w-[412px] h-[996px] rounded-[10px] p-[23px]">
                 <q-form @submit.prevent="submitForm" class="q-gutter-md">
                     <div>
                         <div class="pb-3 flex items-center gap-2">
-                            <div
-                                class="w-[3px] h-[19px] flex-shrink-0 bg-black"
-                            ></div>
+                            <div class="w-[3px] h-[19px] flex-shrink-0 bg-black"></div>
                             <h5>Mitthi Chhungchang</h5>
                         </div>
                         <div>
                             <div class="text-sm font-medium text-black q-mb-xs">
                                 Mitthi hming
                             </div>
-                            <input
-                                type="text"
-                                placeholder="Mitthi hming chhu lut rawh le"
-                                v-model="form.name"
-                                :class="[
-                                    'border p-2 w-full rounded-lg',
-                                    form.errors.name
-                                        ? 'border-red-500'
-                                        : 'border-gray-300',
-                                ]"
-                            />
-                            <div
-                                v-if="form.errors.name"
-                                class="text-red-500 text-sm"
-                            >
+                            <input type="text" placeholder="Mitthi hming chhu lut rawh le" v-model="form.name" :class="[
+                                'border p-2 w-full rounded-lg',
+                                form.errors.name
+                                    ? 'border-red-500'
+                                    : 'border-gray-300',
+                            ]" />
+                            <div v-if="form.errors.name" class="text-red-500 text-sm">
                                 {{ form.errors.name }}
                             </div>
                         </div>
@@ -47,43 +33,20 @@
                         </div>
                         <div class="flex gap-4">
                             <div>
-                                <q-select
-                                    class="w-24"
-                                    outlined
-                                    dense
-                                    v-model="form.relative_id"
-                                    :options="relative"
-                                    option-label="label"
-                                    option-value="value"
-                                    map-options
-                                    emit-value
-                                    label="s/o"
-                                    :error="form.errors.relative_id"
-                                    :error-message="form.errors.relative_id"
-                                />
-                                <div
-                                    v-if="$page.props.errors.relative"
-                                    class="text-red"
-                                >
+                                <q-select  class="w-24" outlined dense v-model="form.relative_id" :options="relative"
+                                    option-label="label" option-value="value" map-options emit-value label="s/o"
+                                    :error="form.errors.relative_id" :error-message="form.errors.relative_id" />
+                                <div v-if="$page.props.errors.relative" class="text-red">
                                     {{ $page.props.errors.relative }}
                                 </div>
                             </div>
                             <div>
-                                <input
-                                    type="text"
-                                    v-model="form.relative_name"
-                                    class="border p-2 w-60 rounded-lg"
-                                    :class="
-                                        form.errors.relative_name
+                                <input type="text" v-model="form.relative_name" class="border p-2 w-60 rounded-lg"
+                                    :class="form.errors.relative_name
                                             ? 'border-red-500'
                                             : 'border-gray-300'
-                                    "
-                                    placeholder="An hming chhut luhna"
-                                />
-                                <div
-                                    v-if="form.errors.relative_name"
-                                    class="text-red-500 text-sm"
-                                >
+                                        " placeholder="An hming chhut luhna" />
+                                <div v-if="form.errors.relative_name" class="text-red-500 text-sm">
                                     {{ form.errors.relative_name }}
                                 </div>
                             </div>
@@ -94,22 +57,14 @@
                         <div class="text-sm font-medium text-black q-mb-xs">
                             A pianni leh thla
                         </div>
-                        <input
-                            class="text-[#61646B]"
-                            type="date"
-                            placeholder="Mitthi Pianni leh thla"
-                            v-model="form.dob"
-                            :class="[
+                        <input class="text-[#61646B]" type="date" placeholder="Mitthi Pianni leh thla"
+                            v-model="form.dob" :class="[
                                 'border p-2 w-full rounded-lg',
                                 form.errors.dob
                                     ? 'border-red-500'
                                     : 'border-gray-300',
-                            ]"
-                        />
-                        <div
-                            v-if="form.errors.dob"
-                            class="text-red-500 text-sm"
-                        >
+                            ]" />
+                        <div v-if="form.errors.dob" class="text-red-500 text-sm">
                             {{ form.errors.dob }}
                         </div>
                     </div>
@@ -118,18 +73,9 @@
                         <div class="text-sm font-medium text-black q-mb-xs">
                             Gender
                         </div>
-                        <q-select
-                            outlined
-                            dense
-                            v-model="form.gender"
-                            :options="genderOptions"
-                            label="Gender"
-                            :error="form.errors.gender"
-                            :error-message="
-                                form.errors.gender ? form.errors.gender : ''
-                            "
-                            required
-                        />
+                        <q-select outlined dense v-model="form.gender" :options="genderOptions" label="Gender"
+                            :error="form.errors.gender" :error-message="form.errors.gender ? form.errors.gender : ''
+                                " required />
                     </div>
                     <div v-if="$page.props.errors.gender" class="text-red">
                         {{ $page.props.errors.gender }}
@@ -140,23 +86,10 @@
                             District
                         </div>
                         <!-- District dropdown -->
-                        <q-select
-                            outlined
-                            dense
-                            v-model="form.district_id"
-                            label="Select District"
-                            :options="district"
-                            option-label="label"
-                            option-value="value"
-                            map-options
-                            emit-value
-                            :error="form.errors.district_id"
-                            :error-message="form.errors.district_id"
-                        />
-                        <div
-                            v-if="$page.props.errors.district"
-                            class="text-red"
-                        >
+                        <q-select outlined dense v-model="form.district_id" label="Select District" :options="district"
+                            option-label="label" option-value="value" map-options emit-value
+                            :error="form.errors.district_id" :error-message="form.errors.district_id" />
+                        <div v-if="$page.props.errors.district" class="text-red">
                             {{ $page.props.errors.district }}
                         </div>
                     </div>
@@ -165,21 +98,13 @@
                         <div class="text-sm font-medium text-black q-mb-xs">
                             Veng/Khua
                         </div>
-                        <input
-                            type="text"
-                            placeholder="Ruang Zalhna tur veng"
-                            v-model="form.locality"
-                            :class="[
-                                'border p-2 w-full rounded-lg',
-                                form.errors.locality
-                                    ? 'border-red-500'
-                                    : 'border-gray-300',
-                            ]"
-                        />
-                        <div
-                            v-if="form.errors.locality"
-                            class="text-red-500 text-sm"
-                        >
+                        <input type="text" placeholder="Ruang Zalhna tur veng" v-model="form.locality" :class="[
+                            'border p-2 w-full rounded-lg',
+                            form.errors.locality
+                                ? 'border-red-500'
+                                : 'border-gray-300',
+                        ]" />
+                        <div v-if="form.errors.locality" class="text-red-500 text-sm">
                             {{ form.errors.locality }}
                         </div>
                     </div>
@@ -188,23 +113,11 @@
                         <div class="text-sm font-medium text-black q-mb-xs">
                             Assembly constituency
                         </div>
-                        <q-select
-                            outlined
-                            dense
-                            label="Mitthi te awmna assembly constituency"
-                            v-model="form.constituency_id"
-                            :options="filteredConstituencies"
-                            option-label="label"
-                            option-value="value"
-                            map-options
-                            emit-value
-                            :error="form.errors.constituency_id"
-                            :error-message="form.errors.constituency_id"
-                        />
-                        <div
-                            v-if="$page.props.errors.constituency"
-                            class="text-red"
-                        >
+                        <q-select outlined dense label="Mitthi te awmna assembly constituency"
+                            v-model="form.constituency_id" :options="filteredConstituencies" option-label="label"
+                            option-value="value" map-options emit-value :error="form.errors.constituency_id"
+                            :error-message="form.errors.constituency_id" />
+                        <div v-if="$page.props.errors.constituency" class="text-red">
                             {{ $page.props.errors.constituency }}
                         </div>
                     </div>
@@ -212,22 +125,14 @@
                         <div class="text-sm font-medium text-black q-mb-xs">
                             Thih ni leh darkar
                         </div>
-                        <input
-                            class="text-[#61646B]"
-                            type="datetime-local"
-                            placeholder="Mitthi thih ni leh darkar"
-                            v-model="form.time_of_death"
-                            :class="[
+                        <input class="text-[#61646B]" type="datetime-local" placeholder="Mitthi thih ni leh darkar"
+                            v-model="form.time_of_death" :class="[
                                 'border p-2 w-full rounded-lg',
                                 form.errors.time_of_death
                                     ? 'border-red-500'
                                     : 'border-gray-300',
-                            ]"
-                        />
-                        <div
-                            v-if="form.errors.time_of_death"
-                            class="text-red-500 text-sm"
-                        >
+                            ]" />
+                        <div v-if="form.errors.time_of_death" class="text-red-500 text-sm">
                             {{ form.errors.time_of_death }}
                         </div>
                     </div>
@@ -236,41 +141,21 @@
                         <div class="text-sm font-medium text-black q-mb-xs">
                             Thihna hmun
                         </div>
-                        <input
-                            type="text"
-                            placeholder="Thihna hmun"
-                            v-model="form.place_of_death"
-                            :class="[
-                                'border p-2 w-full rounded-lg',
-                                form.errors.place_of_death
-                                    ? 'border-red-500'
-                                    : 'border-gray-300',
-                            ]"
-                        />
-                        <div
-                            v-if="form.errors.place_of_death"
-                            class="text-red-500 text-sm"
-                        >
+                        <input type="text" placeholder="Thihna hmun" v-model="form.place_of_death" :class="[
+                            'border p-2 w-full rounded-lg',
+                            form.errors.place_of_death
+                                ? 'border-red-500'
+                                : 'border-gray-300',
+                        ]" />
+                        <div v-if="form.errors.place_of_death" class="text-red-500 text-sm">
                             {{ form.errors.place_of_death }}
                         </div>
                     </div>
 
-                    <q-btn
-                        style="padding: 10px 24px; border-radius: 12px"
-                        outline
-                        unelevated
-                        text-color="black"
-                        label="Preview"
-                        color="white"
-                        @click="preview = true"
-                    />
-                    <q-btn
-                        unelevated
-                        label="Next"
-                        color="black"
-                        @click="submitForm"
-                        style="padding: 10px 95px; border-radius: 12px"
-                    />
+                    <q-btn style="padding: 10px 24px; border-radius: 12px" outline unelevated text-color="black"
+                        label="Preview" color="white" @click="preview = true" />
+                    <q-btn unelevated label="Next" color="black" @click="submitForm"
+                        style="padding: 10px 95px; border-radius: 12px" />
                 </q-form>
             </div>
         </div>
@@ -279,11 +164,7 @@
                 <q-card class="w-[412px] h-[791px] rounded-t-lg">
                     <q-card-section class="flex flex-col items-center">
                         <p class="text-[12px]">Mitthi Chungchang</p>
-                        <img
-                            class="w-[17px] h-[30px]"
-                            src="image/ruang.png"
-                            alt=""
-                        />
+                        <img class="w-[17px] h-[30px]" src="image/ruang.png" alt="" />
                         <h5 class="text-2xl text-bold">
                             {{ form.name }}
                         </h5>
@@ -330,22 +211,10 @@
                     </q-card-section>
 
                     <q-card-actions class="ml-[22px] pt-[35px]">
-                        <q-btn
-                            style="padding: 10px 28px; border-radius: 12px"
-                            outline
-                            unelevated
-                            text-color="black"
-                            color="white"
-                            label="Edit"
-                            v-close-popup
-                        />
-                        <q-btn
-                            style="padding: 10px 80px; border-radius: 12px"
-                            unelevated
-                            label="Approve & Next"
-                            color="black"
-                            @click="submitForm"
-                        />
+                        <q-btn style="padding: 10px 28px; border-radius: 12px" outline unelevated text-color="black"
+                            color="white" label="Edit" v-close-popup />
+                        <q-btn style="padding: 10px 80px; border-radius: 12px" unelevated label="Approve & Next"
+                            color="black" @click="submitForm" />
                     </q-card-actions>
                 </q-card>
             </div>
@@ -474,7 +343,18 @@ const submitForm = () => {
 </script>
 
 <style scoped>
+:root {
+    --q-primary: #000;
+    /* Change to any color you prefer */
+}
+
 .custom-rounded-input {
-    --q-input-border-radius: 20px; /* Adjust as needed */
+    --q-input-border-radius: 20px;
+    /* Adjust as needed */
+}
+
+.custom-popup .q-item--active {
+    background-color: transparent !important;
+    color: inherit !important;
 }
 </style>
