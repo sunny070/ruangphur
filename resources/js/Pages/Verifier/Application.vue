@@ -9,14 +9,9 @@
         </q-banner>
 
         <!-- Status Counts -->
-        <div
-            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
-        >
-            <div
-                v-for="status in statusCards"
-                :key="status.label"
-                :class="`w-full h-[78px] ${status.bgClass} ${status.textClass} text-center`"
-            >
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div v-for="status in statusCards" :key="status.label"
+                :class="`w-full h-[78px] ${status.bgClass} ${status.textClass} text-center`">
                 <h6 class="text-sm sm:text-base font-bold">
                     {{ status.count }}
                 </h6>
@@ -27,64 +22,29 @@
         <!-- Status Tab -->
         <div class="q-my-md grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="q-my-md flex gap-16">
-                <q-btn
-                    label="All"
-                    flat
-                    :class="
-                        currentFilter === 'All'
-                            ? 'active-button'
-                            : 'inactive-button'
-                    "
-                    @click="setFilter('All')"
-                />
-                <q-btn
-                    label="Incoming"
-                    flat
-                    :class="
-                        currentFilter === 'Incoming'
-                            ? 'active-button'
-                            : 'inactive-button'
-                    "
-                    @click="setFilter('Incoming')"
-                />
-                <q-btn
-                    label="Verified"
-                    flat
-                    :class="
-                        currentFilter === 'Verified'
-                            ? 'active-button'
-                            : 'inactive-button'
-                    "
-                    @click="setFilter('Verified')"
-                />
-                <q-btn
-                    label="Rejected"
-                    flat
-                    :class="
-                        currentFilter === 'Rejected'
-                            ? 'active-button'
-                            : 'inactive-button'
-                    "
-                    @click="setFilter('Rejected')"
-                />
+                <q-btn label="All" flat :class="currentFilter === 'All'
+                        ? 'active-button'
+                        : 'inactive-button'
+                    " @click="setFilter('All')" />
+                <q-btn label="Incoming" flat :class="currentFilter === 'Incoming'
+                        ? 'active-button'
+                        : 'inactive-button'
+                    " @click="setFilter('Incoming')" />
+                <q-btn label="Verified" flat :class="currentFilter === 'Verified'
+                        ? 'active-button'
+                        : 'inactive-button'
+                    " @click="setFilter('Verified')" />
+                <q-btn label="Rejected" flat :class="currentFilter === 'Rejected'
+                        ? 'active-button'
+                        : 'inactive-button'
+                    " @click="setFilter('Rejected')" />
             </div>
             <div class="flex justify-end">
-                <q-input
-                    rounded="lg"
-                    outlined
-                    dense
-                    bottom-slots
-                    v-model="searchQuery"
-                    label="Search"
-                    class="w-full max-w-md"
-                >
+                <q-input rounded="lg" outlined dense bottom-slots v-model="searchQuery" label="Search"
+                    class="w-full max-w-md">
                     <template v-slot:append>
-                        <q-icon
-                            v-if="searchQuery !== ''"
-                            name="close"
-                            @click="searchQuery = ''"
-                            class="cursor-pointer"
-                        />
+                        <q-icon v-if="searchQuery !== ''" name="close" @click="searchQuery = ''"
+                            class="cursor-pointer" />
                         <q-icon name="search" />
                     </template>
                 </q-input>
@@ -96,70 +56,49 @@
             <div>
                 <!-- Action buttons (only visible when at least one checkbox is selected) -->
                 <div v-if="showActionButtons" class="flex">
-                    <q-btn
-                        style="border-radius: 8px"
-                        size="md"
-                        flat
-                        outlined
-                        class="q-btn-custom flex items-center justify-center"
-                        @click="toggleSelectAll"
-                    >
+                    <q-btn style="border-radius: 8px" size="md" flat outlined
+                        class="q-btn-custom flex items-center justify-center" @click="toggleSelectAll">
                         <q-icon name="check" size="16px" class="q-mr-xs" />
                         <span>Select All</span>
                     </q-btn>
-                    <q-btn
-                        style="border-radius: 8px"
-                        size="md"
-                        flat
-                        outlined
-                        class="q-btn-custom flex items-center justify-center"
-                        @click="approveAll"
-                        :disabled="!selectedApplications.length"
-                    >
-                        <q-icon
-                            name="check_circle"
-                            size="16px"
-                            class="q-mr-xs"
-                        />
+                    <q-btn style="border-radius: 8px" size="md" flat outlined
+                        class="q-btn-custom flex items-center justify-center" @click="approveAll"
+                        :disabled="!selectedApplications.length || !hasPendingSelectedApplications">
+                        <q-icon name="check_circle" size="16px" class="q-mr-xs" />
                         <span>Verify All</span>
+                        <q-tooltip v-if="!hasPendingSelectedApplications && selectedApplications.length">
+                            Cannot verify - selected applications are already processed
+                        </q-tooltip>
+                        <q-tooltip v-else-if="!selectedApplications.length">
+                            Select applications to verify
+                        </q-tooltip>
                     </q-btn>
-                    <q-btn
-                        style="border-radius: 8px"
-                        size="md"
-                        flat
-                        outlined
-                        class="q-btn-custom flex items-center justify-center"
-                        @click="rejectAll"
-                        :disabled="!selectedApplications.length"
-                    >
+                    <q-btn style="border-radius: 8px" size="md" flat outlined
+                        class="q-btn-custom flex items-center justify-center" @click="rejectAll"
+                        :disabled="!selectedApplications.length || !hasPendingSelectedApplications">
                         <q-icon name="cancel" size="16px" class="q-mr-xs" />
                         <span>Reject All</span>
+                        <q-tooltip v-if="!hasPendingSelectedApplications && selectedApplications.length">
+                            Cannot Reject - selected applications are already processed
+                        </q-tooltip>
+                        <q-tooltip v-else-if="!selectedApplications.length">
+                            Select applications to verify
+                        </q-tooltip>
                     </q-btn>
                 </div>
             </div>
             <div class="flex justify-end pr-16">
-                <q-btn
-                    size="sm"
-                    flat
-                    outlined
-                    class="q-btn-custom flex items-center justify-center"
-                    @click="printTable"
-                >
+                <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center"
+                    @click="printTable">
                     <q-icon name="print" size="16px" class="q-mr-xs" />
                     <span>Print</span>
                 </q-btn>
-                <q-btn
-                    size="sm"
-                    flat
-                    outlined
-                    class="q-btn-custom flex items-center justify-center"
-                    @click="exportTable"
-                >
+                <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center"
+                    @click="exportTable">
                     <q-icon name="ios_share" size="16px" class="q-mr-xs" />
                     <span>Export</span>
                 </q-btn>
-                <q-select
-                    style="
+                <q-select style="
                         color: #000;
                         width: 128px;
                         height: 40px;
@@ -167,24 +106,15 @@
                         border-radius: 8px;
                         border: 1px solid black;
                         background: transparent;
-                    "
-                    v-model="selectedDistrict"
-                    :options="districtOptions"
-                    label="Select District"
-                    outlined
-                    dense
-                    class="q-mb-md"
-                    @input="filterByDistrict"
-                />
+                    " v-model="selectedDistrict" :options="districtOptions" label="Select District" outlined dense
+                    class="q-mb-md" @input="filterByDistrict" />
             </div>
         </div>
 
         <!-- Applications Table -->
         <div class="table-responsive">
             <table class="q-table q-table__grid q-mb-lg">
-                <thead
-                    class="bg-[#3A424A] text-white font-bold h-[30px] w-full text-[11px]"
-                >
+                <thead class="bg-[#3A424A] text-white font-bold h-[30px] w-full text-[11px]">
                     <tr>
                         <th class="no_print">
                             <!-- <input type="checkbox" v-model="selectAllCheckbox" @change="toggleSelectAll" /> -->
@@ -205,20 +135,15 @@
                         <th>STATUS</th>
                         <th>DIL NI</th>
                         <th class="no-print">ACTIONS</th>
+                        <th class="print-only">Signature</th> <!-- New Signature Column -->
                     </tr>
                 </thead>
                 <tbody>
                     <!-- {{filteredApplications  }} -->
-                    <tr
-                        v-for="(application, index) in filteredApplications"
-                        :key="application.id"
-                    >
-                        <td >
-                            <input class="no-print"
-                                type="checkbox"
-                                v-model="selectedApplications"
-                                :value="application.id"
-                            />
+                    <tr v-for="(application, index) in filteredApplications" :key="application.id">
+                        <td>
+                            <input class="no-print" type="checkbox" v-model="selectedApplications"
+                                :value="application.id" />
                         </td>
                         <td>{{ index + 1 }}</td>
                         <!-- Serial number, starting from 1 -->
@@ -233,17 +158,14 @@
                         <td>{{ application?.applicant?.account_no }}</td>
                         <td>{{ application?.applicant?.ifsc_code }}</td>
                         <td>
-                            <div
-                                :class="{
-                                    'status-incoming':
-                                        application?.status === 'Pending',
-                                    'status-rejected':
-                                        application?.status === 'Rejected',
-                                    'status-approved':
-                                        application?.status === 'Verified',
-                                }"
-                                class="status-badge"
-                            >
+                            <div :class="{
+                                'status-incoming':
+                                    application?.status === 'Pending',
+                                'status-rejected':
+                                    application?.status === 'Rejected',
+                                'status-approved':
+                                    application?.status === 'Verified',
+                            }" class="status-badge">
                                 {{ application?.status }}
                             </div>
                         </td>
@@ -252,32 +174,21 @@
                             <q-btn flat icon="more_vert" :style="buttonStyle" />
                             <q-menu>
                                 <q-list>
-                                    <q-item
-                                        clickable
-                                        class="action-btn"
-                                        @click="viewApplication(application.id)"
-                                    >
+                                    <q-item clickable class="action-btn" @click="viewApplication(application.id)">
                                         <q-item-section>View</q-item-section>
                                     </q-item>
-                                    <q-item
-                                        class="action-btn"
-                                        @click="editApplication(application.id)"
-                                    >
-                                        <q-item-section
-                                            >Edit/Update</q-item-section
-                                        >
+                                    <q-item class="action-btn" @click="editApplication(application.id)">
+                                        <q-item-section>Edit/Update</q-item-section>
                                     </q-item>
-                                    <q-item
-                                        class="action-btn"
-                                        @click="
-                                            deleteApplication(application.id)
-                                        "
-                                    >
+                                    <q-item class="action-btn" @click="
+                                        deleteApplication(application.id)
+                                        ">
                                         <q-item-section>Delete</q-item-section>
                                     </q-item>
                                 </q-list>
                             </q-menu>
                         </td>
+                        <td class="print-only"></td> <!-- Empty Signature Column -->
                     </tr>
                 </tbody>
             </table>
@@ -312,7 +223,12 @@ const formatDate = (date) => {
     return dayjs(date).format("dddd, MMMM D, YYYY h:mm A"); // Change this to your desired format
 };
 const showActionButtons = computed(() => selectedApplications.value.length > 0);
-
+const hasPendingSelectedApplications = computed(() => {
+    return selectedApplications.value.some(appId => {
+        const application = props.applications.find(app => app.id === appId);
+        return application?.status === 'Pending';
+    });
+});
 const toggleSelectAll = () => {
     if (
         selectedApplications.value.length === filteredApplications.value.length
@@ -389,27 +305,40 @@ const filteredApplications = computed(() => {
 const setFilter = (filter) => {
     currentFilter.value = filter;
 };
-
 const approveAll = async () => {
-    if (selectedApplications.value.length > 0) {
-        try {
-            await $inertia.post(
-                "/verifier/applications/verify-all",
-                {
-                    ids: selectedApplications.value,
-                },
-                {
-                    onSuccess: () => {
-                        // Optionally, show a success message or refresh the data
-                        selectedApplications.value = []; // Clear the selection
-                    },
-                }
-            );
-        } catch (error) {
-            console.error("Error approving applications:", error);
-        }
-    }
+  const pendingIds = selectedApplications.value.filter(appId => {
+    const app = props.applications.find(a => a.id === appId);
+    return app?.status === 'Pending';
+  });
+
+  if (pendingIds.length === 0) return;
+
+  // Send only pending IDs to backend
+  await $inertia.post('/verifier/applications/verify-all', { ids: pendingIds });
 };
+
+
+
+// const approveAll = async () => {
+//     if (selectedApplications.value.length > 0) {
+//         try {
+//             await $inertia.post(
+//                 "/verifier/applications/verify-all",
+//                 {
+//                     ids: selectedApplications.value,
+//                 },
+//                 {
+//                     onSuccess: () => {
+//                         // Optionally, show a success message or refresh the data
+//                         selectedApplications.value = []; // Clear the selection
+//                     },
+//                 }
+//             );
+//         } catch (error) {
+//             console.error("Error approving applications:", error);
+//         }
+//     }
+// };
 
 const rejectAll = async () => {
     if (selectedApplications.value.length > 0) {
@@ -628,5 +557,13 @@ th {
     .no-print {
         display: none;
     }
+
+    .print-only {
+        display: block !important; /* Show the signature column when printing */
+    }
+}
+
+.print-only {
+    display: none; /* Hide the signature column by default */
 }
 </style>

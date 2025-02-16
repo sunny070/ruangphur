@@ -11,7 +11,7 @@ import "@quasar/extras/roboto-font/roboto-font.css"
 import "@quasar/extras/material-icons/material-icons.css"
 import "quasar/src/css/index.sass"
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appName = import.meta.env.VITE_APP_NAME || 'Ruangphur';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

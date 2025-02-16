@@ -34,9 +34,9 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 //     return Inertia::render('Dashboard');
 // })->middleware(['auth', 'verified'])->name('admin.dashboard');
 
-Route::get('/verifier/dashboard', function () {
-    return Inertia::render('Verifier/VerifierDashboard');
-})->middleware(['auth', 'verified'])->name('verifier.dashboard');
+// Route::get('/verifier/dashboard', function () {
+//     return Inertia::render('Verifier/VerifierDashboard');
+// })->middleware(['auth', 'verified'])->name('verifier.dashboard');
 
 
 //User Controller
@@ -120,6 +120,7 @@ Route::group(['middleware' => [RoleMiddleware::using('approver')]], function () 
 
 
 Route::group([], function () {
+    Route::get('/verifier/dashboard', [VerifierController::class, 'dashboard'])->name('verifier.dashboard');
     Route::get('/verifier/application', [VerifierController::class, 'index'])->name('verifier.application');
     Route::get('/verifier/application/{application}', [VerifierController::class, 'show'])->name('verifier.applications.show');
 
