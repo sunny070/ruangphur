@@ -15,10 +15,10 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::query()->upsert([
-            ['id' => 1, 'name' => 'admin', 'email' => 'admin@mail.com','phone' => '00001', 'password' => Hash::make('password')],
-            ['id' => 2, 'name' => 'verifier', 'email' => 'verifier@mail.com','phone' => '00002', 'password' => Hash::make('password')],
-            ['id' => 3, 'name' => 'approver', 'email' => 'approver@mail.com','phone' => '00003', 'password' => Hash::make('password')],
-            ['id' => 4, 'name' => 'citizen', 'email' => 'citizen1@mail.com','phone' => '00004', 'password' => Hash::make('password')],
+            ['id' => 1, 'name' => 'admin', 'email' => 'admin@mail.com','phone' => '00001','designation' => 'Super Admin', 'password' => Hash::make('password')],
+            ['id' => 2, 'name' => 'verifier', 'email' => 'verifier@mail.com','phone' => '00002','designation' => 'District Admin', 'password' => Hash::make('password')],
+            // ['id' => 3, 'name' => 'approver', 'email' => 'approver@mail.com','phone' => '00003','designation' => 'Super Admin', 'password' => Hash::make('password')],
+            // ['id' => 4, 'name' => 'citizen', 'email' => 'citizen1@mail.com','phone' => '00004','designation' => 'Super Admin', 'password' => Hash::make('password')],
         ], ['id']);
 
         $admin = User::find(1);

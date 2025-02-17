@@ -158,7 +158,7 @@
                                 'status-approved':
                                     application?.status === 'Approved',
                                 'status-paid':
-                                    application?.status === 'Paid',
+                                    application?.status === 'Processed',
                                 'status-rejected':
                                     application?.status === 'Rejected',
                             }" class="status-badge">
@@ -657,8 +657,8 @@ const statusCards = computed(() => [
         textClass: "text-[#404CF1]",
     },
     {
-        label: "Paid",
-        count: props.statusCounts.Paid || 0,
+        label: "Processed",
+        count: props.statusCounts.Processed || 0,
         bgClass: "bg-[#F2FBFF]",
         textClass: "text-[#00AEFF]",
     },

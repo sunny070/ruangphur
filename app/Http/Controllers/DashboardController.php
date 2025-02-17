@@ -135,7 +135,7 @@ class DashboardController extends Controller
     }
 
 
-    
+
 
     public function note()
     {
@@ -194,8 +194,8 @@ class DashboardController extends Controller
             ->with('success', 'Note deleted successfully');
     }
 
-    
-    
+
+
     public function createInfo()
     {
         return Inertia::render('Admin/Information/Create');
@@ -208,15 +208,20 @@ class DashboardController extends Controller
             'sub_title' => 'required',
             'file' => 'required|file|mimes:pdf,jpg,png|max:2048',
         ]);
-    
-        $path = $request->file('file')->store('uploads', 'public');
-    
+        $file = $request->file('file');
+        $path = $file->storeAs('uploads',$file->hashName(),'public');
+        // $path = $request->file('file')->store('uploads', 'public');
+        // dd([
+        //     'stored_path' => $path,
+        //     'full_path' => storage_path('app/public/'.$path),
+        //     'public_url' => asset('storage/'.$path)
+        // ]);
         Information::create([
             'title' => $request->title,
             'sub_title' => $request->sub_title,
             'attachment' => $path,
         ]);
-    
+
         return redirect()->route('admin.info.index')->with('success', 'File uploaded successfully.');
     }
 
@@ -227,11 +232,11 @@ class DashboardController extends Controller
                 'id' => $info->id,
                 'title' => $info->title,  // Include title
                 'sub_title' => $info->sub_title,  // Include sub_title
-                'file_url' => $info->attachment ? asset(Storage::url($info->attachment)) : null,
+                'file_url' => $info->attachment,
                 'created_at' => $info->created_at->format('Y-m-d H:i:s'),
             ];
         });
-    
+        // dd($informations);
         return Inertia::render('Admin/Information/Index', ['informations' => $informations]);
     }
 
@@ -260,5 +265,4 @@ class DashboardController extends Controller
 
         return redirect()->route('admin.info.index')->with('success', 'File deleted successfully.');
     }
-
 }

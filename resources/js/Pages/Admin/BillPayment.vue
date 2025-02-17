@@ -15,10 +15,10 @@
                     ? 'active-button'
                     : 'inactive-button'
                     " @click="setFilter('Approved')" />
-                <q-btn label="Deposit to Bank" flat :class="currentFilter === 'Paid'
+                <q-btn label="Deposit to Bank" flat :class="currentFilter === 'Processed'
                     ? 'active-button'
                     : 'inactive-button'
-                    " @click="setFilter('Paid')" />
+                    " @click="setFilter('Processed')" />
 
                 <q-btn label="Rejected" flat :class="currentFilter === 'Rejected'
                     ? 'active-button'
@@ -130,7 +130,7 @@
                             <div :class="{
                                 'status-incoming': application?.status === 'Pending',
                                 'status-approved': application?.status === 'Approved',
-                                'status-paid': application?.status === 'Paid',
+                                'status-paid': application?.status === 'Processed',
                                 'status-rejected': application?.status === 'Rejected'
                             }" class="status-badge">
                                 {{ application?.status }}

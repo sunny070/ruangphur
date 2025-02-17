@@ -1,18 +1,33 @@
 <template>
     <q-page padding>
-        <div class="flex flex-inline items-center">
+        <div class="flex justify-between items-center order-1 md:order-none">
+            <Link
+            
+                :href="route('user.index')"
+                size="sm"
+                flat
+                outlined
+                class="flex items-center justify-center"
+            >
+                <q-icon name="arrow_back" size="16px" class="q-mr-xs" />
+                <span>Back</span>
+            </Link>
+            <h5>Create District User</h5>
+        </div>
+        <!-- <div class="flex flex-inline items-center">
             <p class="page-title">New User</p>
             <q-space />
             <q-breadcrumbs align="right" gutter="xs">
                 <q-breadcrumbs-el :to="{ name: 'user:read' }" label="Users" />
                 <q-breadcrumbs-el label="New User" />
             </q-breadcrumbs>
-        </div>
+        </div> -->
 
         <q-form class="zcard q-pa-md" @reset="resetForm" @submit="handleSubmit">
             <div class="row q-col-gutter-sm">
                 <div class="col-xs-12 col-sm-6">
                     <q-input
+                    color="dark"
                         v-model="form.name"
                         class="my-input"
                         dense
@@ -27,6 +42,7 @@
 
                 <div class="col-xs-12 col-sm-6">
                     <q-input
+                    color="dark"
                         v-model="form.phone"
                         class="my-input"
                         mask="##########"
@@ -44,6 +60,7 @@
 
                 <div class="col-xs-12 col-sm-6">
                     <q-input
+                    color="dark"
                         v-model="form.email"
                         class="my-input"
                         dense
@@ -60,6 +77,9 @@
 
                 <div class="col-xs-12 col-sm-6">
                     <q-select
+                    color="dark"
+                    outlined
+                    dense
                         v-model="form.districts"
                         multiple
                         use-chips
@@ -73,6 +93,7 @@
                 </div>
                 <div class="col-xs-12 col-sm-6">
                     <q-select
+                    color="dark"
                         v-model="form.roles"
                         multiple
                         use-chips
@@ -93,6 +114,22 @@
                 </div>
                 <div class="col-xs-12 col-sm-6">
                     <q-input
+                    color="dark"
+                        v-model="form.designation"
+                        type="text"
+                        class="my-input"
+                        dense
+                        label="Designation"
+                        outlined
+                        :error="form.errors.hasOwnProperty('designation')"
+                        :error-message="form.errors?.designation?.toString()"
+                        @blur="delete form.errors['designation']"
+                        :rules="[(val) => !!val || 'Designation is required']"
+                    />
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <q-input
+                    color="dark"
                         v-model="form.password"
                         type="password"
                         class="my-input"
@@ -111,6 +148,7 @@
                 </div>
                 <div class="col-xs-12 col-sm-6">
                     <q-input
+                    color="dark"
                         v-model="form.password_confirmation"
                         type="password"
                         class="my-input"
@@ -136,8 +174,24 @@
                 <q-separator class="q-my-md" />
             </div>
             <q-card-actions class="q-mt-md">
-                <q-btn color="primary" flat type="submit" label="Save" />
-                <q-btn color="negative" flat type="reset" label="Reset" />
+                <q-btn style="
+                    color: #fff;
+                    width: 144px;
+                    height: 40px;
+                    flex-shrink: 0;
+                    border-radius: 8px;
+                    border: 1px solid #5b656f;
+                    background: #000;
+                " color="primary" flat type="submit" label="Save" />
+                <q-btn style="
+                    color: #000;
+                    width: 144px;
+                    height: 40px;
+                    flex-shrink: 0;
+                    border-radius: 8px;
+                    border: 1px solid #5b656f;
+                    background: transparent;
+                " color="negative" flat type="reset" label="Reset" />
             </q-card-actions>
         </q-form>
     </q-page>
@@ -148,6 +202,7 @@ import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import { useQuasar } from "quasar";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
+import {Link} from "@inertiajs/vue3";
 
 defineOptions({
     layout: AdminLayout,
@@ -164,7 +219,8 @@ const form = useForm({
     phone: "",
     email: "",
     roles: [],
-    districts: [],  // Change from `district_id` to `districts`
+    districts: [], // Change from `district_id` to `districts`
+    designation: "",
     password: "",
     password_confirmation: "",
 });
@@ -180,6 +236,7 @@ const clear = () => {
     form.mobile = "";
     form.email = "";
     form.roles = [];
+    form.designation = "";
     form.password = "";
     form.password_confirmation = "";
 };

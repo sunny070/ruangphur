@@ -423,8 +423,8 @@
 
 <script setup>
 import { computed } from "vue";
-import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { router as $inertia, Link } from "@inertiajs/vue3";
+import AdminLayout from "@/Layouts/AdminLayout.vue";
 
 defineOptions({
     layout: AdminLayout,

@@ -38,7 +38,7 @@ class AdminController extends Controller
             'Approved' => Application::where('status', 'Approved')->count(),
             'Rejected' => Application::where('status', 'Rejected')->count(),
             'Pending' => Application::where('status', 'Pending')->count(), // Adjust if needed
-            'Paid' => Application::where('status', 'Paid')->count(),
+            'Processed' => Application::where('status', 'Processed')->count(),
         ];
         return Inertia::render('Admin/Application', [
             'applications' => $applications,
@@ -55,7 +55,7 @@ class AdminController extends Controller
     {
         // Fetch applications with the specified statuses
         $applications = Application::with(['applicant', 'deceased.district', 'transport'])
-            ->whereIn('status', ['Approved', 'Paid', 'Rejected'])
+            ->whereIn('status', ['Approved', 'Processed', 'Rejected'])
             ->get();
 
 
@@ -409,7 +409,7 @@ public function report(Request $request)
         'applications' => $applications,
         'filters' => $filters,
         'dropdowns' => [
-            'statuses' => ['Pending', 'Approved', 'Rejected', 'Paid'],
+            'statuses' => ['Pending', 'Approved', 'Rejected', 'Processed'],
             'districts' => District::all(),
             'constituencies' => Constituency::all(),
         ]

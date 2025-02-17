@@ -174,6 +174,16 @@
                     </q-item-section>
                 </q-item>
                 </Link>
+                <Link :href="route('verifier.report')">
+                <q-item clickable v-ripple>
+                    <q-item-section avatar>
+                        <q-icon name="receipt" />
+                    </q-item-section>
+                    <q-item-section>
+                        <q-item-label>Report</q-item-label>
+                    </q-item-section>
+                </q-item>
+                </Link>
 
                 <!-- <q-item clickable v-ripple :to="route('verifier.verified-list')">
                     <q-item-section avatar>

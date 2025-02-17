@@ -62,6 +62,7 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
             'roles' => 'required|array',
             'districts' => 'required|array', // Validate multiple districts
+            'designation' => 'required|string', // Validate multiple districts
             'password' => 'required|string|min:6|confirmed',
         ]);
 
@@ -69,6 +70,7 @@ class UserController extends Controller
             'name' => $validated['name'],
             'phone' => $validated['phone'],
             'email' => $validated['email'],
+            'designation' => $validated['designation'],
             'password' => bcrypt($validated['password']),
         ]);
 
@@ -104,6 +106,7 @@ class UserController extends Controller
             'districts' => 'required|array',
             'districts.*' => 'exists:districts,id',
             'email' => [Rule::unique('users', 'email')->ignore($model)],
+            'designation' => 'required|string',
             'phone' => ['digits:10', Rule::unique('users', 'phone')->ignore($model)],
             'password' => 'nullable|min:6|confirmed', // Allow nullable password
         ]);

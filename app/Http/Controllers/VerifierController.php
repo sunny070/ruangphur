@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\VerifierApplicationsExport;
 use App\Models\Application;
+use App\Models\Constituency;
 use App\Models\District;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 
 class VerifierController extends Controller
 
@@ -417,4 +421,63 @@ class VerifierController extends Controller
         ]);
     }
     
+
+    public function userReport(Request $request)
+{
+    // Get the authenticated user's districts
+    $userDistricts = DB::table('districts')
+    ->join('district_user', 'districts.id', '=', 'district_user.district_id')
+    ->where('district_user.user_id', auth()->id())
+    ->select('districts.id') // Explicitly specify the table name
+    ->pluck('id'); // Use pluck() to get an array of IDs
+    // Get filters from the request
+    $filters = $request->only(['status', 'constituency_id', 'start_date', 'end_date']);
+
+    // Fetch applications based on the user's districts and filters
+    $applications = Application::with([
+            'applicant.district',
+            'deceased.district',
+            'deceased.constituency',
+            'transport.sourceDistrict',
+            'transport.destinationDistrict',
+        ])
+        ->whereIn('status', ['Pending', 'Verified', 'Rejected']) // Only these statuses
+        ->whereHas('deceased', function ($query) use ($userDistricts) {
+            $query->whereIn('district_id', $userDistricts); // Filter by user's districts
+        })
+        ->when($filters['status'] ?? null, fn($q) => $q->where('status', $filters['status']))
+        ->when($filters['constituency_id'] ?? null, function ($q) use ($filters) {
+            $q->whereHas('deceased', fn($q) => $q->where('constituency_id', $filters['constituency_id']));
+        })
+        ->when($filters['start_date'] ?? null, fn($q) => $q->whereDate('created_at', '>=', $filters['start_date']))
+        ->when($filters['end_date'] ?? null, fn($q) => $q->whereDate('created_at', '<=', $filters['end_date']))
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+    return Inertia::render('Verifier/Report', [
+        'applications' => $applications,
+        'filters' => $filters,
+        'dropdowns' => [
+            'statuses' => ['Pending', 'Verified', 'Rejected'], // Only these statuses
+            'constituencies' => Constituency::whereIn('district_id', $userDistricts)->get(), // Filter constituencies by user's districts
+        ]
+    ]);
+}
+
+public function userExport(Request $request)
+{
+    // Get the authenticated user's districts
+    $userDistricts = auth()->user()->districts()->pluck('id');
+
+    // Validate filters
+    $filters = $request->validate([
+        'status' => 'nullable|string',
+        'constituency_id' => 'nullable|exists:constituencies,id',
+        'start_date' => 'nullable|date',
+        'end_date' => 'nullable|date|after_or_equal:start_date',
+    ]);
+
+    // Export the data
+    return Excel::download(new VerifierApplicationsExport($filters, $userDistricts), 'user-applications-'.now()->format('YmdHis').'.xlsx');
+}
 }

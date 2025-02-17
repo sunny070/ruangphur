@@ -1,6 +1,7 @@
 <template>
     <q-page padding>
         <q-btn
+        
             color="black"
             label="Upload New"
             :href="route('admin.info.create')"
@@ -19,9 +20,9 @@
                         <q-td>
                             <a
                                 v-if="props.row.file_url"
-                                :href="props.row.file_url"
                                 target="_blank"
                                 class="text-black"
+                                @click="handleOpenApplicant(props.row.file_url)"
                             >
                                 View File
                             </a>
@@ -116,7 +117,12 @@ const openEditDialog = (file) => {
     selectedId.value = file.id;
     editDialog.value = true;
 };
-
+const handleOpenApplicant = (url) => {
+    let a = document.createElement("a");
+    a.target = "_blank";
+    a.href = `/storage/${url}`;
+    a.click();
+};
 const updateFile = () => {
     form.put(route("admin.info.update", selectedId.value), {
         onSuccess: () => {

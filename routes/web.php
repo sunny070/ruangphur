@@ -123,7 +123,10 @@ Route::group([], function () {
     Route::get('/verifier/dashboard', [VerifierController::class, 'dashboard'])->name('verifier.dashboard');
     Route::get('/verifier/application', [VerifierController::class, 'index'])->name('verifier.application');
     Route::get('/verifier/application/{application}', [VerifierController::class, 'show'])->name('verifier.applications.show');
+    // routes/web.php
 
+    Route::get('/verifier/report', [VerifierController::class, 'userReport'])->name('verifier.report');
+    Route::get('/verifier/export', [VerifierController::class, 'userExport'])->name('verifier.export');
 
 
     Route::post('/verifier/applications/verify-all', [VerifierController::class, 'verifyAll']);

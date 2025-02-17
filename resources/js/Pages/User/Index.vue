@@ -46,7 +46,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="flex flex-col">
+                                    <div class="flex">
                                         <q-chip v-for="district in user.districts" :key="district.name"
                                             :label="district.name" class="q-mr-xs" />
                                     </div>
