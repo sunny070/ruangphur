@@ -10,27 +10,56 @@
         <!--Status Tab -->
         <div class="q-my-md grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="flex flex-col sm:flex-row gap-2">
+                <q-btn
+                    size=""
+                    label="Bill Pek tur"
+                    flat
+                    :class="
+                        currentFilter === 'Approved'
+                            ? 'active-button'
+                            : 'inactive-button'
+                    "
+                    @click="setFilter('Approved')"
+                />
+                <q-btn
+                    label="Deposit to Bank"
+                    flat
+                    :class="
+                        currentFilter === 'Processed'
+                            ? 'active-button'
+                            : 'inactive-button'
+                    "
+                    @click="setFilter('Processed')"
+                />
 
-                <q-btn size="" label="Bill Pek tur" flat :class="currentFilter === 'Approved'
-                    ? 'active-button'
-                    : 'inactive-button'
-                    " @click="setFilter('Approved')" />
-                <q-btn label="Deposit to Bank" flat :class="currentFilter === 'Processed'
-                    ? 'active-button'
-                    : 'inactive-button'
-                    " @click="setFilter('Processed')" />
-
-                <q-btn label="Rejected" flat :class="currentFilter === 'Rejected'
-                    ? 'active-button'
-                    : 'inactive-button'
-                    " @click="setFilter('Rejected')" />
+                <q-btn
+                    label="Rejected"
+                    flat
+                    :class="
+                        currentFilter === 'Rejected'
+                            ? 'active-button'
+                            : 'inactive-button'
+                    "
+                    @click="setFilter('Rejected')"
+                />
             </div>
             <div class="flex justify-end">
-                <q-input rounded="2lg" outlined dense bottom-slots v-model="searchQuery" label="Search"
-                    class="w-full max-w-md">
+                <q-input
+                    rounded="2lg"
+                    outlined
+                    dense
+                    bottom-slots
+                    v-model="searchQuery"
+                    label="Search"
+                    class="w-full max-w-md"
+                >
                     <template v-slot:append>
-                        <q-icon v-if="searchQuery !== ''" name="close" @click="searchQuery = ''"
-                            class="cursor-pointer" />
+                        <q-icon
+                            v-if="searchQuery !== ''"
+                            name="close"
+                            @click="searchQuery = ''"
+                            class="cursor-pointer"
+                        />
                         <q-icon name="search" />
                     </template>
                 </q-input>
@@ -43,39 +72,72 @@
             <div>
                 <!-- Action buttons (only visible when at least one checkbox is selected) -->
                 <div v-if="showActionButtons" class="flex">
-                    <q-btn style="border-radius: 8px" size="md" flat outlined class="q-btn-custom flex items-center justify-center hover:bg-[#3A424A] hover:text-white"
-                        @click="toggleSelectAll">
+                    <q-btn
+                        style="border-radius: 8px"
+                        size="md"
+                        flat
+                        outlined
+                        class="q-btn-custom flex items-center justify-center hover:bg-[#3A424A] hover:text-white"
+                        @click="toggleSelectAll"
+                    >
                         <q-icon name="check" size="16px" class="q-mr-xs" />
                         <span>Select All</span>
                     </q-btn>
-                    <q-btn style="border-radius: 8px" size="md" flat outlined class="q-btn-custom flex items-center justify-center hover:bg-[#3A424A] hover:text-white"
-                        @click="approveAll" :disabled="!selectedApplications.length">
-                        <q-icon name="check_circle" size="16px" class="q-mr-xs" />
+                    <q-btn
+                        style="border-radius: 8px"
+                        size="md"
+                        flat
+                        outlined
+                        class="q-btn-custom flex items-center justify-center hover:bg-[#3A424A] hover:text-white"
+                        @click="approveAll"
+                        :disabled="!selectedApplications.length"
+                    >
+                        <q-icon
+                            name="check_circle"
+                            size="16px"
+                            class="q-mr-xs"
+                        />
                         <span>Process for Deposit</span>
                     </q-btn>
-                    <q-btn style="border-radius: 8px" size="md" flat outlined class="q-btn-custom flex items-center justify-center hover:bg-[#3A424A] hover:text-white"
-                        @click="rejectAll" :disabled="!selectedApplications.length">
+                    <q-btn
+                        style="border-radius: 8px"
+                        size="md"
+                        flat
+                        outlined
+                        class="q-btn-custom flex items-center justify-center hover:bg-[#3A424A] hover:text-white"
+                        @click="rejectAll"
+                        :disabled="!selectedApplications.length"
+                    >
                         <q-icon name="cancel" size="16px" class="q-mr-xs" />
                         <span>Reject</span>
                     </q-btn>
                 </div>
             </div>
             <div class="flex justify-end pr-16">
-                <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center" style="
+                <q-btn
+                    size="sm"
+                    flat
+                    outlined
+                    class="q-btn-custom flex items-center justify-center"
+                    style="
                         color: #000;
                         width: 100px;
                         height: 40px;
                         flex-shrink: 0;
                         border-radius: 8px;
                         background: transparent;
-                        
                     "
                     @click="printTable"
-                    >
+                >
                     <q-icon name="print" size="16px" class="q-mr-xs" />
                     <span>Print</span>
                 </q-btn>
-                <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center" style="
+                <q-btn
+                    size="sm"
+                    flat
+                    outlined
+                    class="q-btn-custom flex items-center justify-center"
+                    style="
                         color: #000;
                         width: 100px;
                         height: 40px;
@@ -85,77 +147,115 @@
                         background: transparent;
                     "
                     @click="exportToExcel"
-                    >
+                >
                     <q-icon name="ios_share" size="16px" class="q-mr-xs" />
                     <span>Export</span>
                 </q-btn>
-
             </div>
         </div>
         <!-- Applications Table -->
-        <div ref="printSection"  class="table-responsive">
+        <div ref="printSection" class="table-responsive">
             <table class="q-table q-table__grid q-mb-lg">
-                <thead class="bg-[#3A424A] text-white font-bold h-[30px] w-full text-[11px]">
-                    <tr>
-                        <th>
-
-                        </th>
-                        <th>APPLICANT ID</th>
-                        <th>MITTHI HMING</th>
+                <thead
+                    class="bg-[#3A424A] text-white font-bold h-[30px] w-full text-[11px]"
+                >
+                    <tr class="bg-[#3A424A] text-white">
+                        <th></th>
+                        <th>Sl.No.</th>
+                        <th>APPLICATION NO.</th>
+                        <th>APPLICANT NAME</th>
+                        <th>ADDRESS</th>
+                        <th>CONTACT No.</th>
                         <th>MITTHI KHUA</th>
+                        <th>PLACE OF DEATH</th>
+
                         <th>KILOMETER</th>
-                        <th>AMOUNT</th>
-                        <th>DIL SAKTU</th>
-                        <th>DILTU PHONE NO</th>
+                        <th>AMOUNT CLAIMED</th>
+
+                        <th>ACCOUNT No. OF CLAIMANT</th>
+                        <th>IFSC</th>
                         <th>STATUS</th>
                         <th>DIL NI</th>
-                        <th>ACTIONS</th>
+                        <th class="no-print">ACTIONS</th>
+                        <th class="print-only">Signature</th>
+                        <!-- New Signature Column -->
                     </tr>
                 </thead>
                 <tbody v-if="filteredApplications.length">
-                    <tr v-for="application in filteredApplications" :key="application.id">
+                    <tr
+                        v-for="(application, index) in filteredApplications"
+                        :key="application.id"
+                    >
                         <td>
-                            <input type="checkbox" :value="application.id" v-model="selectedApplications" />
+                            <input
+                                class="no-print"
+                                type="checkbox"
+                                v-model="selectedApplications"
+                                :value="application.id"
+                            />
                         </td>
+                        <td>{{ index + 1 }}</td>
+                        <!-- Serial number, starting from 1 -->
                         <td>{{ application?.application_no }}</td>
-                        <td>{{ application?.deceased?.name }}</td>
+                        <td>{{ application?.applicant?.name }}</td>
+                        <td>{{ application?.applicant?.locality }}</td>
+                        <td>{{ application?.applicant?.mobile }}</td>
                         <td>{{ application?.deceased?.district?.name }}</td>
+                        <td>{{ application?.deceased?.place_of_death }}</td>
                         <td>{{ application?.transport?.distance }}</td>
                         <td>{{ application?.transport?.transport_cost }}</td>
-                        <td>{{ application?.applicant?.name }}</td>
-                        <td>{{ application?.applicant?.mobile }}</td>
-                        
-                        
+                        <td>{{ application?.applicant?.account_no }}</td>
+                        <td>{{ application?.applicant?.ifsc_code }}</td>
                         <td>
-                            <div :class="{
-                                'status-incoming': application?.status === 'Pending',
-                                'status-approved': application?.status === 'Approved',
-                                'status-paid': application?.status === 'Processed',
-                                'status-rejected': application?.status === 'Rejected'
-                            }" class="status-badge">
+                            <div
+                                :class="{
+                                    'status-incoming':
+                                        application?.status === 'Pending',
+                                    'status-rejected':
+                                        application?.status === 'Rejected',
+                                    'status-approved':
+                                        application?.status === 'Approved',
+                                    'status-paid':
+                                        application?.status === 'Processed',
+                                }"
+                                class="status-badge"
+                            >
                                 {{ application?.status }}
                             </div>
                         </td>
-                        
-                        <td>{{formatDate(application?.created_at)  }}</td>
-                        <td>
+                        <td>{{ formatDate(application?.created_at) }}</td>
+                        <td class="no-print">
                             <q-btn flat icon="more_vert" :style="buttonStyle" />
                             <q-menu>
                                 <q-list>
-                                    <q-item clickable class="action-btn" @click="viewApplication(application.id)">
+                                    <q-item
+                                        clickable
+                                        class="action-btn"
+                                        @click="viewApplication(application.id)"
+                                    >
                                         <q-item-section>View</q-item-section>
                                     </q-item>
-                                    <q-item class="action-btn" @click="editApplication(application.id)">
-                                        <q-item-section>Edit/Update</q-item-section>
+                                    <q-item
+                                        class="action-btn"
+                                        @click="editApplication(application.id)"
+                                    >
+                                        <q-item-section
+                                            >Edit/Update</q-item-section
+                                        >
                                     </q-item>
-                                    <q-item class="action-btn" @click="
-                                        deleteApplication(application.id)
-                                        ">
+                                    <q-item
+                                        class="action-btn"
+                                        @click="
+                                            deleteApplication(application.id)
+                                        "
+                                    >
                                         <q-item-section>Delete</q-item-section>
                                     </q-item>
                                 </q-list>
                             </q-menu>
                         </td>
+                        <td class="print-only"></td>
+                        <!-- Empty Signature Column -->
                     </tr>
                 </tbody>
             </table>
@@ -167,7 +267,7 @@
 import { defineProps, ref, computed, onMounted } from "vue";
 import { router as $inertia } from "@inertiajs/vue3";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 import * as XLSX from "xlsx"; // Import SheetJS library
 
 defineOptions({
@@ -203,7 +303,7 @@ const filterByDistrict = () => {
     }
 };
 const formatDate = (date) => {
-  return dayjs(date).format('dddd, MMMM D, YYYY h:mm A'); // Change this to your desired format
+    return dayjs(date).format("dddd, MMMM D, YYYY h:mm A"); // Change this to your desired format
 };
 const loadDistrictOptions = () => {
     // Assuming applications have a district field
@@ -228,22 +328,32 @@ const filteredApplications = computed(() => {
 
     // Apply status filter
     if (currentFilter.value !== "All") {
-        filtered = filtered.filter(application => application.status === currentFilter.value);
+        filtered = filtered.filter(
+            (application) => application.status === currentFilter.value
+        );
     }
 
     // Apply search filter
     if (searchQuery.value) {
-        filtered = filtered.filter(application =>
-            application.application_no?.toString().includes(searchQuery.value) ||
-            application.deceased?.name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-            application.applicant?.name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-            application.deceased?.district?.name?.toLowerCase().includes(searchQuery.value.toLowerCase())
+        filtered = filtered.filter(
+            (application) =>
+                application.application_no
+                    ?.toString()
+                    .includes(searchQuery.value) ||
+                application.deceased?.name
+                    ?.toLowerCase()
+                    .includes(searchQuery.value.toLowerCase()) ||
+                application.applicant?.name
+                    ?.toLowerCase()
+                    .includes(searchQuery.value.toLowerCase()) ||
+                application.deceased?.district?.name
+                    ?.toLowerCase()
+                    .includes(searchQuery.value.toLowerCase())
         );
     }
 
     return filtered;
 });
-
 
 // Set the current filter
 const setFilter = (filter) => {
@@ -266,10 +376,14 @@ const deleteApplication = (applicationId) => {
 
 // Handle Select All checkbox change
 const toggleSelectAll = () => {
-    if (selectedApplications.value.length === filteredApplications.value.length) {
+    if (
+        selectedApplications.value.length === filteredApplications.value.length
+    ) {
         selectedApplications.value = [];
     } else {
-        selectedApplications.value = filteredApplications.value.map(application => application.id);
+        selectedApplications.value = filteredApplications.value.map(
+            (application) => application.id
+        );
     }
 };
 // Handle the "Select All" action
@@ -282,15 +396,19 @@ const selectAll = () => {
 const approveAll = async () => {
     if (selectedApplications.value.length > 0) {
         try {
-            await $inertia.post('/admin/bill/paymet-all', {
-                ids: selectedApplications.value,
-            }, {
-                onSuccess: () => {
-                    selectedApplications.value = [];
+            await $inertia.post(
+                "/admin/bill/paymet-all",
+                {
+                    ids: selectedApplications.value,
                 },
-            });
+                {
+                    onSuccess: () => {
+                        selectedApplications.value = [];
+                    },
+                }
+            );
         } catch (error) {
-            console.error('Error processing payments:', error);
+            console.error("Error processing payments:", error);
         }
     }
 };
@@ -299,24 +417,33 @@ const approveAll = async () => {
 const rejectAll = async () => {
     if (selectedApplications.value.length > 0) {
         try {
-            await $inertia.post('/admin/bill/reject-all', {
-                ids: selectedApplications.value,
-            }, {
-                onSuccess: () => {
-                    selectedApplications.value = [];
+            await $inertia.post(
+                "/admin/bill/reject-all",
+                {
+                    ids: selectedApplications.value,
                 },
-            });
+                {
+                    onSuccess: () => {
+                        selectedApplications.value = [];
+                    },
+                }
+            );
         } catch (error) {
-            console.error('Error rejecting applications:', error);
+            console.error("Error rejecting applications:", error);
         }
     }
 };
 
-
-
-// Print the table
 const printTable = () => {
-    const printContents = document.querySelector(".table-responsive").innerHTML;
+    // Clone the table element
+    const table = document.querySelector(".q-table");
+    const clone = table.cloneNode(true);
+
+    // Remove the checkbox and action columns
+    const noPrintColumns = clone.querySelectorAll(".no-print");
+    noPrintColumns.forEach((column) => column.remove());
+
+    // Create a new window and write the modified table to it
     const printWindow = window.open("", "", "width=800,height=600");
     printWindow.document.write(`
         <html>
@@ -339,7 +466,9 @@ const printTable = () => {
                     }
                 </style>
             </head>
-            <body>${printContents}</body>
+            <body>
+                ${clone.outerHTML}
+            </body>
         </html>
     `);
     printWindow.document.close();
@@ -348,15 +477,21 @@ const printTable = () => {
 
 const exportToExcel = () => {
     const data = filteredApplications.value.map((app) => ({
-        "Applicant ID": app?.application_no,
-        "Deceased Name": app?.deceased?.name,
-        "Deceased District": app?.deceased?.district?.name,
-        Kilometer: app?.transport?.distance,
-        Amount: app?.transport?.transport_cost,
-        "Applicant Name": app?.applicant?.name,
-        "Applicant Phone": app?.applicant?.mobile,
-        Status: app?.status,
+        "Applicant NO.": app?.application_no,
+        "APPLICANT NAME.": app?.applicant?.name,
+        "ADDRESS.": app?.applicant?.locality,
+        "CONTACT No.": app?.applicant?.mobile,
+        "MITTHI KHUA": app?.deceased?.district?.name,
+        "PLACE OF DEATH.": app?.deceased?.place_of_death,
+
+        " KILOMETER.": app?.transport?.distance,
+        "AMOUNT CLAIMED": app?.transport?.transport_cost,
+        "ACCOUNT No. OF CLAIMANT": app?.applicant?.account_no,
+        "IFSC": app?.applicant?.ifsc_code,
+
+        " Status": app?.status,
         "Date Created": app?.created_at,
+        "Signature": "",
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(data);
@@ -366,7 +501,6 @@ const exportToExcel = () => {
     const timestamp = new Date().toISOString().slice(0, 10); // Add timestamp
     XLSX.writeFile(workbook, `Applications_${timestamp}.xlsx`);
 };
-
 </script>
 
 <style>
@@ -393,7 +527,6 @@ th {
 
 .q-btn {
     margin-right: 4px;
-
 }
 
 .active-button {

@@ -305,6 +305,8 @@ const filteredApplications = computed(() => {
 const setFilter = (filter) => {
     currentFilter.value = filter;
 };
+
+
 const approveAll = async () => {
   const pendingIds = selectedApplications.value.filter(appId => {
     const app = props.applications.find(a => a.id === appId);

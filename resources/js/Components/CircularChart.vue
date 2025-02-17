@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="">
       <canvas ref="circularChart"></canvas>
     </div>
   </template>
@@ -53,8 +53,5 @@
   </script>
   
   <style scoped>
-  canvas {
-    max-width: 100%;
-    height: auto;
-  }
+
   </style>

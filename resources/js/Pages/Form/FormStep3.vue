@@ -60,7 +60,8 @@
                                 >
                                     District
                                 </div>
-                                <q-select color="dark"
+                                <q-select
+                                    color="dark"
                                     outlined
                                     dense
                                     v-model="form.district_id"
@@ -116,9 +117,10 @@
                                     type="text"
                                     maxlength="10"
                                     @input="
-                                        form.driver_phone = form.mobile
-                                            .replace(/\D/g, '')
-                                            .slice(0, 10)
+                                        form.mobile = form.mobile.replace(
+                                            /\D/g,
+                                            ''
+                                        )
                                     "
                                     placeholder="Phone number"
                                     v-model="form.mobile"
@@ -137,6 +139,7 @@
                                     {{ form.errors.mobile }}
                                 </div>
                             </div>
+
                             <div>
                                 <div
                                     class="text-sm font-medium text-black q-mb-xs"
@@ -173,6 +176,10 @@
                                     type="text"
                                     placeholder="Bank account number"
                                     v-model="form.account_no"
+                                    @input="
+                                        form.account_no =
+                                            form.account_no.replace(/\D/g, '')
+                                    "
                                     :class="[
                                         'border p-2 w-full rounded-lg',
                                         form.errors.account_no
@@ -187,6 +194,7 @@
                                     {{ form.errors.account_no }}
                                 </div>
                             </div>
+
                             <div>
                                 <div
                                     class="text-sm font-medium text-black q-mb-xs"
@@ -198,6 +206,10 @@
                                     type="text"
                                     placeholder="Bank IFSC code"
                                     v-model="form.ifsc_code"
+                                    @input="
+                                        form.ifsc_code =
+                                            form.ifsc_code.toUpperCase()
+                                    "
                                     :class="[
                                         'border p-2 w-full rounded-lg',
                                         form.errors.ifsc_code
@@ -227,7 +239,7 @@
                                     Mitthi Aadhar card/Voter ID thlalak upload
                                 </div>
                                 <q-file
-                                color="dark"
+                                    color="dark"
                                     v-model="form.id_proof"
                                     outlined
                                     dense
@@ -251,7 +263,8 @@
                                 >
                                     Motor hman man Voucher/Receipt upload
                                 </div>
-                                <q-file color="dark"
+                                <q-file
+                                    color="dark"
                                     v-model="form.receipt"
                                     outlined
                                     dense
@@ -275,7 +288,8 @@
                                 >
                                     Death certificate/VC hriatpuina lehkha
                                 </div>
-                                <q-file color="dark"
+                                <q-file
+                                    color="dark"
                                     v-model="form.death_certificate"
                                     outlined
                                     dense
@@ -306,7 +320,8 @@
                                 >
                                     Diltu Aadhar card/Voter ID thlalak upload
                                 </div>
-                                <q-file color="dark"
+                                <q-file
+                                    color="dark"
                                     v-model="form.additional_document"
                                     outlined
                                     dense
@@ -447,7 +462,7 @@
 
                             <q-card-actions class="ml-[22px] pt-[35px]">
                                 <q-btn
-                                style="
+                                    style="
                                         padding: 10px 28px;
                                         border-radius: 12px;
                                     "
@@ -457,7 +472,7 @@
                                     v-close-popup
                                 />
                                 <q-btn
-                                style="
+                                    style="
                                         padding: 10px 60px;
                                         border-radius: 12px;
                                     "
@@ -482,8 +497,7 @@ import { useQuasar } from "quasar";
 
 defineOptions({ layout: WebLayout });
 
-
-const districts = ref([])
+const districts = ref([]);
 const props = defineProps(["form", "districts"]);
 const preview = ref(false);
 const $q = useQuasar();
@@ -528,9 +542,6 @@ const fileFields = [
         accept: ".pdf, .jpg, .jpeg, .png",
     },
 ];
-
-
-
 
 const district = ref(props.districts || []);
 
@@ -584,7 +595,6 @@ const submitForm = () => {
         },
     });
 };
-
 
 const openDialog = () => {
     preview.value = true;
