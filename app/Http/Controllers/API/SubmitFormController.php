@@ -183,6 +183,18 @@ class SubmitFormController extends Controller
             $attachments=Attachment::query()->create($request->input('attachments'));
             $application=Application::query()->create(['applicant_id'=>$applicant->id,'deceased_id'=>$deceased->id,'transport_id'=>$transport->id,'attachment_id'=>$attachments->id,'status'=>'Pending']);
             DB::commit();
+            $client = new \GuzzleHttp\Client();
+            $templateId = "1007093779326924573";
+            $message = "We have received your application. Your tracking ID is " . $application->application_no . ". Please use this ID for any further correspondence. – DoICT";
+
+            $client->request('POST', 'https://sms.mizoram.gov.in/api', [
+                'form_params' => [
+                    'api_key' => 'b53366c91585c976e6173e69f6916b2d',
+                    'number' => $request->$applicant->mobile,
+                    'message' => $message,
+                    'template_id' => $templateId
+                ]
+            ]);
             return response()->json(['message' => 'Data saved successfully!','status'=>201,'data'=>$application->application_no], 200);
         }catch (\Exception $e){
             info($e);
