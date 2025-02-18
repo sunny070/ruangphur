@@ -86,7 +86,7 @@ class SubmitFormController extends Controller
         // Send OTP via SMS=
         $client = new \GuzzleHttp\Client();
         $templateId = "1007093779326924573";
-        $message = "OTP for RTI Registration is " . $otp . ". DoICT";
+        $message = "OTP for Ruangphur is " . $otp . ". DoICT";
 
         $client->request('POST', 'https://sms.mizoram.gov.in/api', [
             'form_params' => [
