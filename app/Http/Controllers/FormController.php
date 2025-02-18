@@ -144,10 +144,10 @@ class FormController extends Controller
         $otp = random_int(100000, 999999);
         session()->put('otp', $otp);
     
-        // Send OTP via SMS
+        // Send OTP via SMS 'message' => "OTP $otp sent successfully."
         $client = new \GuzzleHttp\Client();
         $templateId = "1007093779326924573";
-        $message = "OTP for RTI Registration is " . $otp . ". DoICT";
+        $message = "OTP  " . $otp . ". sent successfully";
     
         $client->request('POST', 'https://sms.mizoram.gov.in/api', [
             'form_params' => [
