@@ -190,11 +190,12 @@ class SubmitFormController extends Controller
             $client->request('POST', 'https://sms.mizoram.gov.in/api', [
                 'form_params' => [
                     'api_key' => 'b53366c91585c976e6173e69f6916b2d',
-                    'number' => $request->$applicant->mobile,
+                    'number' => $applicant->mobile,
                     'message' => $message,
                     'template_id' => $templateId
                 ]
             ]);
+            info($applicant->mobile);
             return response()->json(['message' => 'Data saved successfully!','status'=>201,'data'=>$application->application_no], 200);
         }catch (\Exception $e){
             info($e);
