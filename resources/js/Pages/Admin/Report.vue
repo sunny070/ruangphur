@@ -27,7 +27,7 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Deceased Constituency</label>
-                        <select v-model="form.constituency_id" class="...">
+                        <select v-model="form.constituency_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
                             <option value="">All Constituencies</option>
                             <option v-for="constituency in filteredConstituencies" :key="constituency.id"
                                 :value="constituency.id">
