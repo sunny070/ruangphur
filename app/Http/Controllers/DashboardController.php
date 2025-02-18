@@ -37,7 +37,7 @@ class DashboardController extends Controller
             // Count approved applications for the district
             $approvedCount = Application::whereHas('deceased', function ($query) use ($district) {
                 $query->where('district_id', $district->id);
-            })->where('status', 'Approved')->count();
+            })->where('status', 'Processed')->count();
 
             $approvedData[] = $approvedCount; // Add approved count to approvedData
         }
@@ -81,12 +81,12 @@ class DashboardController extends Controller
         // ]);
 
         $totalDisbursed = Application::with('transport')
-            ->where('status', 'Approved')
+            ->where('status', 'Processed')
             ->get()
             ->sum(fn($app) => $app->transport?->transport_cost ?? 0);
 
         // Monthly Disbursement Data
-        $monthlyDisbursements = Application::where('status', 'Approved')
+        $monthlyDisbursements = Application::where('status', 'Processed')
             ->join('transports', 'applications.transport_id', '=', 'transports.id')
             ->selectRaw('
         MONTH(applications.created_at) as month, 

@@ -154,7 +154,7 @@
             </div>
         </div>
         <!-- Applications Table -->
-        <div ref="printSection" class="table-responsive">
+        <div ref="printSection" class="rounded-lg overflow-x-auto table-responsive">
             <table class="q-table q-table__grid q-mb-lg">
                 <thead
                     class="bg-[#3A424A] text-white font-bold h-[30px] w-full text-[11px]"
@@ -233,22 +233,35 @@
                                         class="action-btn"
                                         @click="viewApplication(application.id)"
                                     >
+                                        <q-item-section avatar>
+                                            <q-icon
+                                                size="sm"
+                                                name="visibility"
+                                            />
+                                        </q-item-section>
                                         <q-item-section>View</q-item-section>
                                     </q-item>
-                                    <q-item
+                                    <!-- <q-item
                                         class="action-btn"
                                         @click="editApplication(application.id)"
                                     >
+                                    <q-item-section avatar>
+                                            <q-icon name="edit" />
+                                        </q-item-section>
                                         <q-item-section
                                             >Edit/Update</q-item-section
                                         >
-                                    </q-item>
+                                    </q-item> -->
                                     <q-item
+                                        clickable
                                         class="action-btn"
                                         @click="
                                             deleteApplication(application.id)
                                         "
                                     >
+                                        <q-item-section avatar>
+                                            <q-icon name="delete" />
+                                        </q-item-section>
                                         <q-item-section>Delete</q-item-section>
                                     </q-item>
                                 </q-list>
@@ -487,11 +500,11 @@ const exportToExcel = () => {
         " KILOMETER.": app?.transport?.distance,
         "AMOUNT CLAIMED": app?.transport?.transport_cost,
         "ACCOUNT No. OF CLAIMANT": app?.applicant?.account_no,
-        "IFSC": app?.applicant?.ifsc_code,
+        IFSC: app?.applicant?.ifsc_code,
 
         " Status": app?.status,
         "Date Created": app?.created_at,
-        "Signature": "",
+        Signature: "",
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(data);
@@ -531,7 +544,7 @@ th {
 
 .active-button {
     width: 120px;
-    height: 30px;
+    height: auto;
     background: #3a424a;
     color: #ffffff;
     border-radius: 8px;
@@ -541,7 +554,7 @@ th {
 
 .inactive-button {
     width: 120px;
-    height: 30px;
+    height: auto;
 
     background: transparent;
     color: #5b656f;

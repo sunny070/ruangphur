@@ -64,20 +64,20 @@
             </form>
 
             <!-- Results Table -->
-            <div class="bg-white rounded-lg shadow overflow-hidden">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-[#3A424A]">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-[#FFF] uppercase">App No</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-[#FFF] uppercase">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-[#FFF] uppercase">Applicant</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-[#FFF] uppercase">District</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-[#FFF] uppercase">Deceased</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-[#FFF] uppercase">Constituency
+            <div class="bg-white rounded-lg overflow-x-auto table-responsive">
+                <table class="q-table q-table__grid w-full">
+                    <thead >
+                        <tr class="bg-[#3A424A] text-white">
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase">App No</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase">Applicant</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase">District</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase">Deceased</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase">Constituency
                             </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-[#FFF] uppercase">Transport Cost
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase">Transport Cost
                             </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-[#FFF] uppercase">Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase">Date</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">

@@ -64,10 +64,10 @@
                                     color="dark"
                                     outlined
                                     dense
-                                    v-model="form.district_id"
+                                    v-model="form.district"
                                     label="Select District"
                                     :options="district"
-                                    :error="form.errors.district_id"
+                                    :error="form.errors.district"
                                     :error-message="
                                         form.errors.district_id || ''
                                     "
@@ -370,7 +370,7 @@
                         <q-card class="w-[411px] h-auto rounded-md">
                             <q-card-section class="">
                                 <p
-                                    class="text-center flex-shrink-0 rounded-[20px] mb-8"
+                                    class="text-center flex-shrink-0 rounded-[20px] mb-8 bg-[#61646B]"
                                 >
                                     Ruang Phurh Diltu leh a man Chungchang
                                 </p>

@@ -75,7 +75,12 @@ class FormController extends Controller
             'destination_district' => 'required|max:255',
             'destination_locality' => 'max:255',
             'distance' => 'required',
-            'vehicle_number' => 'required|string|max:20',
+            'vehicle_number' => [
+                'required',
+                'string',
+                'max:20',
+                'regex:/^[A-Z]{2}-\d{2}-[A-Z]{2} \d{4}$/',
+            ],
 
             'driver_name' => 'required|string|max:255',
             'driver_phone' => 'required|string|regex:/^[0-9]{10}$/',
@@ -114,15 +119,15 @@ class FormController extends Controller
             'bank_name' => 'required|string',
             'account_no' => 'required|string',
             'ifsc_code' => 'required|string',
-            'id_proof' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'receipt' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'death_certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'additional_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'id_proof' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'receipt' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'death_certificate' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'additional_document' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
-    
+
         // Extract district_id value
         $validated['district_id'] = is_array($validated['district_id']) ? $validated['district_id']['value'] : $validated['district_id'];
-    
+
         // Handle file uploads and store paths
         $filePaths = [
             'id_proof' => $request->hasFile('id_proof') ? $request->file('id_proof')->store('documents', 'public') : null,
@@ -130,7 +135,7 @@ class FormController extends Controller
             'death_certificate' => $request->hasFile('death_certificate') ? $request->file('death_certificate')->store('documents', 'public') : null,
             'additional_document' => $request->hasFile('additional_document') ? $request->file('additional_document')->store('documents', 'public') : null,
         ];
-    
+
         // Prepare file URLs
         $fileUrls = array_map(function ($filePath) {
             return $filePath ? asset('storage/' . $filePath) : null;
@@ -139,16 +144,16 @@ class FormController extends Controller
         // Store only the necessary data in session (excluding file objects)
         $sessionData = array_merge($validated, $filePaths);
         session()->put('applicant', $sessionData);
-    
+
         // Generate OTP
-        $otp = random_int(100000, 999999);
+        $otp = random_int(1000, 9999);
         session()->put('otp', $otp);
-    
+
         // Send OTP via SMS
         $client = new \GuzzleHttp\Client();
         $templateId = "1007093779326924573";
         $message = "OTP for RTI Registration is " . $otp . ". DoICT";
-    
+
         $client->request('POST', 'https://sms.mizoram.gov.in/api', [
             'form_params' => [
                 'api_key' => 'b53366c91585c976e6173e69f6916b2d',
@@ -157,9 +162,9 @@ class FormController extends Controller
                 'template_id' => $templateId
             ]
         ]);
-    
+
         \Log::info("Generated OTP: $otp");
-    
+
         return redirect()->route('form.otp');
         // Return file URLs along with success response
         // return response()->json([
@@ -167,65 +172,65 @@ class FormController extends Controller
         //     'files' => $fileUrls,
         // ]);
     }
-    
 
 
 
 
-//     public function storeStep3(Request $request)
-// {
-//     // Validate the request
-//     $validated = $request->validate([
-//         'name' => 'required|string',
-//         'mobile' => 'required|string',
-//         'district_id' => 'required',
-//         'locality' => 'required|string',
-//         'bank_name' => 'required|string',
-//         'account_no' => 'required|string',
-//         'ifsc_code' => 'required|string',
-//         'id_proof' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-//         'receipt' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-//         'death_certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-//         'additional_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-//     ]);
 
-//     // Extract district_id value
-//     $validated['district_id'] = is_array($validated['district_id']) ? $validated['district_id']['value'] : $validated['district_id'];
+    //     public function storeStep3(Request $request)
+    // {
+    //     // Validate the request
+    //     $validated = $request->validate([
+    //         'name' => 'required|string',
+    //         'mobile' => 'required|string',
+    //         'district_id' => 'required',
+    //         'locality' => 'required|string',
+    //         'bank_name' => 'required|string',
+    //         'account_no' => 'required|string',
+    //         'ifsc_code' => 'required|string',
+    //         'id_proof' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+    //         'receipt' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+    //         'death_certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+    //         'additional_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+    //     ]);
 
-//     // Handle file uploads and store paths
-//     $filePaths = [
-//         'id_proof' => $request->hasFile('id_proof') ? $request->file('id_proof')->store('documents', 'public') : null,
-//         'receipt' => $request->hasFile('receipt') ? $request->file('receipt')->store('documents', 'public') : null,
-//         'death_certificate' => $request->hasFile('death_certificate') ? $request->file('death_certificate')->store('documents', 'public') : null,
-//         'additional_document' => $request->hasFile('additional_document') ? $request->file('additional_document')->store('documents', 'public') : null,
-//     ];
+    //     // Extract district_id value
+    //     $validated['district_id'] = is_array($validated['district_id']) ? $validated['district_id']['value'] : $validated['district_id'];
 
-//     // Store only the necessary data in session (excluding file objects)
-//     $sessionData = array_merge($validated, $filePaths);
-//     session()->put('applicant', $sessionData);
+    //     // Handle file uploads and store paths
+    //     $filePaths = [
+    //         'id_proof' => $request->hasFile('id_proof') ? $request->file('id_proof')->store('documents', 'public') : null,
+    //         'receipt' => $request->hasFile('receipt') ? $request->file('receipt')->store('documents', 'public') : null,
+    //         'death_certificate' => $request->hasFile('death_certificate') ? $request->file('death_certificate')->store('documents', 'public') : null,
+    //         'additional_document' => $request->hasFile('additional_document') ? $request->file('additional_document')->store('documents', 'public') : null,
+    //     ];
 
-//     // Generate OTP
-//     $otp = random_int(100000, 999999);
-//     session()->put('otp', $otp);
+    //     // Store only the necessary data in session (excluding file objects)
+    //     $sessionData = array_merge($validated, $filePaths);
+    //     session()->put('applicant', $sessionData);
 
-//     // Send OTP via SMS
-//     $client = new \GuzzleHttp\Client();
-//     $templateId = "1007093779326924573";
-//     $message = "OTP for RTI Registration is " . $otp . ". DoICT";
+    //     // Generate OTP
+    //     $otp = random_int(100000, 999999);
+    //     session()->put('otp', $otp);
 
-//     $client->request('POST', 'https://sms.mizoram.gov.in/api', [
-//         'form_params' => [
-//             'api_key' => 'b53366c91585c976e6173e69f6916b2d',
-//             'number' => $validated['mobile'],
-//             'message' => $message,
-//             'template_id' => $templateId
-//         ]
-//     ]);
+    //     // Send OTP via SMS
+    //     $client = new \GuzzleHttp\Client();
+    //     $templateId = "1007093779326924573";
+    //     $message = "OTP for RTI Registration is " . $otp . ". DoICT";
 
-//     \Log::info("Generated OTP: $otp");
+    //     $client->request('POST', 'https://sms.mizoram.gov.in/api', [
+    //         'form_params' => [
+    //             'api_key' => 'b53366c91585c976e6173e69f6916b2d',
+    //             'number' => $validated['mobile'],
+    //             'message' => $message,
+    //             'template_id' => $templateId
+    //         ]
+    //     ]);
 
-//     return redirect()->route('form.otp');
-// }
+    //     \Log::info("Generated OTP: $otp");
+
+    //     return redirect()->route('form.otp');
+    // }
 
 
 
@@ -242,79 +247,79 @@ class FormController extends Controller
     }
 
     public function validateOtp(Request $request)
-{
-    // Validate OTP
-    $request->validate(['otp' => 'required|digits:6']);
-    
-    // Retrieve OTP from session
-    $sessionOtp = session('otp');
-    if ($sessionOtp != $request->otp) {
-        return back()->withErrors(['otp' => 'Invalid OTP.']);
-    }
-    
-    // Retrieve form data from session
-    $deceasedData = session('deceased');
-    $transportData = session('transport');
-    $applicantData = session('applicant');
-    
-    // Fix gender and relative data for deceased
-    if (isset($deceasedData['gender']) && is_array($deceasedData['gender'])) {
-        $deceasedData['gender'] = $deceasedData['gender']['value'];
-    }
-    
-    // Create the Applicant record
-    $applicant = Applicant::create([
-        ...$applicantData,
-        'district_id' => $applicantData['district_id'],
-    ]);
-    
-    // Create the Deceased record
-    $deceased = Deceased::create([...$deceasedData]);
-    
-    // Check if source_district and destination_district are already in transportData, 
-    // otherwise add them manually
-    if (isset($transportData['source_district']['value'])) {
-        $transportData['source_district'] = $transportData['source_district']['value'];
-    }
-    if (isset($transportData['destination_district']['value'])) {
-        $transportData['destination_district'] = $transportData['destination_district']['value'];
+    {
+        // Validate OTP
+        $request->validate(['otp' => 'required|digits:4']);
+
+        // Retrieve OTP from session
+        $sessionOtp = session('otp');
+        if ($sessionOtp != $request->otp) {
+            return back()->withErrors(['otp' => 'Invalid OTP.']);
+        }
+
+        // Retrieve form data from session
+        $deceasedData = session('deceased');
+        $transportData = session('transport');
+        $applicantData = session('applicant');
+
+        // Fix gender and relative data for deceased
+        if (isset($deceasedData['gender']) && is_array($deceasedData['gender'])) {
+            $deceasedData['gender'] = $deceasedData['gender']['value'];
+        }
+
+        // Create the Applicant record
+        $applicant = Applicant::create([
+            ...$applicantData,
+            'district_id' => $applicantData['district_id'],
+        ]);
+
+        // Create the Deceased record
+        $deceased = Deceased::create([...$deceasedData]);
+
+        // Check if source_district and destination_district are already in transportData, 
+        // otherwise add them manually
+        if (isset($transportData['source_district']['value'])) {
+            $transportData['source_district'] = $transportData['source_district']['value'];
+        }
+        if (isset($transportData['destination_district']['value'])) {
+            $transportData['destination_district'] = $transportData['destination_district']['value'];
+        }
+
+        // Create the Transport record
+        $transport = Transport::create([
+            ...$transportData
+        ]);
+        $attachment = Attachment::create([
+
+            'id_proof' => $applicantData['id_proof'] ?? null,
+            'receipt' => $applicantData['receipt'] ?? null,
+            'death_certificate' => $applicantData['death_certificate'] ?? null,
+            'additional_document' => $applicantData['additional_document'] ?? null,
+        ]);
+        // Create the Application record with the attachment_id
+        $application = Application::create([
+            'applicant_id' => $applicant->id,
+            'deceased_id' => $deceased->id,
+            'transport_id' => $transport->id,
+            'attachment_id' => $attachment->id,
+            'status' => 'Pending',
+        ]);
+
+        // Create the Attachment record
+
+
+        // Clear session data
+        session()->forget(['deceased', 'transport', 'applicant', 'otp']);
+
+        // Pass the application number to the FormComplete page
+        return Inertia::render('Form/FormComplete', [
+            'application_no' => $application->application_no,
+        ]);
     }
 
-    // Create the Transport record
-    $transport = Transport::create([
-        ...$transportData
-    ]);
-    $attachment = Attachment::create([
-       
-        'id_proof' => $applicantData['id_proof'] ?? null,
-        'receipt' => $applicantData['receipt'] ?? null,
-        'death_certificate' => $applicantData['death_certificate'] ?? null,
-        'additional_document' => $applicantData['additional_document'] ?? null,
-    ]);
-    // Create the Application record with the attachment_id
-    $application = Application::create([
-        'applicant_id' => $applicant->id,
-        'deceased_id' => $deceased->id,
-        'transport_id' => $transport->id,
-        'attachment_id' => $attachment->id,
-        'status' => 'Pending',
-    ]);
-    
-    // Create the Attachment record
-  
-    
-    // Clear session data
-    session()->forget(['deceased', 'transport', 'applicant', 'otp']);
-    
-    // Pass the application number to the FormComplete page
-    return Inertia::render('Form/FormComplete', [
-        'application_no' => $application->application_no,
-    ]);
-}
 
-    
 
-    
+
 
 
 
@@ -400,7 +405,7 @@ class FormController extends Controller
     //     // Fix gender and relative data
     //     if (isset($deceasedData['gender']) && is_array($deceasedData['gender'])) {
     //         $deceasedData['gender'] = $deceasedData['gender']['value'];
-            
+
     //     }
 
     //     // Create the Applicant
@@ -417,8 +422,8 @@ class FormController extends Controller
     //     $deceased = Deceased::create([
     //         ...$deceasedData,
 
-            
-            
+
+
     //     ]);
 
     //     // Create the Transport record
@@ -428,21 +433,21 @@ class FormController extends Controller
     //         'source_district' => $transportData['source_district']['value'],
     //         'destination_district' => $transportData['destination_district']['value'],
     //     ]);
-        
+
 
     //     // Create the Application record
     //     $application = Application::create([
     //         'applicant_id' => $applicant->id,
     //         'deceased_id' => $deceased->id,
     //         'transport_id' => $transport->id,
-            
+
     //         'status' => 'Pending',
     //         // 'application_no' => $applicationNumber,
     //     ]);
 
 
 
-        
+
     //     // Clear session data
     //     session()->forget(['deceased', 'transport', 'applicant', 'otp']);
 

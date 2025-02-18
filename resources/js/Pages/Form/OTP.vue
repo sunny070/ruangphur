@@ -56,7 +56,7 @@ defineOptions({
 
 const props = defineProps(["phone" ]);
 
-const length = 6; // The length of the OTP (6 characters)
+const length = 4; // The length of the OTP (6 characters)
 const fieldValues = ref(Array(length).fill("")); // OTP field values
 
 // Watch the field values and join them into a single string when all fields are filled

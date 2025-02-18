@@ -21,9 +21,11 @@
 
                             <!-- Show title -->
                             <!-- Show subtitle -->
-                            <span class="text-caption">{{
-                                info.created_at
-                            }}</span>
+                            <span class="text-caption">
+                                <q-icon name="event" class="q-mr-xs" />
+                                {{ info.created_at }}
+                                <q-icon name="access_time" class="q-ml-xs" />
+                            </span>
                         </div>
                         <hr class="my-4 border-border" />
                     </q-item-section>

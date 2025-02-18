@@ -60,48 +60,48 @@ const statusCards = computed(() => [
     },
 ]);
 // const statusCounts = ref(props.statusCounts);
-const amountDisbursedChartOptions = ref({
-    chart: {
-        type: "bar",
-        height: 350,
-        toolbar: { show: false },
-    },
-    plotOptions: {
-        bar: {
-            borderRadius: 4,
-            columnWidth: "70%",
-        },
-    },
-    dataLabels: { enabled: false },
-    series: [],
-    xaxis: {
-        categories: [],
-        labels: { style: { fontSize: "12px" } },
-    },
-    yaxis: {
-        labels: {
-            formatter: (value) =>
-                `₹${new Intl.NumberFormat("en-IN").format(value)}`,
-        },
-    },
-    colors: ["#00AA68"],
-    grid: { borderColor: "#f1f1f1" },
-});
-watch(
-    () => props.amountDisbursedData,
-    (newData) => {
-        if (newData && newData.length) {
-            amountDisbursedChartOptions.value.series = [
-                {
-                    name: "Amount Disbursed",
-                    data: newData,
-                },
-            ];
-            amountDisbursedChartOptions.value.xaxis.categories = props.months;
-        }
-    },
-    { immediate: true }
-);
+// const amountDisbursedChartOptions = ref({
+//     chart: {
+//         type: "bar",
+//         height: 350,
+//         toolbar: { show: false },
+//     },
+//     plotOptions: {
+//         bar: {
+//             borderRadius: 4,
+//             columnWidth: "70%",
+//         },
+//     },
+//     dataLabels: { enabled: false },
+//     series: [],
+//     xaxis: {
+//         categories: [],
+//         labels: { style: { fontSize: "12px" } },
+//     },
+//     yaxis: {
+//         labels: {
+//             formatter: (value) =>
+//                 `₹${new Intl.NumberFormat("en-IN").format(value)}`,
+//         },
+//     },
+//     colors: ["#00AA68"],
+//     grid: { borderColor: "#f1f1f1" },
+// });
+// watch(
+//     () => props.amountDisbursedData,
+//     (newData) => {
+//         if (newData && newData.length) {
+//             amountDisbursedChartOptions.value.series = [
+//                 {
+//                     name: "Amount Disbursed",
+//                     data: newData,
+//                 },
+//             ];
+//             amountDisbursedChartOptions.value.xaxis.categories = props.months;
+//         }
+//     },
+//     { immediate: true }
+// );
 
 const topApplicants = ref(props.topApplicants);
 onMounted(() => {
@@ -160,7 +160,8 @@ const applicantColumns = [
             
             <q-card class="h-full">
                 <q-card-section>
-                    <h6 class="text-h6 q-mb-4">Top 10 Applicants</h6>
+                    <h6 class="text-h6 q-mb-4">Diltu tam dan (top 10)</h6>
+                    <p class="text-[#61646B]">Ruangphur diltu tam te</p>
                     <q-table
                         :rows="topApplicants"
                         :columns="applicantColumns"

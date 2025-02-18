@@ -26,7 +26,7 @@
 
         <!-- Filter Buttons and Search Bar -->
         <div class="q-my-md grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="flex flex-col sm:flex-row gap-2">
+            <div class="flex flex-col sm:flex-row gap-5">
                 <q-btn
                     label="All"
                     flat
@@ -218,6 +218,7 @@
                     <span>Export</span>
                 </q-btn>
                 <q-select
+                color="dark"
                     style="
                         color: #000;
                         width: 160px;
@@ -238,7 +239,7 @@
             </div>
         </div>
         <!-- Applications Table -->
-        <div ref="printSection" class="overflow-x-auto table-responsive">
+        <div ref="printSection" class="rounded-lg overflow-x-auto table-responsive">
             <table class="q-table q-table__grid w-full">
                 <thead>
                     <tr class="bg-[#3A424A] text-white">
@@ -309,7 +310,7 @@
                         </td>
                         <td>{{ formatDate(application?.created_at) }}</td>
                         <td class="no-print">
-                            <q-btn flat icon="more_vert" :style="buttonStyle" />
+                            <q-btn flat icon="more_vert"/>
                             <q-menu>
                                 <q-list>
                                     <q-item
@@ -351,7 +352,7 @@
                                         </q-item-section>
                                         <q-item-section>Delete</q-item-section>
                                     </q-item>
-                                    <q-item
+                                    <!-- <q-item
                                         clickable
                                         class="action-btn"
                                         @click="viewMap(application.transport)"
@@ -362,7 +363,7 @@
                                         <q-item-section
                                             >View Map</q-item-section
                                         >
-                                    </q-item>
+                                    </q-item> -->
                                 </q-list>
                             </q-menu>
                         </td>
