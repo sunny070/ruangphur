@@ -83,7 +83,19 @@ class SubmitFormController extends Controller
         $otp = rand(1000, 9999);
         // Store OTP in cache (valid for 5 minutes)
        $storedOtp= Cache::put('otp_' . $request->phone, $otp, now()->addMinutes(5));
+        // Send OTP via SMS=
+        $client = new \GuzzleHttp\Client();
+        $templateId = "1007093779326924573";
+        $message = "OTP for RTI Registration is " . $otp . ". DoICT";
 
+        $client->request('POST', 'https://sms.mizoram.gov.in/api', [
+            'form_params' => [
+                'api_key' => 'b53366c91585c976e6173e69f6916b2d',
+                'number' => $request->phone,
+                'message' => $message,
+                'template_id' => $templateId
+            ]
+        ]);
         return response()->json(['message' => "OTP $otp sent successfully.",'status'=>201], 200);
     }
 
