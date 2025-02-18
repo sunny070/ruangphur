@@ -37,10 +37,11 @@
               <q-btn 
                 type="submit" 
                 label="Create Note" 
-                color="primary" 
+                color="dark" 
                 :loading="form.processing"
               />
               <q-btn 
+              
                 label="Cancel" 
                 :to="{ name: 'admin.notes.index' }" 
                 flat 
