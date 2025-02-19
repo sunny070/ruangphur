@@ -49,7 +49,7 @@ class AuthenticatedSessionController extends Controller
         }
     
         // Default redirect if no role is found
-        return redirect()->route('dashboard'); // You can customize this as needed
+        return redirect()->route('admin.dashboard'); // You can customize this as needed
     }
 
     /**

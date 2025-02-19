@@ -86,17 +86,37 @@ class AdminController extends Controller
         return redirect()->route('admin.application')->with('error', 'Application is already processed or invalid.');
     }
 
-    public function reject(Application $application)
-    {
-        if ($application && $application->status === 'Pending') {
-            $application->status = 'Rejected'; // Change the status to 'Rejected'
-            $application->save();
+    // public function reject(Application $application)
+    // {
+    //     if ($application && $application->status === 'Pending') {
+    //         $application->status = 'Rejected'; // Change the status to 'Rejected'
+    //         $application->save();
 
-            return redirect()->route('application')->with('success', 'Application rejected.');
-        }
+    //         return redirect()->route('application')->with('success', 'Application rejected.');
+    //     }
 
-        return redirect()->route('application')->with('error', 'Application is already processed or invalid.');
+    //     return redirect()->route('application')->with('error', 'Application is already processed or invalid.');
+    // }
+
+    public function reject(Application $application, Request $request)
+{
+    $validated = $request->validate([
+        'feedback' => 'required|string|max:255'
+    ]);
+
+    if ($application && $application->status === 'Pending') {
+        $application->update([
+            'status' => 'Rejected',
+            'feedback' => $validated['feedback']
+        ]);
+
+        return redirect()->route('admin.application') // Match your actual route name
+            ->with('success', 'Application rejected.');
     }
+
+    return redirect()->route('admin.application') // Match your actual route name
+        ->with('error', 'Application is already processed or invalid.');
+}
 
     public function rejectAll(Request $request)
     {

@@ -25,18 +25,7 @@ Route::get('/', function () {
         'faqs' => \App\Models\Note::where('status', 'published')->get()
     ]);
 })->name('home');
-Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('login', [AuthController::class, 'login']);
-Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-
-// Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->middleware(['auth', 'verified'])->name('admin.dashboard');
-
-// Route::get('/verifier/dashboard', function () {
-//     return Inertia::render('Verifier/VerifierDashboard');
-// })->middleware(['auth', 'verified'])->name('verifier.dashboard');
 
 
 //User Controller

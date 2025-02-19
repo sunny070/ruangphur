@@ -12,10 +12,10 @@ use Inertia\Inertia;
 class AuthController extends Controller
 {
 
-    public function showLoginForm()
-    {
-        return Inertia::render('Auth/Login');  // This would render a Vue component for the login form (if you're using Inertia.js)
-    }
+    // public function showLoginForm()
+    // {
+    //     return Inertia::render('Auth/Login');  // This would render a Vue component for the login form (if you're using Inertia.js)
+    // }
     public function login(Request $request)
     {
         // Validate input to ensure 'email' and 'password' are provided

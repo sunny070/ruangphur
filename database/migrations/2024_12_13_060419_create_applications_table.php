@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignIdFor(\App\Models\Transport::class);
             $table->foreignIdFor(\App\Models\Attachment::class);
             $table->string('status')->nullable();
+            $table->text('feedback')->nullable();
             $table->string('application_no')->unique();
             $table->timestamp('verified_at')->nullable();
             $table->timestamp('approved_at')->nullable();

@@ -338,13 +338,21 @@
                 </q-card-section>
 
                 <q-card-section>
-                    <q-input v-model="rejectFeedback" label="Please provide the reason for rejection" type="textarea"
+                    <q-input color="dark" v-model="rejectFeedback" label="Please provide the reason for rejection" type="textarea"
                         autogrow :rules="[val => !!val || 'Reason is required']" />
                 </q-card-section>
 
                 <q-card-actions align="right">
-                    <q-btn flat label="Cancel" color="primary" v-close-popup />
-                    <q-btn label="Confirm Reject" color="negative" @click="confirmRejection" v-close-popup />
+                    <q-btn flat label="Cancel" color="primary" v-close-popup  style="
+                    color: #fff;
+                    width: 144px;
+                    height: 40px;
+                    flex-shrink: 0;
+                    border-radius: 8px;
+                    border: 1px solid #5b656f;
+                    background: #000;
+                "/>
+                    <q-btn style="border-radius: 8px;" label="Confirm Reject" color="negative" @click="confirmRejection" v-close-popup />
                 </q-card-actions>
             </q-card>
         </q-dialog>

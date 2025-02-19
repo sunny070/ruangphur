@@ -25,6 +25,7 @@ class Application extends Model
         'verified_at',
         'approved_at',
         'processed_at',
+        'feedback'
     ];
     protected static function boot()
     {

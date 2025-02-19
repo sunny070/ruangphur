@@ -2,7 +2,7 @@
     <q-layout>
         <q-page-container>
             <q-page>
-                <div class="flex justify-center flex-col items-center">
+                <div class="flex justify-center flex-col items-center pt-10">
                     <div
                         class="flex justify-center items-center w-8 rounded-full h-8 bg-[#3B6939]"
                     >

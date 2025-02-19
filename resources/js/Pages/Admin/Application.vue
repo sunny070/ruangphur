@@ -495,20 +495,7 @@ const openEditDialog = (application) => {
     currentStep.value = 1;
     editDialog.value = true;
 };
-// const openEditDialog = (application) => {
-//     editableApplication.value = JSON.parse(JSON.stringify(application)); // Deep copy to avoid modifying the original
-//     currentStep.value = 1; // Reset step to first
-//     editDialog.value = true;
-// };
 
-// const handleSubmit = () => {
-//   useForm(editableApplication.value).put(`/admin/applications/${editableApplication.value.id}`, {
-//     onSuccess: () => {
-//       editDialog.value = false;
-//     },
-//   });
-// };
-// Function to handle form submission
 const handleSubmit = () => {
     if (routeError.value) {
         alert("Please fix route errors before submitting");
@@ -525,31 +512,6 @@ const handleSubmit = () => {
     );
 };
 
-// const handleSubmit = () => {
-//   // Handle file uploads and form submission
-//   // You can use FormData to send files to the server
-//   const formData = new FormData();
-//   formData.append('id_proof', editableApplication.value.attachment.id_proof);
-//   formData.append('receipt', editableApplication.value.attachment.receipt);
-//   formData.append('death_certificate', editableApplication.value.attachment.death_certificate);
-//   formData.append('additional_document', editableApplication.value.attachment.additional_document);
-
-//   // Append other fields as needed
-//   // ...
-
-//   // Submit the form data to the server
-//   $inertia.put(
-//         `/application/${editableApplication.value.id}`,
-//         editableApplication.value,
-//         {
-//             onSuccess: () => {
-//                 editDialog.value = false;
-//             },
-//         }
-//     );
-// };
-
-// Step navigation functions
 const nextStep = () => {
     if (currentStep.value < 4) currentStep.value++;
 };
