@@ -64,10 +64,10 @@
                                     color="dark"
                                     outlined
                                     dense
-                                    v-model="form.district"
+                                    v-model="form.district_id"
                                     label="Select District"
                                     :options="district"
-                                    :error="form.errors.district"
+                                    :error="form.errors.district_id"
                                     :error-message="
                                         form.errors.district_id || ''
                                     "

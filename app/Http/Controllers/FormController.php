@@ -166,71 +166,10 @@ class FormController extends Controller
         \Log::info("Generated OTP: $otp");
 
         return redirect()->route('form.otp');
-        // Return file URLs along with success response
-        // return response()->json([
-        //     'message' => 'OTP Sent successfully!',
-        //     'files' => $fileUrls,
-        // ]);
+       
     }
 
 
-
-
-
-    //     public function storeStep3(Request $request)
-    // {
-    //     // Validate the request
-    //     $validated = $request->validate([
-    //         'name' => 'required|string',
-    //         'mobile' => 'required|string',
-    //         'district_id' => 'required',
-    //         'locality' => 'required|string',
-    //         'bank_name' => 'required|string',
-    //         'account_no' => 'required|string',
-    //         'ifsc_code' => 'required|string',
-    //         'id_proof' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-    //         'receipt' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-    //         'death_certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-    //         'additional_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-    //     ]);
-
-    //     // Extract district_id value
-    //     $validated['district_id'] = is_array($validated['district_id']) ? $validated['district_id']['value'] : $validated['district_id'];
-
-    //     // Handle file uploads and store paths
-    //     $filePaths = [
-    //         'id_proof' => $request->hasFile('id_proof') ? $request->file('id_proof')->store('documents', 'public') : null,
-    //         'receipt' => $request->hasFile('receipt') ? $request->file('receipt')->store('documents', 'public') : null,
-    //         'death_certificate' => $request->hasFile('death_certificate') ? $request->file('death_certificate')->store('documents', 'public') : null,
-    //         'additional_document' => $request->hasFile('additional_document') ? $request->file('additional_document')->store('documents', 'public') : null,
-    //     ];
-
-    //     // Store only the necessary data in session (excluding file objects)
-    //     $sessionData = array_merge($validated, $filePaths);
-    //     session()->put('applicant', $sessionData);
-
-    //     // Generate OTP
-    //     $otp = random_int(100000, 999999);
-    //     session()->put('otp', $otp);
-
-    //     // Send OTP via SMS
-    //     $client = new \GuzzleHttp\Client();
-    //     $templateId = "1007093779326924573";
-    //     $message = "OTP for RTI Registration is " . $otp . ". DoICT";
-
-    //     $client->request('POST', 'https://sms.mizoram.gov.in/api', [
-    //         'form_params' => [
-    //             'api_key' => 'b53366c91585c976e6173e69f6916b2d',
-    //             'number' => $validated['mobile'],
-    //             'message' => $message,
-    //             'template_id' => $templateId
-    //         ]
-    //     ]);
-
-    //     \Log::info("Generated OTP: $otp");
-
-    //     return redirect()->route('form.otp');
-    // }
 
 
 
@@ -245,6 +184,47 @@ class FormController extends Controller
             ['phone' => $applicantData['mobile']]
         );
     }
+
+
+
+    public function resendOtp(Request $request)
+{
+    // Check if applicant data exists in session
+    $applicantData = session('applicant');
+    if (!$applicantData) {
+        return redirect()->route('form.step3')->withErrors(['error' => 'Session expired. Please submit the form again.']);
+    }
+
+    // Generate new OTP
+    $otp = random_int(1000, 9999);
+    session()->put('otp', $otp);
+
+    // Send OTP via SMS
+    $client = new \GuzzleHttp\Client();
+    $templateId = "1007093779326924573";
+    $message = "OTP for RTI Registration is " . $otp . ". DoICT";
+
+    try {
+        $client->request('POST', 'https://sms.mizoram.gov.in/api', [
+            'form_params' => [
+                'api_key' => 'b53366c91585c976e6173e69f6916b2d',
+                'number' => $applicantData['mobile'],
+                'message' => $message,
+                'template_id' => $templateId
+            ]
+        ]);
+    } catch (\Exception $e) {
+        \Log::error("Failed to resend OTP: " . $e->getMessage());
+        return back()->withErrors(['error' => 'Failed to resend OTP. Please try again.']);
+    }
+
+    \Log::info("Resent OTP: $otp");
+
+    return back()->with('success', 'OTP has been resent successfully.');
+}
+
+
+
 
     public function validateOtp(Request $request)
     {

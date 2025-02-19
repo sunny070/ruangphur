@@ -150,6 +150,7 @@ Route::post('/form-step-3', [FormController::class, 'storeStep3'])->name('form.s
 
 Route::post('/submit-form', [FormController::class, 'submit'])->name('form.submit');
 Route::get('/form-otp', [FormController::class, 'otpPage'])->name('form.otp');
+Route::post('/form/resend-otp', [FormController::class, 'resendOtp'])->name('form.resendOtp');
 Route::post('/form-validate-otp', [FormController::class, 'validateOtp'])->name('form.validateOtp');
 
 
