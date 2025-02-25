@@ -3,18 +3,23 @@
         <!-- Header -->
         <div class="text-xl font-semibold">Notes</div>
         <div class="bg-white p-4 rounded-lg flex justify-between">
-            
-
-            <q-btn size="sm" flat outlined class=" flex items-center justify-center" style="
-                        color: #fff;
-                        width: 100px;
-                        height: 40px;
-                        border-radius: 8px;
-                        background: #3a424a;
-                    " :href="route('admin.notes.create')">
-                    <q-icon name="create" size="16px" class="q-mr-xs" />
-                    <span>Create New Note</span>
-                </q-btn>
+            <q-btn
+                size="sm"
+                flat
+                outlined
+                class="flex items-center justify-center"
+                style="
+                    color: #fff;
+                    width: 100px;
+                    height: 40px;
+                    border-radius: 8px;
+                    background: #3a424a;
+                "
+                :href="route('admin.notes.create')"
+            >
+                <q-icon name="create" size="16px" class="q-mr-xs" />
+                <span>Create New Note</span>
+            </q-btn>
             <q-input
                 v-model="searchQuery"
                 autofocus
@@ -28,9 +33,6 @@
                     <q-icon name="search" />
                 </template>
             </q-input>
-            
-
-            
         </div>
 
         <!-- Notes Table -->
@@ -87,7 +89,9 @@
                         required
                     />
 
-                    <q-editor
+                    <q-input
+                        outlined
+                        type="textarea"
                         v-model="editForm.content"
                         min-height="150px"
                         label="Content"
@@ -107,8 +111,8 @@
                         <q-btn label="Cancel" flat v-close-popup />
                         <q-btn
                             type="submit"
-                            label="Save"
-                            color="primary"
+                            label="Update"
+                            color="dark"
                             :loading="editForm.processing"
                         />
                     </div>
@@ -188,7 +192,7 @@ function openEditDialog(note) {
 }
 
 function updateNote() {
-    editForm.put(route("admin.notes.update", selectedNote.value), {
+    editForm.patch(route("admin.notes.update", selectedNote.value), {
         onSuccess: () => {
             editDialog.value = false;
             editForm.reset();
@@ -197,7 +201,8 @@ function updateNote() {
 }
 
 function updateStatus(note) {
-    useForm({ status: note.status }).put(route("admin.notes.update", note.id));
+    useForm({ status: note.status }).patch(route("admin.notes.update", note.id));
+
 }
 
 function deleteNote(id) {

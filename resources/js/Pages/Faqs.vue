@@ -1,16 +1,16 @@
 <template>
-    <q-page class="bg-[#f8f9fa]">
-        <div class="q-pa-xl">
-            <div class="text-center q-mb-xl">
-                <h1 class="text-h3 text-weight-bold q-mb-sm">
+    <q-page padding>
+        <div class="flex flex-col justify-center items-center gap-6">
+            <div class="border-2 border-gray-200 bg-[#E9F4FF] flex-shrink-0 rounded-[10px] w-[412px] h-[146px] text-center">
+                <h6 class="text-black">
                     Frequently Asked Questions
-                </h1>
-                <p class="text-h6 text-grey-7">
+                </h6>
+                <p class="text-[#5B656F]">
                     Ruangphurh chungchuang a zawhna leh chhanna tlanglawn  I tan chawpchhuah a ni e
                 </p>
             </div>
 
-            <q-card class="q-pa-md" flat>
+            <q-card class="rounded-md w-[412px] h-auto" flat>
                 <q-list bordered separator v-if="faqs.length">
                     <q-expansion-item v-for="(faq, index) in faqs" :key="faq.id" expand-separator
                         expand-icon="add" :header-class="'text-weight-bold'">
@@ -31,9 +31,7 @@
                     No FAQs available at the moment
                 </div>
 
-                <div v-if="!faqs.length" class="text-center q-pa-xl text-grey-7">
-                    No FAQs available at the moment
-                </div>
+               
             </q-card>
         </div>
     </q-page>

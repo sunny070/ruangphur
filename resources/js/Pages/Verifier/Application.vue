@@ -11,8 +11,8 @@
         <!-- Status Counts -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             <div v-for="status in statusCards" :key="status.label"
-                :class="`w-full h-[78px] ${status.bgClass} ${status.textClass} text-center`">
-                <h6 class="text-sm sm:text-base font-bold">
+                :class="`w-full h-[78px] ${status.bgClass} ${status.textClass} p-4`">
+                <h6 class="text-lg sm:text-base font-black">
                     {{ status.count }}
                 </h6>
                 <p class="text-xs sm:text-sm">{{ status.label }}</p>

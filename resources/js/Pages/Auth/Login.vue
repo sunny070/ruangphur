@@ -90,10 +90,8 @@ const submit = () => {
                     Log in
                 </PrimaryButton>
             </div>
-            <div style="display: flex; gap: 60px">
-                <Link :href="route('register')"
-                    >Register New Account!</Link
-                >
+            <div class="text-center pt-6">
+                
                 <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"

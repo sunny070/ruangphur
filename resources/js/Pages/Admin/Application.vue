@@ -11,8 +11,8 @@
         <!-- Status Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             <div v-for="status in statusCards" :key="status.label"
-                :class="`w-full h-[78px] ${status.bgClass} ${status.textClass} text-center`">
-                <h6 class="text-sm sm:text-base font-bold">
+                :class="`w-full h-[78px] ${status.bgClass} ${status.textClass} p-4`">
+                <h6 class="text-sm sm:text-base font-black">
                     {{ status.count }}
                 </h6>
                 <p class="text-xs sm:text-sm">{{ status.label }}</p>
@@ -40,7 +40,7 @@
                     " @click="setFilter('Rejected')" />
             </div>
             <div class="flex justify-end">
-                <q-input rounded="lg" outlined dense bottom-slots v-model="searchQuery" label="Search"
+                <q-input rounded="lg" outlined dense bottom-slots v-model="searchQuery" label="Search" color="dark"
                     class="w-full max-w-md">
                     <template v-slot:append>
                         <q-icon v-if="searchQuery !== ''" name="close" @click="searchQuery = ''"
@@ -621,15 +621,18 @@ const filteredApplications = computed(() => {
     if (searchQuery.value) {
         filtered = filtered.filter(
             (application) =>
+        
+            
                 application.application_no
-                    .toString()
-                    .includes(searchQuery.value) ||
+                .toString()
+                .includes(searchQuery.value) ||
                 application.deceased.name
-                    .toLowerCase()
-                    .includes(searchQuery.value.toLowerCase())
-        );
+                .toLowerCase()
+                .includes(searchQuery.value.toLowerCase())
+            );
+            // console.log(filtered);
     }
-
+    
     return filtered;
 });
 

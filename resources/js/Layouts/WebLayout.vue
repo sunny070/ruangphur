@@ -1,6 +1,6 @@
 <template>
     <q-layout view="lHh Lpr lFf">
-        <q-header reveal class="text-black">
+        <q-header reveal class="text-black pl-72">
             <q-toolbar>
                 <!-- Logo with responsive margin -->
                 <q-toolbar-title class="q-ml-lg q-ml-xl-md">
@@ -18,7 +18,7 @@
                     v-if="$q.screen.gt.sm"
                     active-color="black"
                     indicator-color="black"
-                    class="text-black q-mr-lg q-mr-xl-md"
+                    class="text-black q-mr-lg q-mr-xl-md pr-72"
                 >
                     <Link
                         v-for="nav in navigation"
@@ -70,11 +70,7 @@
                     style="width: 95px; height: 52px"
                     alt="Logo"
                 />
-                <img
-                    src="/image/msegslogo 2 1.png"
-                    style="width: 52px; height: 52px"
-                    alt="Logo"
-                />
+                
             </div>
             <div class="text-caption text-center text-grey-8" style="max-width: 403px">
                 An initiative of Department of Social Welfare & Tribal Affairs,
@@ -135,6 +131,36 @@ const toggleRightDrawer = () => {
     .pl-72, .pr-72 {
         padding-left: 16px !important;
         padding-right: 16px !important;
+    }
+}
+
+/* Default padding for larger screens */
+.pl-72, .pr-72 {
+    padding-left: 72px;
+    padding-right: 72px;
+}
+
+/* Adjust padding for medium screens */
+@media (max-width: 1024px) {
+    .pl-72, .pr-72 {
+        padding-left: 48px;
+        padding-right: 48px;
+    }
+}
+
+/* Adjust padding for small screens */
+@media (max-width: 768px) {
+    .pl-72, .pr-72 {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+}
+
+/* Adjust padding for extra small screens */
+@media (max-width: 480px) {
+    .pl-72, .pr-72 {
+        padding-left: 16px;
+        padding-right: 16px;
     }
 }
 </style>
