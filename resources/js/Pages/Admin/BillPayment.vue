@@ -1,5 +1,6 @@
 <template>
     <q-page padding>
+        <Head title="Bills" />
         <!-- Flash Success/Error Messages -->
         <q-banner v-if="flash.success" class="bg-green-4 text-white" dense>
             {{ flash.success }}
@@ -44,7 +45,7 @@
                 />
             </div>
             <div class="flex justify-end">
-                <q-input
+                <q-input color="dark"
                     rounded="2lg"
                     outlined
                     dense
@@ -132,7 +133,7 @@
                     <q-icon name="print" size="16px" class="q-mr-xs" />
                     <span>Print</span>
                 </q-btn>
-                <q-btn
+                <!-- <q-btn
                     size="sm"
                     flat
                     outlined
@@ -150,7 +151,7 @@
                 >
                     <q-icon name="ios_share" size="16px" class="q-mr-xs" />
                     <span>Export</span>
-                </q-btn>
+                </q-btn> -->
             </div>
         </div>
         <!-- Applications Table -->
@@ -278,7 +279,7 @@
 
 <script setup>
 import { defineProps, ref, computed, onMounted } from "vue";
-import { router as $inertia } from "@inertiajs/vue3";
+import { router as $inertia,Head } from "@inertiajs/vue3";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import dayjs from "dayjs";
 import * as XLSX from "xlsx"; // Import SheetJS library

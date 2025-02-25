@@ -1,48 +1,50 @@
 <template>
     <q-layout view="lHh Lpr lFf">
-        <q-header reveal class="text-black pl-72">
-            <q-toolbar>
-                <!-- Logo with responsive margin -->
-                <q-toolbar-title class="q-ml-lg q-ml-xl-md">
-                    <Link :href="route('home')">
-                        <img
-                            src="/image/Group 1321315097.png"
-                            style="width: 194px; height: 72px"
-                            alt="Logo"
-                        />
-                    </Link>
-                </q-toolbar-title>
+        <q-header reveal class="text-black pl-72 bg-[#E9F4FF]">
+            <div class="container mx-auto flex justify-between items-center">
+                <q-toolbar>
+                    <!-- Logo with responsive margin -->
+                    <q-toolbar-title class="q-ml-lg q-ml-xl-md">
+                        <Link :href="route('home')">
+                            <img
+                                src="/image/Group 1321315097.png"
+                                style="width: 194px; height: 72px"
+                                alt="Logo"
+                            />
+                        </Link>
+                    </q-toolbar-title>
 
-                <!-- Navigation Tabs with responsive margin -->
-                <q-tabs
-                    v-if="$q.screen.gt.sm"
-                    active-color="black"
-                    indicator-color="black"
-                    class="text-black q-mr-lg q-mr-xl-md pr-72"
-                >
-                    <Link
-                        v-for="nav in navigation"
-                        :key="nav.name"
-                        :href="nav.route"
-                        method="get"
-                        class="no-decoration"
+                    <!-- Navigation Tabs with responsive margin -->
+                    <q-tabs
+                        v-if="$q.screen.gt.sm"
+                        active-color="black"
+                        indicator-color="black"
+                        class="text-black q-mr-lg q-mr-xl-md pr-72"
                     >
-                        <q-tab :name="nav.name">
-                            {{ nav.label }}
-                        </q-tab>
-                    </Link>
-                </q-tabs>
+                        <Link
+                            v-for="nav in navigation"
+                            :key="nav.name"
+                            :href="nav.route"
+                            method="get"
+                            class="no-decoration"
+                        >
+                            <q-tab :name="nav.name">
+                                {{ nav.label }}
+                            </q-tab>
+                        </Link>
+                    </q-tabs>
 
-                <!-- Mobile Menu Button -->
-                <q-btn
-                    v-if="$q.screen.lt.md"
-                    flat
-                    dense
-                    round
-                    icon="menu"
-                    @click="toggleRightDrawer"
-                />
-            </q-toolbar>
+                    <!-- Mobile Menu Button -->
+                    <q-btn
+                        v-if="$q.screen.lt.md"
+                        flat
+                        dense
+                        round
+                        icon="menu"
+                        @click="toggleRightDrawer"
+                    />
+                </q-toolbar>
+            </div>
         </q-header>
 
         <!-- Drawer for Mobile Navigation -->
@@ -70,21 +72,35 @@
                     style="width: 95px; height: 52px"
                     alt="Logo"
                 />
-                
             </div>
-            <div class="text-caption text-center text-grey-8" style="max-width: 403px">
+            <a
+                class="text-caption text-center text-grey-8"
+                style="max-width: 403px"
+                href="https://socialwelfare.mizoram.gov.in/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
                 An initiative of Department of Social Welfare & Tribal Affairs,
                 Government of Mizoram
-            </div>
+            </a>
             <div class="row q-gutter-x-lg">
                 <q-btn flat label="About Us" />
                 <q-btn flat label="Contact Us" />
                 <q-btn flat label="Terms & Conditions" />
-                <q-btn flat :href="route('login')" label="Login for Officials" />
+                <q-btn
+                    flat
+                    :href="route('login')"
+                    label="Login for Officials"
+                />
             </div>
-            <div class="text-caption text-grey-8 flex flex-col justify-center items-center">
+            <a
+                class="text-caption text-grey-8 flex flex-col justify-center items-center"
+                href="https://msegs.in/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
                 Crafted with care by Mizoram State e-Governance Society (MSeGS)
-            </div>
+            </a>
         </div>
     </q-layout>
 </template>
@@ -128,29 +144,33 @@ const toggleRightDrawer = () => {
         margin-right: 0 !important;
     }
 
-    .pl-72, .pr-72 {
+    .pl-72,
+    .pr-72 {
         padding-left: 16px !important;
         padding-right: 16px !important;
     }
 }
 
 /* Default padding for larger screens */
-.pl-72, .pr-72 {
+.pl-72,
+.pr-72 {
     padding-left: 72px;
     padding-right: 72px;
 }
 
 /* Adjust padding for medium screens */
 @media (max-width: 1024px) {
-    .pl-72, .pr-72 {
-        padding-left: 48px;
-        padding-right: 48px;
+    .pl-72,
+    .pr-72 {
+        padding-left: 72px;
+        padding-right: 72px;
     }
 }
 
 /* Adjust padding for small screens */
 @media (max-width: 768px) {
-    .pl-72, .pr-72 {
+    .pl-72,
+    .pr-72 {
         padding-left: 24px;
         padding-right: 24px;
     }
@@ -158,7 +178,8 @@ const toggleRightDrawer = () => {
 
 /* Adjust padding for extra small screens */
 @media (max-width: 480px) {
-    .pl-72, .pr-72 {
+    .pl-72,
+    .pr-72 {
         padding-left: 16px;
         padding-right: 16px;
     }

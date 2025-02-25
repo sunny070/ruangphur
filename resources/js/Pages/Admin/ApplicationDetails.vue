@@ -11,7 +11,7 @@
             </div>
 
             <!-- Action Buttons -->
-            <div class="flex flex-wrap gap-2 justify-end order-2">
+            <!-- <div class="flex flex-wrap gap-2 justify-end order-2">
                 <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center" style="
                         color: #000;
                         min-width: 100px;
@@ -30,71 +30,85 @@
                     <q-icon name="ios_share" size="16px" class="q-mr-xs" />
                     <span class="text-xs md:text-sm">Export</span>
                 </q-btn>
-            </div>
+            </div> -->
         </div>
 
 
 
         <!-- Main Content Container -->
-        <div class="flex flex-col items-center px-4 md:pr-32">
-            <!-- Application Summary Card -->
-            <div class="w-full max-w-4xl rounded-[10px] border border-[#EEE] bg-[#E9F4FF] p-4 md:p-5 mt-6">
-                <div class="grid md:grid-cols-2 gap-4 text-center">
-                    <!-- Left Section -->
-                    <div class="flex flex-col items-center">
-                        <img src="/image/icon 1.png" alt="Ruang" class="w-12 h-12">
+        <div class="flex justify-center">
+            <div
+                class="w-auto max-w-4xl rounded-[10px] border border-[#EEE] bg-[#E9F4FF] p-4 md:p-5 mt-6"
+            >
+                <div class="grid md:grid-cols-2">
+                    <div class="flex flex-col justify-center items-center">
+                        <img
+                            src="/image/icon 1.png"
+                            alt="Ruang"
+                            class="w-12 h-12"
+                        />
                         <h5 class="text-xl md:text-2xl mt-2">
-                            {{ application.applicant.name }}
+                            {{ application?.applicant?.name }}
                         </h5>
+
                         <p class="mb-4 text-sm">
-                            {{ application.deceased.relative.name }} {{ application.deceased.name }}
+                            {{ application.deceased.relative.name }}
+                            {{ application.deceased.name }}
                         </p>
                     </div>
-
-                    <!-- Right Section -->
-                    <div class="grid md:grid-cols-3 gap-4">
-                        <div class="col-span-3 md:col-span-1">
-                            <q-separator class="md:hidden" vertical />
+                    <!-- <q-separator class="" vertical /> -->
+                    <div class="flex justify-center gap-10 items-center">
+                        <div class="flex-col flex items-center">
+                            <h6>{{ application?.transport?.distance }}</h6>
+                            <p>Kilometre</p>
                         </div>
-                        <div>
-                            <h5 class="font-bold">
-                                {{ application?.transport?.distance }}
-                            </h5>
-                            <p class="text-[#5B656F]">Kilometre</p>
-                        </div>
-                        <div>
-                            <h5 class="font-bold">
+                        <div class="flex-col flex items-center">
+                            <h6>
                                 {{ application?.transport?.vehicle_number }}
-                            </h5>
-                            <p class="text-[#5B656F]">Motor Reg.</p>
+                            </h6>
+                            <p>Motor Reg.</p>
                         </div>
-                        <div>
-                            <h5 class="font-bold">
+                        <div class="flex-col flex items-center">
+                            <h6>
                                 {{ application?.transport?.transport_cost }}
-                            </h5>
-                            <p class="text-[#5B656F]">Amount (Rs)</p>
+                            </h6>
+                            <p>Amount (Rs)</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="flex flex-col md:flex-row justify-center items-center gap-4 mt-4">
-                    <q-btn v-if="application?.status === 'Pending'" @click="approveApplication(application.id)"
-                        label="Approve" size="sm" class="w-full md:w-36" style="
+                <div
+                    class="flex flex-col md:flex-row justify-center items-center gap-4 mt-4"
+                >
+                    <q-btn
+                        v-if="application?.status === 'Approved'"
+                        @click="approveApplication(application.id)"
+                        label="Process for Deposit"
+                        size="sm"
+                        class="w-full md:w-36"
+                        style="
                             color: #fff;
                             height: 40px;
                             border-radius: 8px;
                             border: 1px solid #5b656f;
                             background: #000;
-                        " />
+                        "
+                    />
 
-                    <q-btn v-if="application?.status === 'Pending'" @click="rejectApplication(application.id)"
-                        label="Reject" size="sm" class="w-full md:w-36" style="
+                    <q-btn
+                        v-if="application?.status === 'Approved'"
+                        @click="rejectApplication(application.id)"
+                        label="Reject"
+                        size="sm"
+                        class="w-full md:w-36"
+                        style="
                             color: #000;
                             height: 40px;
                             border-radius: 8px;
                             border: 1px solid #5b656f;
                             background: transparent;
-                        " />
+                        "
+                    />
                 </div>
             </div>
         </div>

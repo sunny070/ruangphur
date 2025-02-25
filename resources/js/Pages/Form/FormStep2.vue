@@ -579,7 +579,7 @@ const destinationCoords = ref(null);
 
 const source_locality = ref("");
 const destination_locality = ref("");
-const ratePerKm = 40;
+const ratePerKm = 80;
 
 const showSourceDialog = ref(false);
 const showDestinationDialog = ref(false);

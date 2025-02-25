@@ -1,5 +1,6 @@
 <template>
     <q-page padding>
+        <Head title="Bills" />
         <div class="grid md:grid-cols-2 gap-4">
             <!-- Back Button -->
             <div class="flex items-center order-1 md:order-none">
@@ -16,7 +17,7 @@
             </div>
 
             <!-- Action Buttons -->
-            <div class="flex flex-wrap gap-2 justify-end order-2">
+            <!-- <div class="flex flex-wrap gap-2 justify-end order-2">
                 <q-btn
                     size="sm"
                     flat
@@ -49,82 +50,86 @@
                     <q-icon name="ios_share" size="16px" class="q-mr-xs" />
                     <span class="text-xs md:text-sm">Export</span>
                 </q-btn>
-            </div>
+            </div> -->
         </div>
 
         <!-- Main Content Container -->
-         <div class="flex justify-center">
-        <div
-            class="w-auto max-w-4xl rounded-[10px] border border-[#EEE] bg-[#E9F4FF] p-4 md:p-5 mt-6"
-        >
-            <div class="grid md:grid-cols-2">
-                <div class="flex flex-col justify-center items-center">
-                    <img
-                        src="/image/icon 1.png"
-                        alt="Ruang"
-                        class="w-12 h-12"
-                    />
-                    <h5 class="text-xl md:text-2xl mt-2">
-                        {{ application?.applicant?.name }}
-                    </h5>
-
-                    <p class="mb-4 text-sm">
-                        {{ application.deceased.relative.name }}
-                        {{ application.deceased.name }}
-                    </p>
-                </div>
-                <!-- <q-separator class="" vertical /> -->
-                <div class="flex justify-center gap-10 items-center">
-                    <div class="flex-col flex items-center">
-                        <h6>{{ application?.transport?.distance }}</h6>
-                        <p>Kilometre</p>
-                    </div>
-                    <div class="flex-col flex items-center">
-                        <h6>{{ application?.transport?.vehicle_number }}</h6>
-                        <p>Motor Reg.</p>
-                    </div>
-                    <div class="flex-col flex items-center">
-                        <h6>{{ application?.transport?.transport_cost }}</h6>
-                        <p>Amount (Rs)</p>
-                    </div>
-                </div>
-            </div>
-
+        <div class="flex justify-center">
             <div
-                class="flex flex-col md:flex-row justify-center items-center gap-4 mt-4"
+                class="w-auto max-w-4xl rounded-[10px] border border-[#EEE] bg-[#E9F4FF] p-4 md:p-5 mt-6"
             >
-                <q-btn
-                    v-if="application?.status === 'Approved'"
-                    @click="approveApplication(application.id)"
-                    label="Process for Deposit"
-                    size="sm"
-                    class="w-full md:w-36"
-                    style="
-                        color: #fff;
-                        height: 40px;
-                        border-radius: 8px;
-                        border: 1px solid #5b656f;
-                        background: #000;
-                    "
-                />
+                <div class="grid md:grid-cols-2">
+                    <div class="flex flex-col justify-center items-center">
+                        <img
+                            src="/image/icon 1.png"
+                            alt="Ruang"
+                            class="w-12 h-12"
+                        />
+                        <h5 class="text-xl md:text-2xl mt-2">
+                            {{ application?.applicant?.name }}
+                        </h5>
 
-                <q-btn
-                    v-if="application?.status === 'Approved'"
-                    @click="rejectApplication(application.id)"
-                    label="Reject"
-                    size="sm"
-                    class="w-full md:w-36"
-                    style="
-                        color: #000;
-                        height: 40px;
-                        border-radius: 8px;
-                        border: 1px solid #5b656f;
-                        background: transparent;
-                    "
-                />
+                        <p class="mb-4 text-sm">
+                            {{ application.deceased.relative.name }}
+                            {{ application.deceased.name }}
+                        </p>
+                    </div>
+                    <!-- <q-separator class="" vertical /> -->
+                    <div class="flex justify-center gap-10 items-center">
+                        <div class="flex-col flex items-center">
+                            <h6>{{ application?.transport?.distance }}</h6>
+                            <p>Kilometre</p>
+                        </div>
+                        <div class="flex-col flex items-center">
+                            <h6>
+                                {{ application?.transport?.vehicle_number }}
+                            </h6>
+                            <p>Motor Reg.</p>
+                        </div>
+                        <div class="flex-col flex items-center">
+                            <h6>
+                                {{ application?.transport?.transport_cost }}
+                            </h6>
+                            <p>Amount (Rs)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="flex flex-col md:flex-row justify-center items-center gap-4 mt-4"
+                >
+                    <q-btn
+                        v-if="application?.status === 'Approved'"
+                        @click="approveApplication(application.id)"
+                        label="Process for Deposit"
+                        size="sm"
+                        class="w-full md:w-36"
+                        style="
+                            color: #fff;
+                            height: 40px;
+                            border-radius: 8px;
+                            border: 1px solid #5b656f;
+                            background: #000;
+                        "
+                    />
+
+                    <q-btn
+                        v-if="application?.status === 'Approved'"
+                        @click="rejectApplication(application.id)"
+                        label="Reject"
+                        size="sm"
+                        class="w-full md:w-36"
+                        style="
+                            color: #000;
+                            height: 40px;
+                            border-radius: 8px;
+                            border: 1px solid #5b656f;
+                            background: transparent;
+                        "
+                    />
+                </div>
             </div>
         </div>
-    </div>
 
         <!-- Applicant and Deceased Information -->
         <div class="grid md:grid-cols-2 gap-4 px-4 md:pr-28 mt-6">
@@ -423,7 +428,7 @@
 <script setup>
 import { computed } from "vue";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import { router as $inertia, Link } from "@inertiajs/vue3";
+import { router as $inertia, Link, Head } from "@inertiajs/vue3";
 
 defineOptions({
     layout: AdminLayout,

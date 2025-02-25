@@ -40,7 +40,7 @@
                     " @click="setFilter('Rejected')" />
             </div>
             <div class="flex justify-end">
-                <q-input rounded="lg" outlined dense bottom-slots v-model="searchQuery" label="Search"
+                <q-input rounded="lg" outlined dense bottom-slots v-model="searchQuery" label="Search" color="black"
                     class="w-full max-w-md">
                     <template v-slot:append>
                         <q-icon v-if="searchQuery !== ''" name="close" @click="searchQuery = ''"
@@ -93,12 +93,13 @@
                     <q-icon name="print" size="16px" class="q-mr-xs" />
                     <span>Print</span>
                 </q-btn>
-                <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center"
+                <!-- <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center"
                     @click="exportTable">
                     <q-icon name="ios_share" size="16px" class="q-mr-xs" />
                     <span>Export</span>
-                </q-btn>
-                <q-select style="
+                </q-btn> -->
+                <q-select color="dark"
+                style="
                         color: #000;
                         width: 128px;
                         height: 40px;
@@ -135,7 +136,7 @@
                         <th>STATUS</th>
                         <th>DIL NI</th>
                         <th class="no-print">ACTIONS</th>
-                        <th class="print-only">Signature</th> <!-- New Signature Column -->
+                        <th class="print-only ">SIGNATURE</th> <!-- New Signature Column -->
                     </tr>
                 </thead>
                 <tbody>
@@ -268,11 +269,31 @@ const loadDistrictOptions = () => {
     }));
 };
 
-onMounted(loadDistrictOptions);
-
+onMounted(() => {
+    const districts = [
+        ...new Set(
+            props.applications.map(
+                (application) => application.deceased.district.name
+            )
+        ),
+    ];
+    districtOptions.value = districts.map((district) => ({
+        label: district,
+        value: district,
+    }));
+});
 const filteredApplications = computed(() => {
     let filtered = props.applications;
 
+    // Filter by district
+    if (selectedDistrict.value) {
+        filtered = filtered.filter(
+            (application) =>
+                application.deceased.district.name === selectedDistrict.value
+        );
+    }
+
+    // Filter by status
     if (currentFilter.value === "Incoming") {
         filtered = filtered.filter(
             (application) => application.status === "Pending"
@@ -287,15 +308,27 @@ const filteredApplications = computed(() => {
         );
     }
 
+    // Filter by search query
     if (searchQuery.value) {
+        const query = searchQuery.value.toLowerCase();
         filtered = filtered.filter(
             (application) =>
                 application.application_no
                     .toString()
-                    .includes(searchQuery.value) ||
+                    .toLowerCase()
+                    .includes(query) ||
+                application.applicant.name
+                    .toLowerCase()
+                    .includes(query) ||
                 application.deceased.name
                     .toLowerCase()
-                    .includes(searchQuery.value.toLowerCase())
+                    .includes(query) ||
+                application.applicant.mobile
+                    .toString()
+                    .includes(query) ||
+                application.deceased.district.name
+                    .toLowerCase()
+                    .includes(query)
         );
     }
 

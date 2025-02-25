@@ -1,5 +1,6 @@
 <template>
     <q-page padding>
+        <Head title="Application"/>
         <!-- Flash Success/Error Messages -->
         <q-banner v-if="flash?.success" class="bg-green-4 text-white" dense>
             {{ flash.success }}
@@ -21,7 +22,7 @@
 
         <!-- Filter Buttons and Search Bar -->
         <div class="q-my-md grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="flex flex-col sm:flex-row gap-5">
+            <div class="q-my-md flex gap-16">
                 <q-btn label="All" flat :class="currentFilter === 'All'
                         ? 'active-button'
                         : 'inactive-button'
@@ -124,7 +125,7 @@
                     <q-icon name="print" size="16px" class="q-mr-xs" />
                     <span>Print</span>
                 </q-btn>
-                <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center" style="
+                <!-- <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center" style="
                         color: #000;
                         width: 100px;
                         height: 40px;
@@ -132,7 +133,7 @@
                     " @click="exportToExcel">
                     <q-icon name="ios_share" size="16px" class="q-mr-xs" />
                     <span>Export</span>
-                </q-btn>
+                </q-btn> -->
                 <q-select color="dark" style="
                         color: #000;
                         width: 160px;
@@ -421,6 +422,7 @@
 <script setup>
 import { defineProps, ref, computed, onMounted } from "vue";
 import { router as $inertia } from "@inertiajs/vue3";
+import { Head} from "@inertiajs/vue3";
 import * as XLSX from "xlsx"; // Import SheetJS library
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import dayjs from "dayjs";
@@ -596,13 +598,33 @@ const initAutocomplete = () => {
     });
 };
 // Call loadDistrictOptions when the component is mounted
-onMounted(loadDistrictOptions);
+onMounted(() => {
+    const districts = [
+        ...new Set(
+            props.applications.map(
+                (application) => application.deceased.district.name
+            )
+        ),
+    ];
+    districtOptions.value = districts.map((district) => ({
+        label: district,
+        value: district,
+    }));
+});
 
 // Filtered applications based on search and status filter
 const filteredApplications = computed(() => {
     let filtered = props.applications;
 
-    // Apply status filter
+    // Filter by district
+    if (selectedDistrict.value) {
+        filtered = filtered.filter(
+            (application) =>
+                application.deceased.district.name === selectedDistrict.value
+        );
+    }
+
+    // Filter by status
     if (currentFilter.value === "Incoming") {
         filtered = filtered.filter(
             (application) => application.status === "Pending"
@@ -617,25 +639,32 @@ const filteredApplications = computed(() => {
         );
     }
 
-    // Apply search query filter
+    // Filter by search query
     if (searchQuery.value) {
+        const query = searchQuery.value.toLowerCase();
         filtered = filtered.filter(
             (application) =>
-        
-            
                 application.application_no
-                .toString()
-                .includes(searchQuery.value) ||
+                    .toString()
+                    .toLowerCase()
+                    .includes(query) ||
+                application.applicant.name
+                    .toLowerCase()
+                    .includes(query) ||
                 application.deceased.name
-                .toLowerCase()
-                .includes(searchQuery.value.toLowerCase())
-            );
-            // console.log(filtered);
+                    .toLowerCase()
+                    .includes(query) ||
+                application.applicant.mobile
+                    .toString()
+                    .includes(query) ||
+                application.deceased.district.name
+                    .toLowerCase()
+                    .includes(query)
+        );
     }
-    
+
     return filtered;
 });
-
 // Set the current filter
 const setFilter = (filter) => {
     currentFilter.value = filter;

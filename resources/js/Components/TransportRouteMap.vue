@@ -139,7 +139,7 @@ const calculateRoute = async () => {
         updateMarkers(leg.start_location, leg.end_location);
         // Emit distance and cost
         const distanceKm = (leg.distance.value / 1000).toFixed(2);
-        const ratePerKm = 10; // Adjust your rate here
+        const ratePerKm = 80; // Adjust your rate here
         emit('update:distance', distanceKm);
         emit('update:transport-cost', (distanceKm * ratePerKm).toFixed(2));
         if (response.routes.length > 0) {
