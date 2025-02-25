@@ -1,5 +1,6 @@
 <template>
     <q-page class="">
+        <Head title="Home" />
         <!-- Hero Section -->
 
         <div class="bg-[#E9F4FF] q-pa-md q-pa-lg-xl q-px-lg">
@@ -171,6 +172,7 @@
 
 <script setup>
 import WebLayout from "@/Layouts/WebLayout.vue";
+import { Head } from "@inertiajs/vue3";
 
 defineOptions({
     layout: WebLayout,
