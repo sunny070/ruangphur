@@ -49,7 +49,12 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/admin/application', [AdminController::class, 'index'])->middleware(['role:admin'])->name('admin.application');
+    Route::get('/admin/application/verified', [AdminController::class, 'verified'])->middleware(['role:admin'])->name('admin.application.verified');
+    // Route::get('/admin/application/approved', [AdminController::class, 'approved'])->middleware(['role:admin'])->name('admin.application.approved');
+    Route::get('/admin/application/rejected', [AdminController::class, 'rejected'])->middleware(['role:admin'])->name('admin.application.rejected');
+
     Route::get('/admin/bill', [AdminController::class, 'bill'])->middleware(['role:admin'])->name('admin.bill');
+    Route::get('/admin/bill-process', [AdminController::class, 'bill_process'])->middleware(['role:admin'])->name('admin.bill.process');
     // Route::get('/admin/report', [AdminController::class, 'report'])->name('admin.report');
 
     // Report
@@ -73,7 +78,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/admin/application/{application}', [AdminController::class, 'show'])->middleware(['role:admin'])->name('applications.show');
     Route::get('/admin/bill/{application}', [AdminController::class, 'billShow'])->middleware(['role:admin'])->name('bill.show');
-    Route::put('/application/{application}', [AdminController::class, 'update'])->middleware(['role:admin'])->name('applications.update');
+   
+    Route::put('/application/{id}/update', [AdminController::class, 'update'])
+    ->middleware(['auth', 'role:admin|verifier']) 
+    ->name('applications.update');
+
     Route::delete('/applications/{application}', [AdminController::class, 'destroy'])->middleware(['role:admin'])->name('applications.destroy');
 
 
@@ -81,9 +90,9 @@ Route::middleware('auth')->group(function () {
 
 
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->middleware(['role:admin'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->middleware(['role:admin'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->middleware(['role:admin'])->name('profile.destroy');
+    Route::get('/profile', [ProfileController::class, 'edit'])->middleware(['auth'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->middleware(['auth'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->middleware(['auth'])->name('profile.destroy');
 
     // Note
     Route::get('/admin/note', [DashboardController::class, 'note'])->middleware(['role:admin'])->name('note.index');
@@ -96,7 +105,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/info', [DashboardController::class, 'info'])->middleware(['role:admin'])->name('admin.info.index');
     Route::get('/admin/info/create', [DashboardController::class, 'createInfo'])->middleware(['role:admin'])->name('admin.info.create');
     Route::post('/admin/info/store', [DashboardController::class, 'storeInfo'])->middleware(['role:admin'])->name('admin.info.store');
-    Route::put('/admin/info/{info}', [DashboardController::class, 'updateInfo'])->middleware(['role:admin'])->name('admin.info.update');
+    Route::put('/admin/info/{info}/update', [DashboardController::class, 'updateInfo'])->middleware(['role:admin'])->name('admin.info.update');
     Route::delete('/admin/info/{info}', [DashboardController::class, 'destroyInfo'])->middleware(['role:admin'])->name('admin.info.destroy');
 });
 
@@ -111,11 +120,13 @@ Route::group(['middleware' => [RoleMiddleware::using('approver')]], function () 
 Route::group([], function () {
     Route::get('/verifier/dashboard', [VerifierController::class, 'dashboard'])->name('verifier.dashboard');
     Route::get('/verifier/application', [VerifierController::class, 'index'])->name('verifier.application');
+    Route::get('/verifier/verified', [VerifierController::class, 'verified'])->name('verifier.verified');
+    Route::get('/verifier/rejected', [VerifierController::class, 'rejected'])->name('verifier.rejected');
     Route::get('/verifier/application/{application}', [VerifierController::class, 'show'])->name('verifier.applications.show');
     // routes/web.php
 
     Route::get('/verifier/report', [VerifierController::class, 'userReport'])->name('verifier.report');
-    Route::get('/verifier/export', [VerifierController::class, 'userExport'])->name('verifier.export');
+    Route::get('/verifier/report/export', [VerifierController::class, 'userExport'])->name('verifier.export');
 
 
     Route::post('/verifier/applications/verify-all', [VerifierController::class, 'verifyAll']);
@@ -123,6 +134,8 @@ Route::group([], function () {
 
     Route::post('/verifier/application/{application}/approve', [VerifierController::class, 'verify'])->name('verifier.application.approve');
     Route::post('/verifier/application/{application}/reject', [VerifierController::class, 'reject'])->name('verifier.application.reject');
+
+    Route::delete('/verifier/applications/{application}', [VerifierController::class, 'destroy'])->name('verifier.applications.destroy');
 });
 
 

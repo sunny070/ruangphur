@@ -8,9 +8,10 @@
         <q-banner v-if="flash.error" class="bg-red-4 text-white" dense>
             {{ flash.error }}
         </q-banner>
+        <h1 class="text-2xl font-bold mb-6">Bill Payment</h1>
         <!--Status Tab -->
         <div class="q-my-md grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="flex flex-col sm:flex-row gap-2">
+            <!-- <div class="flex flex-col sm:flex-row gap-2">
                 <q-btn
                     size=""
                     label="Bill Pek tur"
@@ -43,8 +44,16 @@
                     "
                     @click="setFilter('Rejected')"
                 />
-            </div>
-            <div class="flex justify-end">
+            </div> -->
+            
+        </div>
+        <hr class="my-4 border-border bg-[#F0F0F0]" />
+        <!-- Status Action -->
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <!-- Action buttons (only visible when at least one checkbox is selected) -->
+                <div class="">
                 <q-input color="dark"
                     rounded="2lg"
                     outlined
@@ -65,54 +74,6 @@
                     </template>
                 </q-input>
             </div>
-        </div>
-        <hr class="my-4 border-border bg-[#F0F0F0]" />
-        <!-- Status Action -->
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                <!-- Action buttons (only visible when at least one checkbox is selected) -->
-                <div v-if="showActionButtons" class="flex">
-                    <q-btn
-                        style="border-radius: 8px"
-                        size="md"
-                        flat
-                        outlined
-                        class="q-btn-custom flex items-center justify-center hover:bg-[#3A424A] hover:text-white"
-                        @click="toggleSelectAll"
-                    >
-                        <q-icon name="check" size="16px" class="q-mr-xs" />
-                        <span>Select All</span>
-                    </q-btn>
-                    <q-btn
-                        style="border-radius: 8px"
-                        size="md"
-                        flat
-                        outlined
-                        class="q-btn-custom flex items-center justify-center hover:bg-[#3A424A] hover:text-white"
-                        @click="approveAll"
-                        :disabled="!selectedApplications.length"
-                    >
-                        <q-icon
-                            name="check_circle"
-                            size="16px"
-                            class="q-mr-xs"
-                        />
-                        <span>Process for Deposit</span>
-                    </q-btn>
-                    <q-btn
-                        style="border-radius: 8px"
-                        size="md"
-                        flat
-                        outlined
-                        class="q-btn-custom flex items-center justify-center hover:bg-[#3A424A] hover:text-white"
-                        @click="rejectAll"
-                        :disabled="!selectedApplications.length"
-                    >
-                        <q-icon name="cancel" size="16px" class="q-mr-xs" />
-                        <span>Reject</span>
-                    </q-btn>
-                </div>
             </div>
             <div class="flex justify-end pr-16">
                 <q-btn
@@ -161,7 +122,7 @@
                     class="bg-[#3A424A] text-white font-bold h-[30px] w-full text-[11px]"
                 >
                     <tr class="bg-[#3A424A] text-white">
-                        <th></th>
+                        
                         <th>Sl.No.</th>
                         <th>APPLICATION NO.</th>
                         <th>APPLICANT NAME</th>
@@ -187,14 +148,7 @@
                         v-for="(application, index) in filteredApplications"
                         :key="application.id"
                     >
-                        <td>
-                            <input
-                                class="no-print"
-                                type="checkbox"
-                                v-model="selectedApplications"
-                                :value="application.id"
-                            />
-                        </td>
+                        
                         <td>{{ index + 1 }}</td>
                         <!-- Serial number, starting from 1 -->
                         <td>{{ application?.application_no }}</td>

@@ -1,7 +1,9 @@
 <template>
     <q-layout>
         <q-page-container>
+
             <q-page padding>
+                <Head title="Application" />
                 <div class="flex flex-col justify-center items-center gap-6">
                     <div
                         class="border-2 border-gray-200 bg-[#E9F4FF] flex-shrink-0 rounded-[10px] text-center items-center"
@@ -554,6 +556,7 @@
 import { useForm } from "@inertiajs/vue3";
 import { ref, onMounted, watch } from "vue";
 import { useQuasar } from "quasar";
+import { Head } from "@inertiajs/inertia-vue3";
 import { GoogleMap, Marker, Polyline } from "vue3-google-map";
 import { debounce } from "lodash";
 import WebLayout from "@/Layouts/WebLayout.vue";

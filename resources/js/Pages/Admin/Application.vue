@@ -22,7 +22,7 @@
 
         <!-- Filter Buttons and Search Bar -->
         <div class="q-my-md grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="q-my-md flex gap-16">
+            <!-- <div class="q-my-md flex gap-16">
                 <q-btn label="All" flat :class="currentFilter === 'All'
                         ? 'active-button'
                         : 'inactive-button'
@@ -39,8 +39,14 @@
                         ? 'active-button'
                         : 'inactive-button'
                     " @click="setFilter('Rejected')" />
-            </div>
-            <div class="flex justify-end">
+            </div> -->
+            
+        </div>
+
+        <!-- Status Action -->
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="">
                 <q-input rounded="lg" outlined dense bottom-slots v-model="searchQuery" label="Search" color="dark"
                     class="w-full max-w-md">
                     <template v-slot:append>
@@ -49,71 +55,6 @@
                         <q-icon name="search" />
                     </template>
                 </q-input>
-            </div>
-        </div>
-
-        <!-- Status Action -->
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="">
-                <!-- Action buttons (only visible when at least one checkbox is selected) -->
-                <div v-if="showActionButtons" class="flex flex-col sm:flex-row gap-2">
-                    <q-btn style="border-radius: 8px" size="md" flat outlined
-                        class="q-btn-custom flex items-center justify-center hover:bg-[#3A424A] hover:text-white"
-                        @click="toggleSelectAll">
-                        <q-icon name="check" size="16px" class="q-mr-xs" />
-                        <span>Select All</span>
-                    </q-btn>
-
-                    <q-btn style="border-radius: 8px" size="md" flat outlined
-                        class="q-btn-custom flex items-center justify-center hover:bg-[#3A424A] hover:text-white"
-                        @click="approveAll" :disabled="!selectedApplications.length ||
-                            hasNonPendingSelectedApplications
-                            ">
-                        <q-icon name="check_circle" size="16px" class="q-mr-xs" />
-                        <span>Approve All</span>
-                        <q-tooltip v-if="
-                            hasNonPendingSelectedApplications &&
-                            selectedApplications.length
-                        ">
-                            Cannot Approve - selected applications are already
-                            processed
-                        </q-tooltip>
-                        <q-tooltip v-else-if="!selectedApplications.length">
-                            Select applications to approve
-                        </q-tooltip>
-                    </q-btn>
-                    <q-btn style="border-radius: 8px" size="md" flat outlined
-                        class="q-btn-custom flex items-center justify-center hover:bg-[#3A424A] hover:text-white"
-                        @click="rejectAll" :disabled="!selectedApplications.length ||
-                            hasNonPendingSelectedApplications
-                            ">
-                        <q-icon name="cancel" size="16px" class="q-mr-xs" />
-                        <span>Reject All</span>
-                        <q-tooltip v-if="
-                            hasNonPendingSelectedApplications &&
-                            selectedApplications.length
-                        ">
-                            Cannot Reject - selected applications are already
-                            processed
-                        </q-tooltip>
-                        <q-tooltip v-else-if="!selectedApplications.length">
-                            Select applications to reject
-                        </q-tooltip>
-                    </q-btn>
-                    <!-- <q-btn style="border-radius: 8px" size="md" flat outlined
-                        class="q-btn-custom flex items-center justify-center hover:bg-[#3A424A] hover:text-white"
-                        @click="approveAll" :disabled="!selectedApplications.length">
-                        <q-icon name="check_circle" size="16px" class="q-mr-xs" />
-                        <span>Approve All</span>
-                    </q-btn>
-                    <q-btn style="border-radius: 8px" size="md" flat outlined
-                        class="q-btn-custom flex items-center justify-center hover:bg-[#3A424A] hover:text-white"
-                        @click="rejectAll" :disabled="!selectedApplications.length">
-                        <q-icon name="cancel" size="16px" class="q-mr-xs" />
-                        <span>Reject All</span>
-                    </q-btn> -->
-                </div>
             </div>
             <div class="flex justify-end pr-16">
                 <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center" style="
@@ -151,7 +92,7 @@
             <table class="q-table q-table__grid w-full">
                 <thead>
                     <tr class="bg-[#3A424A] text-white">
-                        <th></th>
+                       
                         <th>Sl.No.</th>
                         <th>APPLICATION NO.</th>
                         <th>APPLICANT NAME</th>
@@ -174,10 +115,7 @@
                 </thead>
                 <tbody v-if="filteredApplications.length">
                     <tr v-for="(application, index) in filteredApplications" :key="application.id">
-                        <td>
-                            <input class="no-print" type="checkbox" v-model="selectedApplications"
-                                :value="application.id" />
-                        </td>
+                        
                         <td>{{ index + 1 }}</td>
                         <!-- Serial number, starting from 1 -->
                         <td>{{ application?.application_no }}</td>
@@ -764,32 +702,7 @@ const printTable = () => {
     printWindow.print();
 };
 // Export table data to Excel
-const exportToExcel = () => {
-    const data = filteredApplications.value.map((app) => ({
-        "Applicant NO.": app?.application_no,
-        "APPLICANT NAME.": app?.applicant?.name,
-        "ADDRESS.": app?.applicant?.locality,
-        "CONTACT No.": app?.applicant?.mobile,
-        "MITTHI KHUA": app?.deceased?.district?.name,
-        "PLACE OF DEATH.": app?.deceased?.place_of_death,
 
-        " KILOMETER.": app?.transport?.distance,
-        "AMOUNT CLAIMED": app?.transport?.transport_cost,
-        "ACCOUNT No. OF CLAIMANT": app?.applicant?.account_no,
-        IFSC: app?.applicant?.ifsc_code,
-
-        " Status": app?.status,
-        "Date Created": app?.created_at,
-        Signature: "",
-    }));
-
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Applications");
-
-    const timestamp = new Date().toISOString().slice(0, 10); // Add timestamp
-    XLSX.writeFile(workbook, `Applications_${timestamp}.xlsx`);
-};
 
 const statusCards = computed(() => [
     {

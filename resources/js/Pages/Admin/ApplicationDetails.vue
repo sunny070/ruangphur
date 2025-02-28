@@ -3,10 +3,15 @@
         <div class="grid md:grid-cols-2 gap-4">
             <!-- Back Button -->
             <div class="flex items-center order-1 md:order-none">
-                <Link :href="route('admin.application')" size="sm" flat outlined
-                    class="flex items-center justify-center">
-                <q-icon name="arrow_back" size="16px" class="q-mr-xs" />
-                <span>Back</span>
+                <Link
+                    :href="route('admin.application')"
+                    size="sm"
+                    flat
+                    outlined
+                    class="flex items-center justify-center"
+                >
+                    <q-icon name="arrow_back" size="16px" class="q-mr-xs" />
+                    <span>Back</span>
                 </Link>
             </div>
 
@@ -32,8 +37,6 @@
                 </q-btn>
             </div> -->
         </div>
-
-
 
         <!-- Main Content Container -->
         <div class="flex justify-center">
@@ -81,9 +84,12 @@
                     class="flex flex-col md:flex-row justify-center items-center gap-4 mt-4"
                 >
                     <q-btn
-                        v-if="application?.status === 'Approved'"
+                        v-if="
+                            application?.status === 'Verified' ||
+                            application?.status === 'Pending'
+                        "
                         @click="approveApplication(application.id)"
-                        label="Process for Deposit"
+                        label="Approve"
                         size="sm"
                         class="w-full md:w-36"
                         style="
@@ -96,7 +102,10 @@
                     />
 
                     <q-btn
-                        v-if="application?.status === 'Approved'"
+                        v-if="
+                            application?.status === 'Verified' ||
+                            application?.status === 'Pending'
+                        "
                         @click="rejectApplication(application.id)"
                         label="Reject"
                         size="sm"
@@ -119,7 +128,9 @@
 
             <div class="flex flex-col gap-4">
                 <div class="border-2 w-full p-4 md:pl-12 md:pt-6 rounded-md">
-                    <p class="text-center w-32 h-4 rounded-[20px] bg-[#E9E9E9] mb-4 md:mb-8">
+                    <p
+                        class="text-center w-32 h-4 rounded-[20px] bg-[#E9E9E9] mb-4 md:mb-8"
+                    >
                         Mitthi Chungchang
                     </p>
                     <div class="space-y-4">
@@ -157,11 +168,12 @@
                     </div>
                 </div>
                 <div class="border-2 w-full p-4 md:pl-12 md:pt-6 rounded-md">
-                    <p class="text-center w-32 h-4 rounded-[20px] bg-[#E9E9E9] mb-4 md:mb-8">
+                    <p
+                        class="text-center w-32 h-4 rounded-[20px] bg-[#E9E9E9] mb-4 md:mb-8"
+                    >
                         Ruang Phurh Diltu
                     </p>
                     <div class="space-y-4">
-
                         <div class="leading-[2px]">
                             <p class="text-[#61646B]">Hming</p>
                             <p>{{ application?.applicant?.name }}</p>
@@ -181,53 +193,81 @@
                     </div>
                 </div>
                 <div class="border-2 rounded-md w-full p-4 md:pl-12 md:pt-6">
-                    <p class="text-center w-32 h-4 rounded-[20px] bg-[#E9E9E9] mb-4 md:mb-8">
+                    <p
+                        class="text-center w-32 h-4 rounded-[20px] bg-[#E9E9E9] mb-4 md:mb-8"
+                    >
                         Document Thiltel te
                     </p>
                     <div class="flex flex-wrap gap-2">
-
-                        <q-chip v-if="application?.attachment?.id_proof" dense class="transparent text-black"
-                            icon="check_circle" clickable @click="
+                        <q-chip
+                            v-if="application?.attachment?.id_proof"
+                            dense
+                            class="transparent text-black"
+                            icon="check_circle"
+                            clickable
+                            @click="
                                 handleOpenFile(
-                                    '/storage/' + application.attachment.id_proof
+                                    '/storage/' +
+                                        application.attachment.id_proof
                                 )
-                                ">
+                            "
+                        >
                             Mitthi Aadhar card/Voter ID/Birth Certificate
                         </q-chip>
-                        <q-chip v-if="application?.attachment?.receipt" dense class="transparent text-black"
-                            icon="check_circle" clickable @click="
+                        <q-chip
+                            v-if="application?.attachment?.receipt"
+                            dense
+                            class="transparent text-black"
+                            icon="check_circle"
+                            clickable
+                            @click="
                                 handleOpenFile(
                                     '/storage/' + application.attachment.receipt
                                 )
-                                ">
+                            "
+                        >
                             Motor hman man Voucher/Receipt
                         </q-chip>
-                        <q-chip v-if="application?.attachment?.death_certificate" dense class="transparent text-black"
-                            icon="check_circle" clickable @click="
+                        <q-chip
+                            v-if="application?.attachment?.death_certificate"
+                            dense
+                            class="transparent text-black"
+                            icon="check_circle"
+                            clickable
+                            @click="
                                 handleOpenFile(
                                     '/storage/' +
-                                    application.attachment.death_certificate
+                                        application.attachment.death_certificate
                                 )
-                                ">
+                            "
+                        >
                             Death Certificate
                         </q-chip>
-                        <q-chip v-if="application?.attachment?.additional_document" dense class="transparent text-black"
-                            icon="check_circle" clickable @click="
+                        <q-chip
+                            v-if="application?.attachment?.additional_document"
+                            dense
+                            class="transparent text-black"
+                            icon="check_circle"
+                            clickable
+                            @click="
                                 handleOpenFile(
                                     '/storage/' +
-                                    application.attachment.additional_document
+                                        application.attachment
+                                            .additional_document
                                 )
-                                ">
+                            "
+                        >
                             Diltu Aadhar card/voter ID
                         </q-chip>
-
                     </div>
                 </div>
             </div>
 
             <div class="flex flex-col gap-4">
                 <div class="border-2 w-full p-4 md:pl-12 md:pt-6 rounded-md">
-                    <p class="text-center w-48 h-4 rounded-[20px] bg-[#E9E9E9] mb-4 md:mb-8">
+                    <p
+                        class="text-center w-48 h-4 rounded-[20px] bg-[#E9E9E9] mb-4 md:mb-8"
+                    >
                         Ruang Phurh leh Motor Chungchang
                     </p>
                     <div class="space-y-4">
@@ -237,22 +277,7 @@
                                 <p class="text-[#61646B]">District</p>
                                 <p>
                                     {{
-                                        application?.transport?.source_district.name
-                                    }}
-                                </p>
-                            </div>
-                            <div class="leading-[2px] pt-4">
-                                <p class="text-[#61646B]">Veng/Khua</p>
-                                <p>{{ application?.transport?.source_locality }}</p>
-                            </div>
-                        </div>
-                        <p class="pt-5">Ruang dahna tur hmun</p>
-                        <div class="pl-4">
-                            <div class="leading-[2px]">
-                                <p class="text-[#61646B]">District</p>
-                                <p>
-                                    {{
-                                        application?.transport?.destination_district
+                                        application?.transport?.source_district
                                             .name
                                     }}
                                 </p>
@@ -261,7 +286,28 @@
                                 <p class="text-[#61646B]">Veng/Khua</p>
                                 <p>
                                     {{
-                                        application?.transport?.destination_locality
+                                        application?.transport?.source_locality
+                                    }}
+                                </p>
+                            </div>
+                        </div>
+                        <p class="pt-5">Ruang dahna tur hmun</p>
+                        <div class="pl-4">
+                            <div class="leading-[2px]">
+                                <p class="text-[#61646B]">District</p>
+                                <p>
+                                    {{
+                                        application?.transport
+                                            ?.destination_district.name
+                                    }}
+                                </p>
+                            </div>
+                            <div class="leading-[2px] pt-4">
+                                <p class="text-[#61646B]">Veng/Khua</p>
+                                <p>
+                                    {{
+                                        application?.transport
+                                            ?.destination_locality
                                     }}
                                 </p>
                             </div>
@@ -278,7 +324,9 @@
                                 <p class="text-[#61646B]">
                                     Motor registration number
                                 </p>
-                                <p>{{ application?.transport?.vehicle_number }}</p>
+                                <p>
+                                    {{ application?.transport?.vehicle_number }}
+                                </p>
                             </div>
 
                             <div class="leading-[2px] pt-4">
@@ -289,17 +337,23 @@
                             </div>
                             <div class="leading-[2px] pt-4">
                                 <p class="text-[#61646B]">Phone Number</p>
-                                <p>{{ application?.transport?.driver_phone }}</p>
+                                <p>
+                                    {{ application?.transport?.driver_phone }}
+                                </p>
                             </div>
                             <div class="leading-[2px] pt-4">
                                 <p class="text-[#61646B]">Motor saung (Rs.)</p>
-                                <p>{{ application?.transport?.transport_cost }}</p>
+                                <p>
+                                    {{ application?.transport?.transport_cost }}
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="border-2 rounded-md w-full p-4 md:pl-12 md:pt-6">
-                    <p class="text-center w-32 h-4 rounded-[20px] bg-[#E9E9E9] mb-4 md:mb-8">
+                    <p
+                        class="text-center w-32 h-4 rounded-[20px] bg-[#E9E9E9] mb-4 md:mb-8"
+                    >
                         Bank Details
                     </p>
                     <div class="space-y-4">
@@ -320,10 +374,19 @@
             </div>
         </div>
         <hr class="my-4 border-border" />
-        <div class="flex flex-col md:flex-row justify-center items-center gap-4 my-6">
-            <q-btn v-if="
-                props.application && props.application.status === 'Pending'
-            " @click="approveApplication(props.application.id)" label="Approve" size="sm" style="
+        <div
+            class="flex flex-col md:flex-row justify-center items-center gap-4 my-6"
+        >
+            <q-btn
+                v-if="
+                    (props.application &&
+                        props.application.status === 'Pending') ||
+                    application?.status === 'Verified'
+                "
+                @click="approveApplication(props.application.id)"
+                label="Approve"
+                size="sm"
+                style="
                     color: #fff;
                     width: 144px;
                     height: 40px;
@@ -331,17 +394,27 @@
                     border-radius: 8px;
                     border: 1px solid #5b656f;
                     background: #000;
-                " />
+                "
+            />
 
             <!-- In your existing template -->
-            <q-btn v-if="application?.status === 'Pending'" @click="rejectApplication(application.id)" label="Reject"
-                size="sm" class="w-full md:w-36" style="
-        color: #000;
-        height: 40px;
-        border-radius: 8px;
-        border: 1px solid #5b656f;
-        background: transparent;
-    " />
+            <q-btn
+                v-if="
+                    application?.status === 'Pending' ||
+                    application?.status === 'Verified'
+                "
+                @click="rejectApplication(application.id)"
+                label="Reject"
+                size="sm"
+                class="w-full md:w-36"
+                style="
+                    color: #000;
+                    height: 40px;
+                    border-radius: 8px;
+                    border: 1px solid #5b656f;
+                    background: transparent;
+                "
+            />
         </div>
 
         <!-- Rejection Feedback Dialog -->
@@ -352,21 +425,39 @@
                 </q-card-section>
 
                 <q-card-section>
-                    <q-input color="dark" v-model="rejectFeedback" label="Please provide the reason for rejection" type="textarea"
-                        autogrow :rules="[val => !!val || 'Reason is required']" />
+                    <q-input
+                        color="dark"
+                        v-model="rejectFeedback"
+                        label="Please provide the reason for rejection"
+                        type="textarea"
+                        autogrow
+                        :rules="[(val) => !!val || 'Reason is required']"
+                    />
                 </q-card-section>
 
                 <q-card-actions align="right">
-                    <q-btn flat label="Cancel" color="primary" v-close-popup  style="
-                    color: #fff;
-                    width: 144px;
-                    height: 40px;
-                    flex-shrink: 0;
-                    border-radius: 8px;
-                    border: 1px solid #5b656f;
-                    background: #000;
-                "/>
-                    <q-btn style="border-radius: 8px;" label="Confirm Reject" color="negative" @click="confirmRejection" v-close-popup />
+                    <q-btn
+                        flat
+                        label="Cancel"
+                        color="primary"
+                        v-close-popup
+                        style="
+                            color: #fff;
+                            width: 144px;
+                            height: 40px;
+                            flex-shrink: 0;
+                            border-radius: 8px;
+                            border: 1px solid #5b656f;
+                            background: #000;
+                        "
+                    />
+                    <q-btn
+                        style="border-radius: 8px"
+                        label="Confirm Reject"
+                        color="negative"
+                        @click="confirmRejection"
+                        v-close-popup
+                    />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -390,7 +481,6 @@ const showRejectDialog = ref(false);
 const rejectFeedback = ref("");
 let applicationIdToReject = null;
 
-
 const rejectApplication = (id) => {
     applicationIdToReject = id;
     showRejectDialog.value = true;
@@ -398,15 +488,18 @@ const rejectApplication = (id) => {
 
 const confirmRejection = async () => {
     if (!rejectFeedback.value.trim()) {
-        alert('Please provide a rejection reason');
+        alert("Please provide a rejection reason");
         return;
     }
 
     if (confirm("Are you sure you want to reject this application?")) {
         try {
-            await $inertia.post(`/admin/application/${applicationIdToReject}/reject`, {
-                feedback: rejectFeedback.value
-            });
+            await $inertia.post(
+                `/admin/application/${applicationIdToReject}/reject`,
+                {
+                    feedback: rejectFeedback.value,
+                }
+            );
             // Reset feedback after submission
             rejectFeedback.value = "";
         } catch (error) {
@@ -475,7 +568,7 @@ const ageAtDeath = computed(() =>
         padding: 8px;
     }
 
-    .grid>div {
+    .grid > div {
         padding-left: 0;
         padding-right: 0;
     }

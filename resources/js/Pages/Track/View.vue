@@ -1,5 +1,6 @@
 <template>
     <q-page padding>
+        <Head title="Track" />
         <div class="flex flex-center column q-mt-md">
             <div
                 class="q-pa-md rounded-borders bg-blue-1"
@@ -235,6 +236,7 @@ import { ref, computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import WebLayout from "@/Layouts/WebLayout.vue";
 import { Inertia } from "@inertiajs/inertia";
+import { Head } from "@inertiajs/inertia-vue3";
 
 defineOptions({
     layout: WebLayout,

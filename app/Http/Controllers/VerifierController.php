@@ -6,6 +6,7 @@ use App\Exports\VerifierApplicationsExport;
 use App\Models\Application;
 use App\Models\Constituency;
 use App\Models\District;
+use App\Models\Relative;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -15,320 +16,321 @@ class VerifierController extends Controller
 
 {
     public function dashboard()
-{
-    // Fetch the districts associated with the authenticated user
-    $userDistricts = auth()->user()->districts()->get();
+    {
+        // Fetch the districts associated with the authenticated user
+        $userDistricts = auth()->user()->districts()->get();
 
-    // Get applications based on the user's districts
-    $applications = Application::with(['applicant', 'deceased.district', 'transport'])
-        ->whereIn('status', ['Pending', 'Verified', 'Rejected'])
-        ->whereHas('deceased', function ($query) use ($userDistricts) {
-            $query->whereIn('district_id', $userDistricts->pluck('id'));
-        })
-        ->get();
-
-    // Count applications by status filtered by the user's districts
-    $statusCounts = [
-        'Incoming' => Application::where('status', 'Pending')
+        // Get applications based on the user's districts
+        $applications = Application::with(['applicant', 'deceased.district', 'transport'])
+            ->whereIn('status', ['Pending', 'Verified', 'Rejected'])
             ->whereHas('deceased', function ($query) use ($userDistricts) {
                 $query->whereIn('district_id', $userDistricts->pluck('id'));
             })
-            ->count(),
-        'Verified' => Application::where('status', 'Verified')
-            ->whereHas('deceased', function ($query) use ($userDistricts) {
-                $query->whereIn('district_id', $userDistricts->pluck('id'));
-            })
-            ->count(),
-        'Rejected' => Application::where('status', 'Rejected')
-            ->whereHas('deceased', function ($query) use ($userDistricts) {
-                $query->whereIn('district_id', $userDistricts->pluck('id'));
-            })
-            ->count(),
-        'Pending' => Application::where('status', 'Pending')
-            ->whereHas('deceased', function ($query) use ($userDistricts) {
-                $query->whereIn('district_id', $userDistricts->pluck('id'));
-            })
-            ->count(),
-    ];
+            ->get();
 
-    // Initialize arrays for chart data
-    $labels = [];
-    $pendingData = [];
-    $verifiedData = [];
+        // Count applications by status filtered by the user's districts
+        $statusCounts = [
+            'Incoming' => Application::where('status', 'Pending')
+                ->whereHas('deceased', function ($query) use ($userDistricts) {
+                    $query->whereIn('district_id', $userDistricts->pluck('id'));
+                })
+                ->count(),
+            'Verified' => Application::where('status', 'Verified')
+                ->whereHas('deceased', function ($query) use ($userDistricts) {
+                    $query->whereIn('district_id', $userDistricts->pluck('id'));
+                })
+                ->count(),
+            'Rejected' => Application::where('status', 'Rejected')
+                ->whereHas('deceased', function ($query) use ($userDistricts) {
+                    $query->whereIn('district_id', $userDistricts->pluck('id'));
+                })
+                ->count(),
+            'Pending' => Application::where('status', 'Pending')
+                ->whereHas('deceased', function ($query) use ($userDistricts) {
+                    $query->whereIn('district_id', $userDistricts->pluck('id'));
+                })
+                ->count(),
+        ];
 
-    // Loop through each district to get application counts
-    foreach ($userDistricts as $district) {
-        $labels[] = $district->name; // Add district name to labels
+        // Initialize arrays for chart data
+        $labels = [];
+        $pendingData = [];
+        $verifiedData = [];
 
-        // Count pending applications for the district
-        $pendingCount = Application::whereHas('deceased', function ($query) use ($district) {
-            $query->where('district_id', $district->id);
-        })->where('status', 'Pending')->count();
+        // Loop through each district to get application counts
+        foreach ($userDistricts as $district) {
+            $labels[] = $district->name; // Add district name to labels
 
-        $pendingData[] = $pendingCount; // Add pending count to pendingData
+            // Count pending applications for the district
+            $pendingCount = Application::whereHas('deceased', function ($query) use ($district) {
+                $query->where('district_id', $district->id);
+            })->where('status', 'Pending')->count();
 
-        // Count verified applications for the district
-        $verifiedCount = Application::whereHas('deceased', function ($query) use ($district) {
-            $query->where('district_id', $district->id);
-        })->where('status', 'Verified')->count();
+            $pendingData[] = $pendingCount; // Add pending count to pendingData
 
-        $verifiedData[] = $verifiedCount; // Add verified count to verifiedData
-    }
+            // Count verified applications for the district
+            $verifiedCount = Application::whereHas('deceased', function ($query) use ($district) {
+                $query->where('district_id', $district->id);
+            })->where('status', 'Verified')->count();
 
-    // Prepare chart data
-    $chartData = [
-        'labels' => $labels,
-        'pendingData' => $pendingData,
-        'verifiedData' => $verifiedData,
-    ];
+            $verifiedData[] = $verifiedCount; // Add verified count to verifiedData
+        }
 
-    // Top Applicants
-    $topApplicants = Application::with('applicant')
-        ->selectRaw('applicant_id, count(*) as count')
-        ->groupBy('applicant_id')
-        ->orderBy('count', 'desc')
-        ->limit(10)
-        ->get()
-        ->map(function ($app) {
-            return [
-                'name' => $app->applicant->name,
-                'count' => $app->count,
-            ];
-        });
+        // Prepare chart data
+        $chartData = [
+            'labels' => $labels,
+            'pendingData' => $pendingData,
+            'verifiedData' => $verifiedData,
+        ];
 
-    // Total Disbursed
-    $totalDisbursed = Application::with('transport')
-        ->where('status', 'Verified')
-        ->get()
-        ->sum(fn($app) => $app->transport?->transport_cost ?? 0);
+        // Top Applicants
+        $topApplicants = Application::with('applicant')
+            ->selectRaw('applicant_id, count(*) as count')
+            ->groupBy('applicant_id')
+            ->orderBy('count', 'desc')
+            ->limit(10)
+            ->get()
+            ->map(function ($app) {
+                return [
+                    'name' => $app->applicant->name,
+                    'count' => $app->count,
+                ];
+            });
 
-    // Monthly Disbursement Data
-    $monthlyDisbursements = Application::where('status', 'Verified')
-        ->join('transports', 'applications.transport_id', '=', 'transports.id')
-        ->selectRaw('
+        // Total Disbursed
+        $totalDisbursed = Application::with('transport')
+            ->where('status', 'Verified')
+            ->get()
+            ->sum(fn($app) => $app->transport?->transport_cost ?? 0);
+
+        // Monthly Disbursement Data
+        $monthlyDisbursements = Application::where('status', 'Verified')
+            ->join('transports', 'applications.transport_id', '=', 'transports.id')
+            ->selectRaw('
             MONTH(applications.created_at) as month, 
             COALESCE(SUM(transports.transport_cost), 0) as total
         ')
-        ->groupBy('month')
-        ->orderBy('month')
-        ->get()
-        ->keyBy('month');
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get()
+            ->keyBy('month');
 
-    // Create data for all months (January-December)
-    $months = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-    ];
+        // Create data for all months (January-December)
+        $months = [
+            'Jan',
+            'Feb',
+            'Mar',
+            'Apr',
+            'May',
+            'Jun',
+            'Jul',
+            'Aug',
+            'Sep',
+            'Oct',
+            'Nov',
+            'Dec'
+        ];
 
-    $amountDisbursedData = [];
-    foreach (range(1, 12) as $month) {
-        $amountDisbursedData[] = $monthlyDisbursements->has($month)
-            ? (float) $monthlyDisbursements[$month]->total
-            : 0;
-    }
-
-    return Inertia::render('Verifier/VerifierDashboard', [
-        'applications' => $applications,
-        'statusCounts' => $statusCounts,
-        'topApplicants' => $topApplicants,
-        'chartData' => $chartData,
-        'mitthiRecordChartData' => [
-            'labels' => $labels,
-            'data' => $pendingData,
-        ],
-        'totalDisbursed' => $totalDisbursed,
-        'amountDisbursedData' => $amountDisbursedData,
-        'months' => $months,
-    ]);
-}
-
-//     public function dashboard()
-// {
-//     // Fetch all districts
-//     $districts = District::all();
-
-//     // Initialize arrays for chart data
-//     $labels = [];
-//     $pendingData = [];
-//     $verifiedData = [];
-
-//     // Loop through each district to get application counts
-//     foreach ($districts as $district) {
-//         $labels[] = $district->name; // Add district name to labels
-
-//         // Count pending applications for the district
-//         $pendingCount = Application::whereHas('deceased', function ($query) use ($district) {
-//             $query->where('district_id', $district->id);
-//         })->where('status', 'Pending')->count();
-
-//         $pendingData[] = $pendingCount; // Add pending count to pendingData
-
-//         // Count verified applications for the district
-//         $verifiedCount = Application::whereHas('deceased', function ($query) use ($district) {
-//             $query->where('district_id', $district->id);
-//         })->where('status', 'Verified')->count();
-
-//         $verifiedData[] = $verifiedCount; // Add verified count to verifiedData
-//     }
-
-//     // Prepare chart data
-//     $chartData = [
-//         'labels' => $labels,
-//         'pendingData' => $pendingData,
-//         'verifiedData' => $verifiedData,
-//     ];
-//     $userDistrictIds = auth()->user()->districts()->pluck('district_id');
-//      $applications = Application::with(['applicant', 'deceased.district', 'transport'])
-//         ->whereIn('status', ['Pending', 'Verified','Rejected'])
-//         ->whereHas('deceased', function ($query) use ($userDistrictIds) {
-//             $query->whereIn('district_id', $userDistrictIds);
-//         })
-//         ->get();
-
-//     // Other data for the dashboard
-//     $statusCounts = [
-//         'Incoming' => Application::where('status', 'Pending')
-//             ->whereHas('deceased', function ($query) use ($userDistrictIds) {
-//                 $query->whereIn('district_id', $userDistrictIds);
-//             })
-//             ->count(),
-//         'Verified' => Application::where('status', 'Verified')
-//             ->whereHas('deceased', function ($query) use ($userDistrictIds) {
-//                 $query->whereIn('district_id', $userDistrictIds);
-//             })
-//             ->count(),
-//         'Rejected' => Application::where('status', 'Rejected')
-//             ->whereHas('deceased', function ($query) use ($userDistrictIds) {
-//                 $query->whereIn('district_id', $userDistrictIds);
-//             })
-//             ->count(),
-//         'Pending' => Application::where('status', 'Pending') // Adjust if needed    
-//             ->whereHas('deceased', function ($query) use ($userDistrictIds) {
-//                 $query->whereIn('district_id', $userDistrictIds);
-//             })
-//             ->count(),
-//     ];
-
-
-//     $topApplicants = Application::with('applicant')
-//         ->selectRaw('applicant_id, count(*) as count')
-//         ->groupBy('applicant_id')
-//         ->orderBy('count', 'desc')
-//         ->limit(10)
-//         ->get()
-//         ->map(function ($app) {
-//             return [
-//                 'name' => $app->applicant->name,
-//                 'count' => $app->count,
-//             ];
-//         });
-
-//     $totalDisbursed = Application::with('transport')
-//         ->where('status', 'Verified')
-//         ->get()
-//         ->sum(fn($app) => $app->transport?->transport_cost ?? 0);
-
-//     // Monthly Disbursement Data
-//     $monthlyDisbursements = Application::where('status', 'Verified')
-//         ->join('transports', 'applications.transport_id', '=', 'transports.id')
-//         ->selectRaw('
-//             MONTH(applications.created_at) as month, 
-//             COALESCE(SUM(transports.transport_cost), 0) as total
-//         ')
-//         ->groupBy('month')
-//         ->orderBy('month')
-//         ->get()
-//         ->keyBy('month');
-
-//     // Create data for all months (January-December)
-//     $months = [
-//         'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-//         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-//     ];
-
-//     $amountDisbursedData = [];
-//     foreach (range(1, 12) as $month) {
-//         $amountDisbursedData[] = $monthlyDisbursements->has($month)
-//             ? (float) $monthlyDisbursements[$month]->total
-//             : 0;
-//     }
-
-//     return Inertia::render('Verifier/VerifierDashboard', [
-//         'applications' => Application::with(['applicant', 'deceased.district', 'transport'])
-//             ->whereIn('status', ['Pending', 'Verified'])
-//             ->get(),
-//         'statusCounts' => $statusCounts,
-//         'topApplicants' => $topApplicants,
-//         'chartData' => $chartData,
-//         'mitthiRecordChartData' => [ // If you want a separate structure
-//             'labels' => $labels,
-//             'data' => $pendingData,
-//         ],
-//         'totalDisbursed' => $totalDisbursed,
-//         'amountDisbursedData' => $amountDisbursedData,
-//         'months' => $months,
-//     ]);
-// }
-   
-
-    public function index()
-{
-    $userDistrictIds = auth()->user()->districts()->pluck('district_id');
-
-    // Get applications based on the user's districts
-    $applications = Application::with(['applicant', 'deceased.district', 'transport'])
-        ->whereIn('status', ['Pending', 'Verified','Rejected'])
-        ->whereHas('deceased', function ($query) use ($userDistrictIds) {
-            $query->whereIn('district_id', $userDistrictIds);
-        })
-        ->get();
-
-    // Count applications by status filtered by the user's districts
-    $statusCounts = [
-        'Incoming' => Application::where('status', 'Pending')
-            ->whereHas('deceased', function ($query) use ($userDistrictIds) {
-                $query->whereIn('district_id', $userDistrictIds);
-            })
-            ->count(),
-        'Verified' => Application::where('status', 'Verified')
-            ->whereHas('deceased', function ($query) use ($userDistrictIds) {
-                $query->whereIn('district_id', $userDistrictIds);
-            })
-            ->count(),
-        'Rejected' => Application::where('status', 'Rejected')
-            ->whereHas('deceased', function ($query) use ($userDistrictIds) {
-                $query->whereIn('district_id', $userDistrictIds);
-            })
-            ->count(),
-        'Pending' => Application::where('status', 'Pending') // Adjust if needed    
-            ->whereHas('deceased', function ($query) use ($userDistrictIds) {
-                $query->whereIn('district_id', $userDistrictIds);
-            })
-            ->count(),
-    ];
-
-    return Inertia::render('Verifier/Application', [
-        'applications' => $applications,
-        'statusCounts' => $statusCounts,
-        'flash' => [
-            'success' => session('success'),
-            'error' => session('error')
-        ]
-    ]);
-}
-
-    public function verify(Application $application)
-    {
-        if ($application && $application->status === 'Pending') {
-            $application->status = 'Verified'; // Change the status to 'Verified'
-            $application->verified_at = now(); // Set the verified_at timestamp
-            $application->save();
-
-            return redirect()->route('verifier.application')->with('success', 'Application verified.');
+        $amountDisbursedData = [];
+        foreach (range(1, 12) as $month) {
+            $amountDisbursedData[] = $monthlyDisbursements->has($month)
+                ? (float) $monthlyDisbursements[$month]->total
+                : 0;
         }
 
-        return redirect()->route('verifier.application')->with('error', 'Application is already processed or invalid.');
+        return Inertia::render('Verifier/VerifierDashboard', [
+            'applications' => $applications,
+            'statusCounts' => $statusCounts,
+            'topApplicants' => $topApplicants,
+            'chartData' => $chartData,
+            'mitthiRecordChartData' => [
+                'labels' => $labels,
+                'data' => $pendingData,
+            ],
+            'totalDisbursed' => $totalDisbursed,
+            'amountDisbursedData' => $amountDisbursedData,
+            'months' => $months,
+        ]);
     }
+
+   
+
+
+    public function index()
+    {
+        $userDistrictIds = auth()->user()->districts()->pluck('district_id');
+
+        // Get applications based on the user's districts
+        $applications = Application::with([
+            'applicant.district',
+            'deceased.district',
+            'deceased.constituency',
+            'transport.sourceDistrict',
+            'transport.destinationDistrict',
+        ])
+            ->where('status', 'Pending')
+            ->whereHas('deceased', function ($query) use ($userDistrictIds) {
+                $query->whereIn('district_id', $userDistrictIds);
+            })
+            ->get();
+
+        // Count applications by status filtered by the user's districts
+        $statusCounts = [
+            'Incoming' => Application::where('status', 'Pending')
+                ->whereHas('deceased', function ($query) use ($userDistrictIds) {
+                    $query->whereIn('district_id', $userDistrictIds);
+                })
+                ->count(),
+            'Verified' => Application::where('status', 'Verified')
+                ->whereHas('deceased', function ($query) use ($userDistrictIds) {
+                    $query->whereIn('district_id', $userDistrictIds);
+                })
+                ->count(),
+            'Rejected' => Application::where('status', 'Rejected')
+                ->whereHas('deceased', function ($query) use ($userDistrictIds) {
+                    $query->whereIn('district_id', $userDistrictIds);
+                })
+                ->count(),
+            'Pending' => Application::where('status', 'Pending') // Adjust if needed    
+                ->whereHas('deceased', function ($query) use ($userDistrictIds) {
+                    $query->whereIn('district_id', $userDistrictIds);
+                })
+                ->count(),
+        ];
+
+        $dropdowns = [
+            'districts' => District::all(),
+            'constituencies' => Constituency::all(),
+            'relatives' => Relative::all(),
+        ];
+        return Inertia::render('Verifier/Application', [
+            'applications' => $applications,
+            'statusCounts' => $statusCounts,
+            'districts' => District::all(),
+            'dropdowns' => $dropdowns,
+            'flash' => [
+                'success' => session('success'),
+                'error' => session('error')
+            ]
+        ]);
+    }
+    public function verified()
+    {
+        $userDistrictIds = auth()->user()->districts()->pluck('district_id');
+
+        // Get applications based on the user's districts
+        $applications = Application::with([
+            'applicant.district',
+            'deceased.district',
+            'deceased.constituency',
+            'transport.sourceDistrict',
+            'transport.destinationDistrict',
+        ])
+            ->where('status', 'verified')
+            ->whereHas('deceased', function ($query) use ($userDistrictIds) {
+                $query->whereIn('district_id', $userDistrictIds);
+            })
+            ->get();
+
+        // Count applications by status filtered by the user's districts
+        $statusCounts = [
+            'Incoming' => Application::where('status', 'Pending')
+                ->whereHas('deceased', function ($query) use ($userDistrictIds) {
+                    $query->whereIn('district_id', $userDistrictIds);
+                })
+                ->count(),
+            'Verified' => Application::where('status', 'Verified')
+                ->whereHas('deceased', function ($query) use ($userDistrictIds) {
+                    $query->whereIn('district_id', $userDistrictIds);
+                })
+                ->count(),
+            'Rejected' => Application::where('status', 'Rejected')
+                ->whereHas('deceased', function ($query) use ($userDistrictIds) {
+                    $query->whereIn('district_id', $userDistrictIds);
+                })
+                ->count(),
+            'Pending' => Application::where('status', 'Pending') // Adjust if needed    
+                ->whereHas('deceased', function ($query) use ($userDistrictIds) {
+                    $query->whereIn('district_id', $userDistrictIds);
+                })
+                ->count(),
+        ];
+
+        $dropdowns = [
+            'districts' => District::all(),
+            'constituencies' => Constituency::all(),
+            'relatives' => Relative::all(),
+        ];
+        return Inertia::render('Verifier/Application', [
+            'applications' => $applications,
+            'statusCounts' => $statusCounts,
+            'districts' => District::all(),
+            'dropdowns' => $dropdowns,
+            'flash' => [
+                'success' => session('success'),
+                'error' => session('error')
+            ]
+        ]);
+    }
+    public function rejected()
+    {
+        $userDistrictIds = auth()->user()->districts()->pluck('district_id');
+
+        // Get applications based on the user's districts
+        $applications = Application::with([
+            'applicant.district',
+            'deceased.district',
+            'deceased.constituency',
+            'transport.sourceDistrict',
+            'transport.destinationDistrict',
+        ])
+            ->where('status', 'rejected')
+            ->whereHas('deceased', function ($query) use ($userDistrictIds) {
+                $query->whereIn('district_id', $userDistrictIds);
+            })
+            ->get();
+
+        // Count applications by status filtered by the user's districts
+        $statusCounts = [
+            'Incoming' => Application::where('status', 'Pending')
+                ->whereHas('deceased', function ($query) use ($userDistrictIds) {
+                    $query->whereIn('district_id', $userDistrictIds);
+                })
+                ->count(),
+            'Verified' => Application::where('status', 'Verified')
+                ->whereHas('deceased', function ($query) use ($userDistrictIds) {
+                    $query->whereIn('district_id', $userDistrictIds);
+                })
+                ->count(),
+            'Rejected' => Application::where('status', 'Rejected')
+                ->whereHas('deceased', function ($query) use ($userDistrictIds) {
+                    $query->whereIn('district_id', $userDistrictIds);
+                })
+                ->count(),
+            'Pending' => Application::where('status', 'Pending') // Adjust if needed    
+                ->whereHas('deceased', function ($query) use ($userDistrictIds) {
+                    $query->whereIn('district_id', $userDistrictIds);
+                })
+                ->count(),
+        ];
+
+        $dropdowns = [
+            'districts' => District::all(),
+            'constituencies' => Constituency::all(),
+            'relatives' => Relative::all(),
+        ];
+        return Inertia::render('Verifier/Application', [
+            'applications' => $applications,
+            'statusCounts' => $statusCounts,
+            'districts' => District::all(),
+            'dropdowns' => $dropdowns,
+            'flash' => [
+                'success' => session('success'),
+                'error' => session('error')
+            ]
+        ]);
+    }
+   
     // public function verifyAll(Request $request)
     // {
     //     $ids = $request->input('ids');
@@ -344,20 +346,20 @@ class VerifierController extends Controller
     // }
 
     public function verifyAll(Request $request)
-{
-    $ids = $request->input('ids');
+    {
+        $ids = $request->input('ids');
 
-    if (empty($ids)) {
-        return redirect()->back()->with('error', 'No applications selected.');
+        if (empty($ids)) {
+            return redirect()->back()->with('error', 'No applications selected.');
+        }
+
+        // Only update applications that are in 'Pending' state
+        Application::whereIn('id', $ids)
+            ->where('status', 'Pending')
+            ->update(['status' => 'Verified', 'verified_at' => now()]);
+
+        return redirect()->back()->with('success', 'Pending applications have been verified.');
     }
-
-    // Only update applications that are in 'Pending' state
-    Application::whereIn('id', $ids)
-        ->where('status', 'Pending')
-        ->update(['status' => 'Verified', 'verified_at' => now()]);
-
-    return redirect()->back()->with('success', 'Pending applications have been verified.');
-}
     public function reject(Application $application)
     {
         if ($application && $application->status === 'Pending') {
@@ -386,20 +388,20 @@ class VerifierController extends Controller
     // }
 
     public function rejectAll(Request $request)
-{
-    $ids = $request->input('ids');
+    {
+        $ids = $request->input('ids');
 
-    if (empty($ids)) {
-        return redirect()->back()->with('error', 'No applications selected.');
+        if (empty($ids)) {
+            return redirect()->back()->with('error', 'No applications selected.');
+        }
+
+        // Only update applications that are in 'Pending' state
+        Application::whereIn('id', $ids)
+            ->where('status', 'Pending')
+            ->update(['status' => 'Rejected']);
+
+        return redirect()->back()->with('success', 'Pending applications have been rejected.');
     }
-
-    // Only update applications that are in 'Pending' state
-    Application::whereIn('id', $ids)
-        ->where('status', 'Pending')
-        ->update(['status' => 'Rejected']);
-
-    return redirect()->back()->with('success', 'Pending applications have been rejected.');
-}
     public function show(Application $application)
     {
         // Eager load related models to avoid N+1 query problem
@@ -420,64 +422,76 @@ class VerifierController extends Controller
             'application' => $application,
         ]);
     }
-    
+
+    public function destroy(Application $application)
+    {
+        // Delete related data (if needed)
+        $application->deceased()->delete();
+        $application->transport()->delete();
+
+        // Delete the application
+        $application->delete();
+
+        return redirect()->route('verifier.application')->with('success', 'Application deleted successfully.');
+    }
 
     public function userReport(Request $request)
-{
-    // Get the authenticated user's districts
-    $userDistricts = DB::table('districts')
-    ->join('district_user', 'districts.id', '=', 'district_user.district_id')
-    ->where('district_user.user_id', auth()->id())
-    ->select('districts.id') // Explicitly specify the table name
-    ->pluck('id'); // Use pluck() to get an array of IDs
-    // Get filters from the request
-    $filters = $request->only(['status', 'constituency_id', 'start_date', 'end_date']);
+    {
+        // Get the authenticated user's districts
+        $filters = $request->only(['status', 'district_id', 'constituency_id', 'start_date', 'end_date']);
 
-    // Fetch applications based on the user's districts and filters
-    $applications = Application::with([
+        $userDistricts = DB::table('districts')
+            ->join('district_user', 'districts.id', '=', 'district_user.district_id')
+            ->where('district_user.user_id', 2)
+            ->pluck('districts.id') // Extract only the 'id' column
+            ->toArray(); // Convert to an array
+
+        // Fetch applications with filters
+        $applications = Application::with([
             'applicant.district',
             'deceased.district',
             'deceased.constituency',
             'transport.sourceDistrict',
             'transport.destinationDistrict',
         ])
-        ->whereIn('status', ['Pending', 'Verified', 'Rejected']) // Only these statuses
-        ->whereHas('deceased', function ($query) use ($userDistricts) {
-            $query->whereIn('district_id', $userDistricts); // Filter by user's districts
-        })
-        ->when($filters['status'] ?? null, fn($q) => $q->where('status', $filters['status']))
-        ->when($filters['constituency_id'] ?? null, function ($q) use ($filters) {
-            $q->whereHas('deceased', fn($q) => $q->where('constituency_id', $filters['constituency_id']));
-        })
-        ->when($filters['start_date'] ?? null, fn($q) => $q->whereDate('created_at', '>=', $filters['start_date']))
-        ->when($filters['end_date'] ?? null, fn($q) => $q->whereDate('created_at', '<=', $filters['end_date']))
-        ->orderBy('created_at', 'desc')
-        ->get();
+            ->whereIn('status', ['Pending', 'Verified', 'Rejected'])
+            ->whereHas('deceased', function ($query) use ($userDistricts) {
+                $query->whereIn('district_id', $userDistricts);
+            })
+            ->when($filters['status'] ?? null, fn($q) => $q->where('status', $filters['status']))
+            ->when($filters['district_id'] ?? null, function ($q) use ($filters) {
+                $q->whereHas('deceased', fn($q) => $q->where('district_id', $filters['district_id']));
+            })
+            ->when($filters['constituency_id'] ?? null, function ($q) use ($filters) {
+                $q->whereHas('deceased', fn($q) => $q->where('constituency_id', $filters['constituency_id']));
+            })
+            ->when($filters['start_date'] ?? null, fn($q) => $q->whereDate('created_at', '>=', $filters['start_date']))
+            ->when($filters['end_date'] ?? null, fn($q) => $q->whereDate('created_at', '<=', $filters['end_date']))
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-    return Inertia::render('Verifier/Report', [
-        'applications' => $applications,
-        'filters' => $filters,
-        'dropdowns' => [
-            'statuses' => ['Pending', 'Verified', 'Rejected'], // Only these statuses
-            'constituencies' => Constituency::whereIn('district_id', $userDistricts)->get(), // Filter constituencies by user's districts
-        ]
-    ]);
-}
+        return Inertia::render('Verifier/Report', [
+            'applications' => $applications,
+            'filters' => $filters,
+            'dropdowns' => [
+                'statuses' => ['Pending', 'Verified', 'Rejected'],
+                'districts' => District::whereIn('id', $userDistricts)->get(),
+                'constituencies' => Constituency::whereIn('district_id', $userDistricts)->get(),
+            ]
+        ]);
+    }
+    public function userExport(Request $request)
+    {
+        $userDistricts = auth()->user()->districts()->pluck('districts.id')->toArray();
 
-public function userExport(Request $request)
-{
-    // Get the authenticated user's districts
-    $userDistricts = auth()->user()->districts()->pluck('id');
+        $filters = $request->validate([
+            'status' => 'nullable|string',
+            'district_id' => 'nullable|exists:districts,id',
+            'constituency_id' => 'nullable|exists:constituencies,id',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+        ]);
 
-    // Validate filters
-    $filters = $request->validate([
-        'status' => 'nullable|string',
-        'constituency_id' => 'nullable|exists:constituencies,id',
-        'start_date' => 'nullable|date',
-        'end_date' => 'nullable|date|after_or_equal:start_date',
-    ]);
-
-    // Export the data
-    return Excel::download(new VerifierApplicationsExport($filters, $userDistricts), 'user-applications-'.now()->format('YmdHis').'.xlsx');
-}
+        return Excel::download(new VerifierApplicationsExport($filters, $userDistricts), 'applications-export.xlsx');
+    }
 }

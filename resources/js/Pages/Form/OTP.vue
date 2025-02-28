@@ -2,6 +2,7 @@
     <q-layout>
         <q-page-container>
             <q-page padding class="flex justify-center">
+                <Head title="OTP" />
                 <div class="border w-[412px] h-[280px] text-center">
                     <div>
 
@@ -26,7 +27,7 @@
                                     <p v-if="countdown > 0" class="text-caption q-mt-sm text-right">
                                         Resend OTP in {{ countdown }} seconds
                                     </p>
-                                    <p v-else>ddddddddddddddddddddddddddd</p>
+                                    <!-- <p v-else>ddddddddddddddddddddddddddd</p> -->
 
                                     <!-- Resend OTP Link -->
                                     <Link label="Resend OTP" @click="resendOtp" :disabled="isResendDisabled"
@@ -50,6 +51,7 @@
 import { useForm } from "@inertiajs/vue3";
 import { ref, computed, watch, onMounted } from "vue";
 import WebLayout from "@/Layouts/WebLayout.vue";
+import { Head } from "@inertiajs/inertia-vue3";
 import { Notify } from "quasar";
 import { Link } from "@inertiajs/inertia-vue3";
 

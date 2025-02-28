@@ -1,5 +1,6 @@
 <template>
     <q-page padding>
+        <Head title="Application" />
         <div class="flex flex-col justify-center items-center gap-6">
             <!-- <h5>Step 1: Mitthi Chhungchang</h5> -->
             <img id="background" class="w-[412px] h-[193px" src="image/Vertical Stepper with numbers.png" />
@@ -226,6 +227,7 @@
 import { useForm } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
 import { useQuasar } from "quasar";
+import { Head } from "@inertiajs/inertia-vue3";
 import WebLayout from "@/Layouts/WebLayout.vue";
 
 defineOptions({

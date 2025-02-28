@@ -11,6 +11,7 @@ use App\Exports\ApplicationsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class AdminController extends Controller
@@ -24,7 +25,115 @@ class AdminController extends Controller
             'deceased.constituency',
             'transport.sourceDistrict',
             'transport.destinationDistrict',
-        ])->get();
+        ])->where('status', 'Pending')->get();
+        // dd($applications);
+        // Fetch dropdown options
+        $dropdowns = [
+            'districts' => District::all(),
+            'constituencies' => Constituency::all(),
+            'relatives' => Relative::all(),
+        ];
+
+        $statusCounts = [
+            'Incoming' => Application::where('status', 'Pending')->count(),
+            'Approved' => Application::where('status', 'Approved')->count(),
+            'Rejected' => Application::where('status', 'Rejected')->count(),
+            'Pending' => Application::where('status', 'Pending')->count(), // Adjust if needed
+            'Processed' => Application::where('status', 'Processed')->count(),
+        ];
+        return Inertia::render('Admin/Application', [
+            'applications' => $applications,
+            'statusCounts' => $statusCounts,
+            'districts' => District::all(),
+            'dropdowns' => $dropdowns,
+            'flash' => [
+                'success' => session('success'),
+                'error' => session('error')
+            ]
+        ]);
+    }
+    public function verified()
+    {
+        $applications = Application::with([
+
+            'applicant.district',
+            'deceased.district',
+            'deceased.constituency',
+            'transport.sourceDistrict',
+            'transport.destinationDistrict',
+        ])->where('status', 'Verified')->get();
+        // dd($applications);
+        // Fetch dropdown options
+        $dropdowns = [
+            'districts' => District::all(),
+            'constituencies' => Constituency::all(),
+            'relatives' => Relative::all(),
+        ];
+
+        $statusCounts = [
+            'Incoming' => Application::where('status', 'Pending')->count(),
+            'Approved' => Application::where('status', 'Approved')->count(),
+            'Rejected' => Application::where('status', 'Rejected')->count(),
+            'Pending' => Application::where('status', 'Pending')->count(), // Adjust if needed
+            'Processed' => Application::where('status', 'Processed')->count(),
+        ];
+        return Inertia::render('Admin/Application', [
+            'applications' => $applications,
+            'statusCounts' => $statusCounts,
+            'districts' => District::all(),
+            'dropdowns' => $dropdowns,
+            'flash' => [
+                'success' => session('success'),
+                'error' => session('error')
+            ]
+        ]);
+    }
+    public function approved()
+    {
+        $applications = Application::with([
+
+            'applicant.district',
+            'deceased.district',
+            'deceased.constituency',
+            'transport.sourceDistrict',
+            'transport.destinationDistrict',
+        ])->where('status', 'Approved')->get();
+        // dd($applications);
+        // Fetch dropdown options
+        $dropdowns = [
+            'districts' => District::all(),
+            'constituencies' => Constituency::all(),
+            'relatives' => Relative::all(),
+        ];
+
+        $statusCounts = [
+            'Incoming' => Application::where('status', 'Pending')->count(),
+            'Approved' => Application::where('status', 'Approved')->count(),
+            'Rejected' => Application::where('status', 'Rejected')->count(),
+            'Pending' => Application::where('status', 'Pending')->count(), // Adjust if needed
+            'Processed' => Application::where('status', 'Processed')->count(),
+        ];
+        return Inertia::render('Admin/Application', [
+            'applications' => $applications,
+            'statusCounts' => $statusCounts,
+            'districts' => District::all(),
+            'dropdowns' => $dropdowns,
+            'flash' => [
+                'success' => session('success'),
+                'error' => session('error')
+            ]
+        ]);
+    }
+    public function rejected()
+    {
+        $applications = Application::with([
+
+            'applicant.district',
+            'deceased.district',
+            'deceased.constituency',
+            'transport.sourceDistrict',
+            'transport.destinationDistrict',
+        ])->where('status', 'Rejected')->get();
         // dd($applications);
         // Fetch dropdown options
         $dropdowns = [
@@ -55,7 +164,25 @@ class AdminController extends Controller
     {
         // Fetch applications with the specified statuses
         $applications = Application::with(['applicant', 'deceased.district', 'transport'])
-            ->whereIn('status', ['Approved', 'Processed', 'Rejected'])
+            ->where('status', 'Approved')
+            ->get();
+
+
+
+        return Inertia::render('Admin/BillPayment', [
+            'applications' => $applications,
+
+            'flash' => [
+                'success' => session('success'),
+                'error' => session('error')
+            ]
+        ]);
+    }
+    public function bill_process()
+    {
+        // Fetch applications with the specified statuses
+        $applications = Application::with(['applicant', 'deceased.district', 'transport'])
+            ->where('status', 'Processed')
             ->get();
 
 
@@ -75,7 +202,7 @@ class AdminController extends Controller
 
     public function approve(Application $application)
     {
-        if ($application && $application->status === 'Pending') {
+        if ($application && $application->status === 'Pending' || $application->status === 'Verified') {
             $application->status = 'Approved'; // Change the status to 'Approved'
             $application->approved_at = now(); // Set the approved_at timestamp
             $application->save();
@@ -99,24 +226,24 @@ class AdminController extends Controller
     // }
 
     public function reject(Application $application, Request $request)
-{
-    $validated = $request->validate([
-        'feedback' => 'required|string|max:255'
-    ]);
-
-    if ($application && $application->status === 'Pending') {
-        $application->update([
-            'status' => 'Rejected',
-            'feedback' => $validated['feedback']
+    {
+        $validated = $request->validate([
+            'feedback' => 'required|string|max:255'
         ]);
 
-        return redirect()->route('admin.application') // Match your actual route name
-            ->with('success', 'Application rejected.');
-    }
+        if ($application && $application->status === 'Pending') {
+            $application->update([
+                'status' => 'Rejected',
+                'feedback' => $validated['feedback']
+            ]);
 
-    return redirect()->route('admin.application') // Match your actual route name
-        ->with('error', 'Application is already processed or invalid.');
-}
+            return redirect()->route('admin.application') // Match your actual route name
+                ->with('success', 'Application rejected.');
+        }
+
+        return redirect()->route('admin.application') // Match your actual route name
+            ->with('error', 'Application is already processed or invalid.');
+    }
 
     public function rejectAll(Request $request)
     {
@@ -215,7 +342,7 @@ class AdminController extends Controller
 
 
 
-   
+
 
 
 
@@ -279,6 +406,9 @@ class AdminController extends Controller
 
     public function update(Request $request, $id)
     {
+        // dd($id);
+        // dd(auth()->user()); // Should return user details
+
         // Find the application record
         $application = Application::find($id);
 
@@ -380,9 +510,18 @@ class AdminController extends Controller
             ]);
         }
 
+        $user = Auth::user();
 
+        // Check the user's role and redirect accordingly
+        if ($user->hasRole('admin')) {
+            return redirect()->route('admin.application')->with('success', 'Application updated successfully.');
+        } elseif ($user->hasRole('approver')) {
+            return redirect()->route('approver.application')->with('success', 'Application updated successfully.');
+        } elseif ($user->hasRole('verifier')) {
+            return redirect()->route('verifier.application')->with('success', 'Application updated successfully.');
+        }
 
-        return redirect()->route('admin.application')->with('success', 'Application updated successfully.');
+        // return redirect()->route('admin.application')->with('success', 'Application updated successfully.');
     }
     public function destroy(Application $application)
     {
@@ -400,54 +539,54 @@ class AdminController extends Controller
     // Add at the top
 
 
-// Add new methods
-public function report(Request $request)
-{
-    $filters = $request->only(['status', 'district_id', 'constituency_id', 'start_date', 'end_date']);
+    // Add new methods
+    public function report(Request $request)
+    {
+        $filters = $request->only(['status', 'district_id', 'constituency_id', 'start_date', 'end_date']);
 
-    
-    $applications = Application::with([
+
+        $applications = Application::with([
             'applicant.district',
             'deceased.district',
             'deceased.constituency',
             'transport.sourceDistrict',
             'transport.destinationDistrict',
         ])
-        ->when($filters['status'] ?? null, fn($q) => $q->where('status', $filters['status']))
-        ->when($filters['district_id'] ?? null, function ($q) use ($filters) {
-            $q->whereHas('applicant', fn($q) => $q->where('district_id', $filters['district_id']));
-        })
-        ->when($filters['constituency_id'] ?? null, function ($q) use ($filters) {
-            $q->whereHas('deceased', fn($q) => $q->where('constituency_id', $filters['constituency_id']));
-        })
-        ->when($filters['start_date'] ?? null, fn($q) => $q->whereDate('created_at', '>=', $filters['start_date']))
-        ->when($filters['end_date'] ?? null, fn($q) => $q->whereDate('created_at', '<=', $filters['end_date']))
-        ->orderBy('created_at', 'desc')
-        ->get();
+            ->when($filters['status'] ?? null, fn($q) => $q->where('status', $filters['status']))
+            ->when($filters['district_id'] ?? null, function ($q) use ($filters) {
+                $q->whereHas('applicant', fn($q) => $q->where('district_id', $filters['district_id']));
+            })
+            ->when($filters['constituency_id'] ?? null, function ($q) use ($filters) {
+                $q->whereHas('deceased', fn($q) => $q->where('constituency_id', $filters['constituency_id']));
+            })
+            ->when($filters['start_date'] ?? null, fn($q) => $q->whereDate('created_at', '>=', $filters['start_date']))
+            ->when($filters['end_date'] ?? null, fn($q) => $q->whereDate('created_at', '<=', $filters['end_date']))
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-    return Inertia::render('Admin/Report', [
-        'applications' => $applications,
-        'filters' => $filters,
-        'dropdowns' => [
-            'statuses' => ['Pending', 'Approved', 'Rejected', 'Processed'],
-            'districts' => District::all(),
-            'constituencies' => Constituency::all(),
-        ]
-    ]);
-}
+        return Inertia::render('Admin/Report', [
+            'applications' => $applications,
+            'filters' => $filters,
+            'dropdowns' => [
+                'statuses' => ['Pending', 'Approved', 'Rejected', 'Processed'],
+                'districts' => District::all(),
+                'constituencies' => Constituency::all(),
+            ]
+        ]);
+    }
 
-public function export(Request $request)
-{
-    $filters = $request->validate([
-        'status' => 'nullable|string',
-        'district_id' => 'nullable|exists:districts,id',
-        'constituency_id' => 'nullable|exists:constituencies,id',
-        'start_date' => 'nullable|date',
-        'end_date' => 'nullable|date|after_or_equal:start_date',
-    ]);
+    public function export(Request $request)
+    {
+        $filters = $request->validate([
+            'status' => 'nullable|string',
+            'district_id' => 'nullable|exists:districts,id',
+            'constituency_id' => 'nullable|exists:constituencies,id',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+        ]);
 
-    return Excel::download(new AdminApplicationsExport($filters), 'applications-'.now()->format('YmdHis').'.xlsx');
-}
+        return Excel::download(new AdminApplicationsExport($filters), 'applications-' . now()->format('YmdHis') . '.xlsx');
+    }
 
 
     // public function update(Request $request, Application $application)

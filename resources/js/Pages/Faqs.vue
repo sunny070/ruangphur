@@ -1,5 +1,6 @@
 <template>
     <q-page padding>
+        <Head title="FAQs" />
         <div class="flex flex-col justify-center items-center gap-6">
             <div class="border-2 border-gray-200 bg-[#E9F4FF] flex-shrink-0 rounded-[10px] w-[412px] h-[146px] text-center">
                 <h6 class="text-black">
@@ -39,6 +40,7 @@
 
 <script setup>
 import WebLayout from "@/Layouts/WebLayout.vue";
+import { Head } from "@inertiajs/inertia-vue3";
 
 defineOptions({
     layout: WebLayout,

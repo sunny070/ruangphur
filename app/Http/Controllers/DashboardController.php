@@ -209,7 +209,7 @@ class DashboardController extends Controller
             'file' => 'required|file|mimes:pdf,jpg,png|max:2048',
         ]);
         $file = $request->file('file');
-        $path = $file->storeAs('uploads',$file->hashName(),'public');
+        $path = $file->storeAs('uploads', $file->hashName(), 'public');
         // $path = $request->file('file')->store('uploads', 'public');
         // dd([
         //     'stored_path' => $path,
@@ -226,35 +226,59 @@ class DashboardController extends Controller
     }
 
     public function info()
-    {
-        $informations = Information::all()->map(function ($info) {
-            return [
-                'id' => $info->id,
-                'title' => $info->title,  // Include title
-                'sub_title' => $info->sub_title,  // Include sub_title
-                'file_url' => $info->attachment,
-                'created_at' => $info->created_at->format('Y-m-d H:i:s'),
-            ];
-        });
-        // dd($informations);
-        return Inertia::render('Admin/Information/Index', ['informations' => $informations]);
-    }
+{
+    $search = request('search');
+
+    $informations = Information::when($search, function ($query, $search) {
+        return $query->where('title', 'like', "%{$search}%")
+                     ->orWhere('sub_title', 'like', "%{$search}%");
+    })->get()->map(function ($info) {
+        return [
+            'id' => $info->id,
+            'title' => $info->title,
+            'sub_title' => $info->sub_title,
+            'attachment' => $info->attachment,
+            'created_at' => $info->created_at->toISOString(),
+        ];
+    });
+
+    return Inertia::render('Admin/Information/Index', [
+        'informations' => $informations,
+        'filters' => request()->only('search'),
+    ]);
+}
+
 
     public function updateInfo(Request $request, Information $info)
     {
-        $request->validate([
-            'file' => 'required|file|mimes:pdf,jpg,png|max:2048'
+        // Validate the request
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'sub_title' => 'nullable|string|max:255',
+            'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
-        if ($info->attachment) {
-            Storage::disk('public')->delete($info->attachment);
+        // Update fields
+        $info->title = $validated['title'];
+        $info->sub_title = $validated['sub_title'];
+
+        // Handle file upload
+        if ($request->hasFile('file')) {
+            // Delete the old file if it exists
+            if ($info->attachment && Storage::disk('public')->exists($info->attachment)) {
+                Storage::disk('public')->delete($info->attachment);
+            }
+            // Store the new file
+            $path = $request->file('file')->store('uploads', 'public');
+            $info->attachment = $path;
         }
 
-        $path = $request->file('file')->store('uploads', 'public');
-        $info->update(['attachment' => $path]);
+        // Save the updated record
+        $info->save();
 
-        return redirect()->route('admin.info.index')->with('success', 'File updated successfully.');
+        return redirect()->back()->with('success', 'Information updated successfully');
     }
+
 
     public function destroyInfo(Information $info)
     {

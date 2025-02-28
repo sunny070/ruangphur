@@ -2,6 +2,7 @@
     <q-layout>
         <q-page-container>
             <q-page padding>
+                <Head title="Application" />
                 <div class="flex flex-col justify-center items-center gap-6">
                     <div
                         class="border-2 border-gray-200 bg-[#E9F4FF] flex-shrink-0 rounded-[10px] text-center"
@@ -243,7 +244,7 @@
                                     v-model="form.id_proof"
                                     outlined
                                     dense
-                                    accept=".jpg, .jpeg, .png"
+                                    accept=".pdf, .jpg, .jpeg, .png"
                                     label="Upload ID proof"
                                 >
                                     <template v-slot:prepend>
@@ -492,6 +493,7 @@
 <script setup>
 import { useForm } from "@inertiajs/vue3";
 import WebLayout from "@/Layouts/WebLayout.vue";
+import { Head } from "@inertiajs/inertia-vue3";
 import { ref } from "vue";
 import { useQuasar } from "quasar";
 

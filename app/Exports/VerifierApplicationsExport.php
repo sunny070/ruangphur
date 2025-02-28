@@ -3,9 +3,12 @@
 namespace App\Exports;
 
 use App\Models\Application;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
-class VerifierApplicationsExport implements FromCollection
+
+class VerifierApplicationsExport implements FromQuery, WithHeadings, WithMapping
 {
     protected $filters;
     protected $userDistricts;
@@ -16,7 +19,7 @@ class VerifierApplicationsExport implements FromCollection
         $this->userDistricts = $userDistricts;
     }
 
-    public function collection()
+    public function query()
     {
         return Application::with([
                 'applicant.district',
@@ -29,25 +32,44 @@ class VerifierApplicationsExport implements FromCollection
             ->whereHas('deceased', function ($query) {
                 $query->whereIn('district_id', $this->userDistricts);
             })
+            ->when($this->filters['district_id'] ?? null, function ($query) {
+                $query->whereHas('deceased', function ($q) {
+                    $q->where('district_id', $this->filters['district_id']);
+                });
+            })
             ->when($this->filters['status'] ?? null, fn($q) => $q->where('status', $this->filters['status']))
             ->when($this->filters['constituency_id'] ?? null, function ($q) {
                 $q->whereHas('deceased', fn($q) => $q->where('constituency_id', $this->filters['constituency_id']));
             })
             ->when($this->filters['start_date'] ?? null, fn($q) => $q->whereDate('created_at', '>=', $this->filters['start_date']))
             ->when($this->filters['end_date'] ?? null, fn($q) => $q->whereDate('created_at', '<=', $this->filters['end_date']))
-            ->orderBy('created_at', 'desc')
-            ->get();
+            ->orderBy('created_at', 'desc');
     }
 
     public function headings(): array
     {
         return [
-            'ID',
-            'Applicant Name',
-            'Deceased Name',
+            'Application No',
             'Status',
+            'Applicant Name',
+            'Applicant District',
+            'Deceased Name',
+            'Deceased Constituency',
+            'Transport Cost',
             'Created At',
-            // Add more columns as needed
+        ];
+    }
+    public function map($application): array
+    {
+        return [
+            $application->application_no,
+            $application->status,
+            $application->applicant->name,
+            $application->applicant->district->name,
+            $application->deceased->name,
+            $application->deceased->constituency->name ?? 'N/A',
+            $application->transport->transport_cost ?? '0',
+            $application->created_at->format('Y-m-d H:i'),
         ];
     }
 }

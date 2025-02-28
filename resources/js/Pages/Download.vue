@@ -1,5 +1,6 @@
 <template>
     <q-page padding>
+        <Head title="Download" />
         <div class="flex flex-col justify-center items-center gap-6">
             <div
                 class="border-2 border-gray-200 bg-[#E9F4FF] flex-shrink-0 rounded-[10px] w-[412px] h-[146px] text-center"
@@ -53,6 +54,7 @@
 <script setup>
 import WebLayout from "@/Layouts/WebLayout.vue";
 import { Link } from "@inertiajs/vue3";
+import { Head } from "@inertiajs/inertia-vue3";
 
 defineOptions({
     layout: WebLayout,

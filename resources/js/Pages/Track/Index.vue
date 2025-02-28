@@ -2,26 +2,27 @@
     <q-layout>
         <q-page-container>
             <q-page padding>
+                <Head title="Track" />
                 <div class="flex items-center flex-col">
                     <div
                         class="w-[412px] h-[381px] flex-shrink-0 rounded-[10px] border border-[#EEE] bg-[#E9F4FF] p-5 mt-6"
                     >
                         <div class="flex flex-col">
-                            <h5 class="text-2xl">
+                            <h5 class="text-2xl font-black">
                                 Ruang phurh dil chhuina/track
                             </h5>
-                            <p class="font-bold mb-4 text-[#5B656F] text-sm">
+                            <p class="font-black mb-4 text-[#5B656F] text-sm">
                                 I ruang phurh dilna a thlen chin zawnna a ni.
                                 Mipui ten zawldawh takin min lo ngaichang zel
                                 dawn nia.
                             </p>
-                            Track ID chhu lut rawh le
+                            <p class="font-black">Track ID chhu lut rawh le</p> 
                             <q-input
                                 outlined
                                 v-model="applicationId"
                                 placeholder="I dilna thlen chin zawnna"
                                 dense
-                                class="custom-input"
+                                class="custom-input font-bold"
                             />
                         </div>
 
@@ -98,6 +99,7 @@
 
 <script setup>
 import { ref, computed } from "vue";
+import { Head } from "@inertiajs/inertia-vue3";
 import { useQuasar } from "quasar";
 import axios from "axios";
 import { router } from "@inertiajs/vue3";

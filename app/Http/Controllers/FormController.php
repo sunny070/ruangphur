@@ -14,6 +14,7 @@ use App\Models\Transport;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Mail;
 
@@ -151,16 +152,25 @@ class FormController extends Controller
 
         // Send OTP via SMS
         $client = new \GuzzleHttp\Client();
-        $templateId = "1007093779326924573";
-        $message = "OTP for RTI Registration is " . $otp . ". DoICT";
+        // $templateId = "1007093779326924573";
+        // $message = "OTP for RTI Registration is " . $otp . ". DoICT";
 
-        $client->request('POST', 'https://sms.mizoram.gov.in/api', [
-            'form_params' => [
-                'api_key' => 'b53366c91585c976e6173e69f6916b2d',
-                'number' => $validated['mobile'],
-                'message' => $message,
-                'template_id' => $templateId
-            ]
+        // $client->request('POST', 'https://sms.mizoram.gov.in/api', [
+        //     'form_params' => [
+        //         'api_key' => 'b53366c91585c976e6173e69f6916b2d',
+        //         'number' => $validated['mobile'],
+        //         'message' => $message,
+        //         'template_id' => $templateId
+        //     ]
+        // ]);
+        $templateId = "1407173926279603243";
+        $message = "Please enter OTP ". $otp ." to submit your Ruangphur application.";
+        $response=Http::withHeaders([
+            'Authorization' => "Bearer " . env('SMS_TOKEN'),
+        ])->get("https://sms.msegs.in/api/send-otp",[
+            'template_id' => $templateId,
+            'message' => $message,
+            'recipient'=>$validated['mobile']
         ]);
 
         \Log::info("Generated OTP: $otp");
@@ -201,17 +211,25 @@ class FormController extends Controller
 
     // Send OTP via SMS
     $client = new \GuzzleHttp\Client();
-    $templateId = "1007093779326924573";
-    $message = "OTP for RTI Registration is " . $otp . ". DoICT";
+    $templateId = "1407173926279603243";
+    $message = "Please enter OTP . $otp . to submit your Ruangphur application.";
+    // $message = "OTP for RTI Registration is " . $otp . ". DoICT";
 
     try {
-        $client->request('POST', 'https://sms.mizoram.gov.in/api', [
-            'form_params' => [
-                'api_key' => 'b53366c91585c976e6173e69f6916b2d',
-                'number' => $applicantData['mobile'],
-                'message' => $message,
-                'template_id' => $templateId
-            ]
+        // $client->request('POST', 'https://sms.msegs.in/api', [
+        //     'form_params' => [
+        //         'api_key' => 'b53366c91585c976e6173e69f6916b2d',
+        //         'number' => $applicantData['mobile'],
+        //         'message' => $message,
+        //         'template_id' => $templateId
+        //     ]
+        // ]);
+        $response=Http::withHeaders([
+            'Authorization' => "Bearer " . env('SMS_TOKEN'),
+        ])->get("https://sms.msegs.in/api/send-sms",[
+            'template_id' => $templateId,
+            'message' => $message,
+            'recipient'=>$applicantData['mobile']
         ]);
     } catch (\Exception $e) {
         \Log::error("Failed to resend OTP: " . $e->getMessage());

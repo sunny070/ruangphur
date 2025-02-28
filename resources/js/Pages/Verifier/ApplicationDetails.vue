@@ -16,7 +16,7 @@
             </div>
 
             <!-- Action Buttons -->
-            <div class="flex flex-wrap gap-2 justify-end order-2">
+            <!-- <div class="flex flex-wrap gap-2 justify-end order-2">
                 <q-btn
                     size="sm"
                     flat
@@ -49,7 +49,7 @@
                     <q-icon name="ios_share" size="16px" class="q-mr-xs" />
                     <span class="text-xs md:text-sm">Export</span>
                 </q-btn>
-            </div>
+            </div> -->
         </div>
 
 
@@ -57,10 +57,10 @@
         <!-- Main Content Container -->
         <div class="flex flex-col items-center px-4 md:pr-32">
             <!-- Application Summary Card -->
-            <div class="w-full max-w-4xl rounded-[10px] border border-[#EEE] bg-[#E9F4FF] p-4 md:p-5 mt-6">
-                <div class="grid md:grid-cols-2 gap-4 text-center">
+            <div class="w-auto max-w-4xl rounded-[10px] border border-[#EEE] bg-[#E9F4FF] p-4 md:p-5 mt-6">
+                <div class="grid md:grid-cols-2">
                     <!-- Left Section -->
-                    <div class="flex flex-col items-center">
+                    <div class="flex flex-col justify-center items-center">
                         <img src="/image/icon 1.png" alt="Ruang" class="w-12 h-12">
                         <h5 class="text-xl md:text-2xl mt-2">
                             {{ application.applicant.name }}
@@ -71,23 +71,23 @@
                     </div>
                     
                     <!-- Right Section -->
-                    <div class="grid md:grid-cols-3 gap-4">
-                        <div class="col-span-3 md:col-span-1">
+                    <div class="flex justify-center gap-10 items-center">
+                        <!-- <div class="flex-col flex items-center">
                             <q-separator class="md:hidden" vertical/>
-                        </div>
-                        <div>
+                        </div> -->
+                        <div class="flex-col flex items-center">
                             <h5 class="font-bold">
                                 {{ application?.transport?.distance }}
                             </h5>
                             <p class="text-[#5B656F]">Kilometre</p>
                         </div>
-                        <div>
+                        <div class="flex-col flex items-center">
                             <h5 class="font-bold">
                                 {{ application?.transport?.vehicle_number }}
                             </h5>
                             <p class="text-[#5B656F]">Motor Reg.</p>
                         </div>
-                        <div>
+                        <div class="flex-col flex items-center">
                             <h5 class="font-bold">
                                 {{ application?.transport?.transport_cost }}
                             </h5>
@@ -387,7 +387,7 @@
                     props.application && props.application.status === 'Pending'
                 "
                 @click="approveApplication(props.application.id)"
-                label="Approve"
+                label="Verify"
                 size="sm"
                 style="
                     color: #fff;
@@ -418,11 +418,37 @@
                 "
             />
         </div>
+        <!-- Rejection Feedback Dialog -->
+        <q-dialog v-model="showRejectDialog">
+            <q-card style="min-width: 400px">
+                <q-card-section>
+                    <div class="text-h6">Reason for Rejection</div>
+                </q-card-section>
+
+                <q-card-section>
+                    <q-input outlined color="dark" min-height="250px" v-model="rejectFeedback" label="Please provide the reason for rejection" type="textarea"
+                         :rules="[val => !!val || 'Reason is required']" />
+                </q-card-section>
+
+                <q-card-actions align="right">
+                    <q-btn flat label="Cancel" color="primary" v-close-popup  style="
+                    color: #fff;
+                    width: 144px;
+                    height: 40px;
+                    flex-shrink: 0;
+                    border-radius: 8px;
+                    border: 1px solid #5b656f;
+                    background: #000;
+                "/>
+                    <q-btn style="border-radius: 8px;" label="Confirm Reject" color="negative" @click="confirmRejection" v-close-popup />
+                </q-card-actions>
+            </q-card>
+        </q-dialog>
     </q-page>
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed,ref } from "vue";
 import { router as $inertia, Link } from "@inertiajs/vue3";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 
@@ -435,6 +461,36 @@ const props = defineProps({
     application: Object,
 });
 
+const showRejectDialog = ref(false);
+const rejectFeedback = ref("");
+
+let applicationIdToReject = null;
+
+const rejectApplication = (id) => {
+    applicationIdToReject = id;
+    showRejectDialog.value = true;
+};
+
+
+
+const confirmRejection = async () => {
+    if (!rejectFeedback.value.trim()) {
+        alert('Please provide a rejection reason');
+        return;
+    }
+
+    if (confirm("Are you sure you want to reject this application?")) {
+        try {
+            await $inertia.post(`/admin/application/${applicationIdToReject}/reject`, {
+                feedback: rejectFeedback.value
+            });
+            // Reset feedback after submission
+            rejectFeedback.value = "";
+        } catch (error) {
+            console.error(error);
+        }
+    }
+};
 const approveApplication = async (applicationId) => {
     if (confirm("Are you sure you want to approve this application?")) {
         try {
@@ -445,15 +501,15 @@ const approveApplication = async (applicationId) => {
     }
 };
 
-const rejectApplication = async (applicationId) => {
-    if (confirm("Are you sure you want to reject this application?")) {
-        try {
-            await $inertia.post(`/admin/application/${applicationId}/reject`);
-        } catch (error) {
-            console.error(error);
-        }
-    }
-};
+// const rejectApplication = async (applicationId) => {
+//     if (confirm("Are you sure you want to reject this application?")) {
+//         try {
+//             await $inertia.post(`/admin/application/${applicationId}/reject`);
+//         } catch (error) {
+//             console.error(error);
+//         }
+//     }
+// };
 const handleOpenFile = (fileUrl) => {
     if (fileUrl) {
         // Open the file URL in a new tab

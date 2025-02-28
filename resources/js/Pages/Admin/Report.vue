@@ -1,5 +1,6 @@
 <template>
     <q-page>
+        <Head title="Report" />
         <div class="p-6">
             <h1 class="text-2xl font-bold mb-6">Generate Report</h1>
 
@@ -52,14 +53,45 @@
                 </div>
 
                 <div class="flex gap-4">
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+
+                    
+
+                    <q-btn
+                       
+                        type="submit"
+                        label="Apply Filter"
+                        size="sm"
+                        class="w-full md:w-36"
+                        style="
+                            color: #000;
+                            height: 40px;
+                            border-radius: 8px;
+                            border: 1px solid #5b656f;
+                            background: transparent;
+                        "
+                    />
+
+                    <q-btn
+                        @click="exportReport"
+                        label="Export"
+                        size="sm"
+                        class="w-full md:w-36"
+                        style="
+                            color: #fff;
+                            height: 40px;
+                            border-radius: 8px;
+                            border: 1px solid #5b656f;
+                            background: #000;
+                        "
+                    />
+                    <!-- <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
                         Apply Filters
                     </button>
 
                     <button @click="exportReport" type="button"
-                        class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                        class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700" >
                         Export to Excel
-                    </button>
+                    </button> -->
                 </div>
             </form>
 
@@ -111,6 +143,7 @@ import { reactive } from 'vue';
 import { router } from '@inertiajs/vue3';
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { computed } from 'vue';
+import { Head } from '@inertiajs/inertia-vue3';
 // import useForm from "@inertiajs/vue3";
 
 defineOptions({

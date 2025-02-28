@@ -2,6 +2,7 @@
     <q-layout>
         <q-page-container>
             <q-page>
+                <Head title="Application" />
                 <div class="flex justify-center flex-col items-center pt-10">
                     <div
                         class="flex justify-center items-center w-8 rounded-full h-8 bg-[#3B6939]"
@@ -39,6 +40,7 @@
 <script setup>
 import WebLayout from "@/Layouts/WebLayout.vue";
 import { Link } from "@inertiajs/vue3";
+import { Head } from "@inertiajs/inertia-vue3";
 
 defineOptions({
     layout: WebLayout,
