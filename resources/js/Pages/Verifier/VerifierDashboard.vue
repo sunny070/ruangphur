@@ -7,14 +7,22 @@
             <!-- <pre>{{ statusCounts }}</pre> -->
 
             <!-- Status Counts -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                <div v-for="status in statusCards" :key="status.label"
-                    :class="`w-full h-[78px] ${status.bgClass} ${status.textClass} p-4`">
+
+            <div
+                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
+            >
+                <a
+                    v-for="status in statusCards"
+                    :key="status.label"
+                    :href="status.route"
+                    class="w-full h-[78px]"
+                    :class="`${status.bgClass} ${status.textClass} p-4`"
+                >
                     <h6 class="text-sm sm:text-base font-black">
                         {{ status.count }}
                     </h6>
                     <p class="text-xs sm:text-sm">{{ status.label }}</p>
-                </div>
+                </a>
             </div>
 
             <!-- Charts -->
@@ -22,33 +30,39 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6">
                 <div class="chart-container">
                     <VerifierBarChart :chartData="chartData" />
-
                 </div>
                 <div class="circular-chart-container">
-
-                    <CircularChart :labels="chartData.labels" :data="chartData.pendingData" style="width: 50%;height:auto"/>
+                    <CircularChart
+                        :labels="chartData.labels"
+                        :data="chartData.pendingData"
+                        style="width: 50%; height: auto"
+                    />
                 </div>
             </div>
-           
 
             <!-- Monthly Disbursement -->
-             <div class="grid grid-cols-2">
+            <div class="grid grid-cols-2">
+                <VerifierMonthlyAmountDisbursed
+                    :months="months"
+                    :amountDisbursedData="amountDisbursedData"
+                />
 
-                 <VerifierMonthlyAmountDisbursed :months="months" :amountDisbursedData="amountDisbursedData" />
-                 
-                 <!-- Top Applicants -->
-                 <div class="col-12 col-md-6">
-                     <q-card class="q-pa-md">
+                <!-- Top Applicants -->
+                <div class="col-12 col-md-6">
+                    <q-card class="q-pa-md">
                         <p class="text-bold">Diltu tam dan (top 10)</p>
                         <p class="text-[#61646B]">Ruangphur diltu tam te</p>
-                         <q-card-section>
-                             <!-- <div class="text-h6">Top 10 Applicants</div> -->
-                             <q-table :rows="topApplicants" :columns="applicantColumns" />
-                            </q-card-section>
-                        </q-card>
-                    </div>
+                        <q-card-section>
+                            <!-- <div class="text-h6">Top 10 Applicants</div> -->
+                            <q-table
+                                :rows="topApplicants"
+                                :columns="applicantColumns"
+                            />
+                        </q-card-section>
+                    </q-card>
                 </div>
             </div>
+        </div>
     </AdminLayout>
 </template>
 
@@ -77,30 +91,33 @@ const statusCards = computed(() => [
         count: props.statusCounts.Incoming || 0,
         bgClass: "bg-[#FFF7EF]",
         textClass: "text-[#FD7900]",
+        route: '/verifier/application' 
     },
     {
         label: "Verified",
         count: props.statusCounts.Verified || 0, // Fixed key
         bgClass: "bg-[#EEFFF8]",
         textClass: "text-[#00AA68]",
+        route: '/verifier/verified',
     },
     {
         label: "Rejected",
         count: props.statusCounts.Rejected || 0,
         bgClass: "bg-[#FFF2F2]",
         textClass: "text-[#FE6262]",
+        route: '/verifier/rejected',
     },
     {
         label: "Pending",
         count: props.statusCounts.Pending || 0,
         bgClass: "bg-[#F2F8FF]",
         textClass: "text-[#404CF1]",
+        route: '/verifier/application',
     },
-    
 ]);
 
 onMounted(() => {
-    console.log('Status Counts:', props.statusCounts);
+    console.log("Status Counts:", props.statusCounts);
 });
 </script>
 
@@ -109,7 +126,7 @@ onMounted(() => {
     height: 300px;
     min-height: 300px;
 }
-.circular-chart-container{
+.circular-chart-container {
     height: 500px;
 }
 

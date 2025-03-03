@@ -10,19 +10,21 @@
 
         <!-- Status Counts -->
         <div
-            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
-        >
-            <div
-                v-for="status in statusCards"
-                :key="status.label"
-                :class="`w-full h-[78px] ${status.bgClass} ${status.textClass} p-4`"
+                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
             >
-                <h6 class="text-lg sm:text-base font-black">
-                    {{ status.count }}
-                </h6>
-                <p class="text-xs sm:text-sm">{{ status.label }}</p>
+                <a
+                    v-for="status in statusCards"
+                    :key="status.label"
+                    :href="status.route"
+                    class="w-full h-[78px]"
+                    :class="`${status.bgClass} ${status.textClass} p-4`"
+                >
+                    <h6 class="text-sm sm:text-base font-black">
+                        {{ status.count }}
+                    </h6>
+                    <p class="text-xs sm:text-sm">{{ status.label }}</p>
+                </a>
             </div>
-        </div>
 
         <!-- Status Tab -->
         <!-- <div class="q-my-md grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -601,24 +603,28 @@ const statusCards = computed(() => [
         count: props.statusCounts.Incoming || 0,
         bgClass: "bg-[#FFF7EF]",
         textClass: "text-[#FD7900]",
+        route: '/verifier/application' 
     },
     {
         label: "Verified",
-        count: props.statusCounts.Verified || 0,
+        count: props.statusCounts.Verified || 0, // Fixed key
         bgClass: "bg-[#EEFFF8]",
         textClass: "text-[#00AA68]",
+        route: '/verifier/verified',
     },
     {
         label: "Rejected",
         count: props.statusCounts.Rejected || 0,
         bgClass: "bg-[#FFF2F2]",
         textClass: "text-[#FE6262]",
+        route: '/verifier/rejected',
     },
     {
         label: "Pending",
         count: props.statusCounts.Pending || 0,
         bgClass: "bg-[#F2F8FF]",
         textClass: "text-[#404CF1]",
+        route: '/verifier/application',
     },
 ]);
 </script>

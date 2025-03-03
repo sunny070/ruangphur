@@ -263,8 +263,8 @@
                 </div>
 
                 <!-- Map Dialogs -->
-                <q-dialog v-model="showSourceDialog" maximized>
-                    <q-card style="width: 90vw; max-width: 600px; height: auto">
+                <q-dialog v-model="showSourceDialog">
+                    <q-card style="width: 90vw; max-width: 600px;">
                         <q-card-section>
                             <div class="flex gap-4 mb-4">
                                 <q-input
@@ -305,10 +305,13 @@
                                     </q-item>
                                 </q-list>
                             </div>
+                          
                             <GoogleMap
                                 :center="mapCenter"
-                                :zoom="7"
-                                style="height: 60vh"
+                                
+                                 :zoom="mapZoom"
+                                 style="height: 60vh"
+                                class="map-container"
                                 @click="
                                     (event) =>
                                         handleMapClick(event.latLng, 'source')
@@ -396,7 +399,8 @@
                             </div>
                             <GoogleMap
                                 :center="mapCenter"
-                                :zoom="7"
+                                :zoom="mapZoom"
+                                style="height: 60vh"
                                 class="map-container"
                                 @click="
                                     (event) =>
@@ -406,6 +410,7 @@
                                         )
                                 "
                             >
+                            
                                 <Marker
                                     v-if="sourceCoords"
                                     :position="sourceCoords"
@@ -436,6 +441,12 @@
                                     }"
                                 />
                             </GoogleMap>
+                            <div
+                                class="distance-preview"
+                                v-if="form.source_locality"
+                            >
+                                Selected: {{ form.destination_locality }}
+                            </div>
                         </q-card-section>
                         <q-card-section align="right">
                             <q-btn
@@ -626,34 +637,7 @@ const submitForm = () => {
         },
     });
 };
-// const handleMapClick = async (event, type) => {
-//     const clickedLocation = {
-//         lat: event.latLng.lat(),
-//         lng: event.latLng.lng(),
-//     };
-
-//     try {
-//         const response = await fetch(
-//             `https://maps.googleapis.com/maps/api/geocode/json?latlng=${clickedLocation.lat},${clickedLocation.lng}&key=YOUR_API_KEY`
-//         );
-//         const data = await response.json();
-
-//         if (data.results[0]) {
-//             const address = data.results[0].formatted_address;
-//             if (type === 'source') {
-//                 form.source_locality = address;
-//                 sourceCoords.value = clickedLocation;
-//             } else {
-//                 form.destination_locality = address;
-//                 destinationCoords.value = clickedLocation;
-//             }
-//             calculateDistanceAndCost();
-//         }
-//     } catch (error) {
-//         console.error('Geocoding error:', error);
-//         $q.notify('Error getting address from coordinates');
-//     }
-// };
+const mapZoom = ref(7);
 const handleMapClick = async (latLng, type) => {
     if (!latLng) return;
 
@@ -667,6 +651,10 @@ const handleMapClick = async (latLng, type) => {
         lat: latLng.lat(),
         lng: latLng.lng(),
     };
+
+    mapCenter.value = clickedLocation;
+    mapZoom.value = 14; // Zoom in when clicking on the map
+
 
     console.log("Clicked Location:", clickedLocation);
 
@@ -739,9 +727,13 @@ const selectPrediction = async (prediction, type) => {
             destinationSearch.value = "";
         }
 
+        // Zoom in when selecting a location
+        mapCenter.value = location;
+        mapZoom.value = 14; // Set a closer zoom level
+
         calculateDistanceAndCost();
-        if (type === "source") showSourceDialog.value = false;
-        if (type === "destination") showDestinationDialog.value = false;
+        // if (type === "source") showSourceDialog.value = false;
+        // if (type === "destination") showDestinationDialog.value = false;
     } catch (error) {
         console.error("Error selecting prediction:", error);
         $q.notify("Error loading location details");

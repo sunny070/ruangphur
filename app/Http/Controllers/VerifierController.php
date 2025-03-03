@@ -360,6 +360,15 @@ class VerifierController extends Controller
 
         return redirect()->back()->with('success', 'Pending applications have been verified.');
     }
+
+    public function verify(Application $application){
+        // dd($application);
+        $application->status = 'Verified';
+        $application->verified_at = now();
+        $application->save();
+        return redirect()->route('verifier.application')->with('success', 'Pending applications have been verified.');
+    }
+
     public function reject(Application $application)
     {
         if ($application && $application->status === 'Pending') {

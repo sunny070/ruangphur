@@ -15,6 +15,62 @@ use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Middleware\RoleMiddleware;
 use Inertia\Inertia;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\ConfirmablePasswordController;
+use App\Http\Controllers\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\VerifyEmailController;
+
+Route::get('register', [RegisteredUserController::class, 'create'])
+->name('register');
+
+Route::post('register', [RegisteredUserController::class, 'store']);
+
+Route::get('login', [AuthenticatedSessionController::class, 'create'])
+->name('login');
+
+Route::post('login', [AuthenticatedSessionController::class, 'store']);
+
+Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
+->name('password.request');
+
+Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
+->name('password.email');
+
+Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
+->name('password.reset');
+
+Route::post('reset-password', [NewPasswordController::class, 'store'])
+->name('password.store');
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('verify-email', EmailVerificationPromptController::class)
+        ->name('verification.notice');
+
+    Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
+        ->middleware(['signed', 'throttle:6,1'])
+        ->name('verification.verify');
+
+    Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+        ->middleware('throttle:6,1')
+        ->name('verification.send');
+
+    Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
+        ->name('password.confirm');
+
+    Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
+
+    Route::put('password', [PasswordController::class, 'update'])->name('password.update');
+
+    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+        ->name('logout');
+});
+
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -118,24 +174,24 @@ Route::group(['middleware' => [RoleMiddleware::using('approver')]], function () 
 
 
 Route::group([], function () {
-    Route::get('/verifier/dashboard', [VerifierController::class, 'dashboard'])->name('verifier.dashboard');
-    Route::get('/verifier/application', [VerifierController::class, 'index'])->name('verifier.application');
-    Route::get('/verifier/verified', [VerifierController::class, 'verified'])->name('verifier.verified');
-    Route::get('/verifier/rejected', [VerifierController::class, 'rejected'])->name('verifier.rejected');
-    Route::get('/verifier/application/{application}', [VerifierController::class, 'show'])->name('verifier.applications.show');
+    Route::get('/verifier/dashboard', [VerifierController::class, 'dashboard'])->name('verifier.dashboard')->middleware('auth');
+    Route::get('/verifier/application', [VerifierController::class, 'index'])->name('verifier.application')->middleware('auth');
+    Route::get('/verifier/verified', [VerifierController::class, 'verified'])->name('verifier.verified')->middleware('auth');
+    Route::get('/verifier/rejected', [VerifierController::class, 'rejected'])->name('verifier.rejected')->middleware('auth');
+    Route::get('/verifier/application/{application}', [VerifierController::class, 'show'])->name('verifier.applications.show')->middleware('auth');
     // routes/web.php
 
-    Route::get('/verifier/report', [VerifierController::class, 'userReport'])->name('verifier.report');
-    Route::get('/verifier/report/export', [VerifierController::class, 'userExport'])->name('verifier.export');
+    Route::get('/verifier/report', [VerifierController::class, 'userReport'])->name('verifier.report')->middleware('auth');
+    Route::get('/verifier/report/export', [VerifierController::class, 'userExport'])->name('verifier.export')->middleware('auth');
 
 
-    Route::post('/verifier/applications/verify-all', [VerifierController::class, 'verifyAll']);
-    Route::post('/verifier/applications/reject-all', [VerifierController::class, 'rejectAll']);
+    Route::post('/verifier/applications/verify-all', [VerifierController::class, 'verifyAll'])->middleware('auth');
+    Route::post('/verifier/applications/reject-all', [VerifierController::class, 'rejectAll'])->middleware('auth');
 
-    Route::post('/verifier/application/{application}/approve', [VerifierController::class, 'verify'])->name('verifier.application.approve');
-    Route::post('/verifier/application/{application}/reject', [VerifierController::class, 'reject'])->name('verifier.application.reject');
+    Route::post('/verifier/application/{application}/approve', [VerifierController::class, 'verify'])->middleware('auth')->name('verifier.application.approve');
+    Route::post('/verifier/application/{application}/reject', [VerifierController::class, 'reject'])->middleware('auth')->name('verifier.application.reject');
 
-    Route::delete('/verifier/applications/{application}', [VerifierController::class, 'destroy'])->name('verifier.applications.destroy');
+    Route::delete('/verifier/applications/{application}', [VerifierController::class, 'destroy'])->middleware('auth')->name('verifier.applications.destroy');
 });
 
 

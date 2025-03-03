@@ -451,11 +451,12 @@
 import { computed,ref } from "vue";
 import { router as $inertia, Link } from "@inertiajs/vue3";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-
+import { useQuasar } from "quasar";
 defineOptions({
     layout: AdminLayout,
 });
 
+const q = useQuasar();
 // Props passed from the parent component (Inertia)
 const props = defineProps({
     application: Object,
@@ -492,13 +493,37 @@ const confirmRejection = async () => {
     }
 };
 const approveApplication = async (applicationId) => {
-    if (confirm("Are you sure you want to approve this application?")) {
+
+    q.dialog({
+        title: 'Confirmation',
+        message: 'Are you sure you want to approve this application?',
+        cancel: true,
+        ok: {
+          push: true,
+           color: 'dark'
+        },
+        cancel: {
+          push: true,
+          color: 'negative'
+        },
+      }).onOk(() => {
         try {
-            await $inertia.post(`/verifier/application/${applicationId}/approve`);
+         $inertia.post(`/verifier/application/${applicationId}/approve`);
         } catch (error) {
             console.error(error);
         }
-    }
+      }).onCancel(() => {
+        // console.log('Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+    // if (confirm("Are you sure you want to approve this application?")) {
+    //     try {
+    //         await $inertia.post(`/verifier/application/${applicationId}/approve`);
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // }
 };
 
 // const rejectApplication = async (applicationId) => {

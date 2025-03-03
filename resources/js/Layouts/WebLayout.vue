@@ -87,11 +87,7 @@
                 <q-btn flat label="About Us" />
                 <q-btn flat label="Contact Us" />
                 <q-btn flat label="Terms & Conditions" />
-                <q-btn
-                    flat
-                    :href="route('login')"
-                    label="Login for Officials"
-                />
+                <q-btn @click="login" flat label="Login for Officials" />
             </div>
             <a
                 class="text-caption text-grey-8 flex flex-col justify-center items-center"
@@ -121,6 +117,10 @@ const navigation = [
 
 const toggleRightDrawer = () => {
     rightDrawerOpen.value = !rightDrawerOpen.value;
+};
+
+const login = () => {
+    router.visit(route("login"));
 };
 </script>
 
