@@ -1,5 +1,6 @@
 <template>
     <q-page padding>
+        <Head title="Application"/>
         <!-- Flash Success/Error Messages -->
         <q-banner v-if="flash.success" class="bg-green-4 text-white" dense>
             {{ flash.success }}
@@ -234,6 +235,7 @@ import { router as $inertia } from "@inertiajs/vue3";
 import * as XLSX from "xlsx";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import dayjs from "dayjs";
+import { Head } from "@inertiajs/vue3";
 
 defineOptions({
     layout: AdminLayout,

@@ -1,5 +1,6 @@
 <template>
     <q-page padding>
+        <Head title="Application"/>
         <div class="grid md:grid-cols-2 gap-4">
             <!-- Back Button -->
             <div class="flex items-center order-1 md:order-none">
@@ -452,6 +453,9 @@ import { computed,ref } from "vue";
 import { router as $inertia, Link } from "@inertiajs/vue3";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { useQuasar } from "quasar";
+import { Head } from "@inertiajs/vue3";
+
+
 defineOptions({
     layout: AdminLayout,
 });

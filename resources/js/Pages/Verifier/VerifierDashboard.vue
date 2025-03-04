@@ -1,5 +1,6 @@
 <template>
     <AdminLayout>
+        <Head title="Dashboard"/>
         <div class="p-6">
             <h1 class="text-2xl font-bold mb-6">Verifier Dashboard</h1>
 
@@ -71,6 +72,7 @@ import AdminLayout from "@/Layouts/AdminLayout.vue";
 import VerifierBarChart from "@/Components/Verifier/VerifierBarChart.vue";
 import CircularChart from "@/Components/Verifier/VerifierCircularChart.vue";
 import VerifierMonthlyAmountDisbursed from "@/Components/Verifier/VerifierMonthlyAmountDisbursed.vue";
+import { Head } from "@inertiajs/vue3";
 // import VerifierTopApplicants from "@/Components/Verifier/VerifierTopApplicants.vue";
 import { computed, onMounted } from "vue";
 

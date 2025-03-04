@@ -1,5 +1,6 @@
 <template>
     <q-page>
+        <Head title="Report"/>
         <div class="p-6">
             <h1 class="text-2xl font-bold mb-6">Generate Report</h1>
 
@@ -15,7 +16,7 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Applicant District</label>
+                        <label class="block text-sm font-medium text-gray-700">Deceased District</label>
                         <select v-model="form.district_id"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
                             <option value="">All Districts</option>
@@ -111,6 +112,7 @@ import { reactive } from 'vue';
 import { router } from '@inertiajs/vue3';
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { computed } from 'vue';
+import { Head } from "@inertiajs/vue3";
 // import useForm from "@inertiajs/vue3";
 
 defineOptions({

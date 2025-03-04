@@ -1,6 +1,6 @@
 <template>
     <q-page padding>
-        <Head title="Application"/>
+        <Head title="Application" />
         <!-- Flash Success/Error Messages -->
         <q-banner v-if="flash?.success" class="bg-green-4 text-white" dense>
             {{ flash.success }}
@@ -10,9 +10,14 @@
         </q-banner>
 
         <!-- Status Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            <div v-for="status in statusCards" :key="status.label"
-                :class="`w-full h-[78px] ${status.bgClass} ${status.textClass} p-4`">
+        <div
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
+        >
+            <div
+                v-for="status in statusCards"
+                :key="status.label"
+                :class="`w-full h-[78px] ${status.bgClass} ${status.textClass} p-4`"
+            >
                 <h6 class="text-sm sm:text-base font-black">
                     {{ status.count }}
                 </h6>
@@ -40,29 +45,47 @@
                         : 'inactive-button'
                     " @click="setFilter('Rejected')" />
             </div> -->
-            
         </div>
 
         <!-- Status Action -->
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="">
-                <q-input rounded="lg" outlined dense bottom-slots v-model="searchQuery" label="Search" color="dark"
-                    class="w-full max-w-md">
+                <q-input
+                    rounded="lg"
+                    outlined
+                    dense
+                    bottom-slots
+                    v-model="searchQuery"
+                    label="Search"
+                    color="dark"
+                    class="w-full max-w-md"
+                >
                     <template v-slot:append>
-                        <q-icon v-if="searchQuery !== ''" name="close" @click="searchQuery = ''"
-                            class="cursor-pointer" />
+                        <q-icon
+                            v-if="searchQuery !== ''"
+                            name="close"
+                            @click="searchQuery = ''"
+                            class="cursor-pointer"
+                        />
                         <q-icon name="search" />
                     </template>
                 </q-input>
             </div>
             <div class="flex justify-end pr-16">
-                <q-btn size="sm" flat outlined class="q-btn-custom flex items-center justify-center" style="
+                <q-btn
+                    size="sm"
+                    flat
+                    outlined
+                    class="q-btn-custom flex items-center justify-center"
+                    style="
                         color: #000;
                         width: 100px;
                         height: 40px;
                         border-radius: 8px;
-                    " @click="printTable">
+                    "
+                    @click="printTable"
+                >
                     <q-icon name="print" size="16px" class="q-mr-xs" />
                     <span>Print</span>
                 </q-btn>
@@ -75,7 +98,9 @@
                     <q-icon name="ios_share" size="16px" class="q-mr-xs" />
                     <span>Export</span>
                 </q-btn> -->
-                <q-select color="dark" style="
+                <q-select
+                    color="dark"
+                    style="
                         color: #000;
                         width: 160px;
                         height: 40px;
@@ -83,16 +108,27 @@
                         border-radius: 8px;
                         border: 1px solid black;
                         background: transparent;
-                    " v-model="selectedDistrict" :options="districtOptions" label="Select District" outlined dense
-                    class="q-mb-md" @input="filterByDistrict" />
+                    "
+                    v-model="selectedDistrict"
+                    :options="districtOptions"
+                    option-value="value"
+                    option-label="label"
+                    label="Select District"
+                    outlined
+                    dense
+                    class="q-mb-md"
+                    @input="filterByDistrict"
+                />
             </div>
         </div>
         <!-- Applications Table -->
-        <div ref="printSection" class="rounded-lg overflow-x-auto table-responsive">
+        <div
+            ref="printSection"
+            class="rounded-lg overflow-x-auto table-responsive"
+        >
             <table class="q-table q-table__grid w-full">
                 <thead>
                     <tr class="bg-[#3A424A] text-white">
-                       
                         <th>Sl.No.</th>
                         <th>APPLICATION NO.</th>
                         <th>APPLICANT NAME</th>
@@ -114,8 +150,10 @@
                     </tr>
                 </thead>
                 <tbody v-if="filteredApplications.length">
-                    <tr v-for="(application, index) in filteredApplications" :key="application.id">
-                        
+                    <tr
+                        v-for="(application, index) in filteredApplications"
+                        :key="application.id"
+                    >
                         <td>{{ index + 1 }}</td>
                         <!-- Serial number, starting from 1 -->
                         <td>{{ application?.application_no }}</td>
@@ -129,18 +167,21 @@
                         <td>{{ application?.applicant?.account_no }}</td>
                         <td>{{ application?.applicant?.ifsc_code }}</td>
                         <td>
-                            <div :class="{
-                                'status-incoming':
-                                    application?.status === 'Pending',
-                                'status-verified':
-                                    application?.status === 'Verified',
-                                'status-rejected':
-                                    application?.status === 'Rejected',
-                                'status-approved':
-                                    application?.status === 'Approved',
-                                'status-paid':
-                                    application?.status === 'Processed',
-                            }" class="status-badge">
+                            <div
+                                :class="{
+                                    'status-incoming':
+                                        application?.status === 'Pending',
+                                    'status-verified':
+                                        application?.status === 'Verified',
+                                    'status-rejected':
+                                        application?.status === 'Rejected',
+                                    'status-approved':
+                                        application?.status === 'Approved',
+                                    'status-paid':
+                                        application?.status === 'Processed',
+                                }"
+                                class="status-badge"
+                            >
                                 {{ application?.status }}
                             </div>
                         </td>
@@ -149,23 +190,37 @@
                             <q-btn flat icon="more_vert" />
                             <q-menu>
                                 <q-list>
-                                    <q-item clickable @click="viewApplication(application.id)">
+                                    <q-item
+                                        clickable
+                                        @click="viewApplication(application.id)"
+                                    >
                                         <q-item-section avatar>
-                                            <q-icon size="sm" name="visibility" />
+                                            <q-icon
+                                                size="sm"
+                                                name="visibility"
+                                            />
                                         </q-item-section>
                                         <q-item-section>View</q-item-section>
                                     </q-item>
 
-                                    <q-item clickable @click="openEditDialog(application)">
+                                    <q-item
+                                        clickable
+                                        @click="openEditDialog(application)"
+                                    >
                                         <q-item-section avatar>
                                             <q-icon name="edit" />
                                         </q-item-section>
-                                        <q-item-section>Edit/Update</q-item-section>
+                                        <q-item-section
+                                            >Edit/Update</q-item-section
+                                        >
                                     </q-item>
 
-                                    <q-item clickable @click="
-                                        deleteApplication(application.id)
-                                        ">
+                                    <q-item
+                                        clickable
+                                        @click="
+                                            deleteApplication(application.id)
+                                        "
+                                    >
                                         <q-item-section avatar>
                                             <q-icon name="delete" />
                                         </q-item-section>
@@ -200,48 +255,125 @@
                     <q-form @submit.prevent="handleSubmit">
                         <!-- Step 1: Deceased Details -->
                         <div v-if="currentStep === 1">
-                            <p class="text-center w-[242px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8">
+                            <p
+                                class="text-center w-[242px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
+                            >
                                 Ruang Phurh MITTHI Chungchang
                             </p>
-                            <q-input v-model="editableApplication.deceased.name" label="Mitthi hming" outlined dense
-                                class="q-mb-md" />
-                            <q-input v-model="editableApplication.deceased.relative_name
-                                " label="A chhungte hming" outlined dense class="q-mb-md" />
-                            <q-input type="date" v-model="editableApplication.deceased.dob"
-                                label="Mitthi Pianni leh thla" outlined dense class="q-mb-md" />
+                            <q-input
+                                v-model="editableApplication.deceased.name"
+                                label="Mitthi hming"
+                                outlined
+                                dense
+                                class="q-mb-md"
+                            />
+                            <q-input
+                                v-model="
+                                    editableApplication.deceased.relative_name
+                                "
+                                label="A chhungte hming"
+                                outlined
+                                dense
+                                class="q-mb-md"
+                            />
+                            <q-input
+                                type="date"
+                                v-model="editableApplication.deceased.dob"
+                                label="Mitthi Pianni leh thla"
+                                outlined
+                                dense
+                                class="q-mb-md"
+                            />
                             <!-- {{ editableApplication.deceased.district.name }} -->
-                            <q-select v-model="editableApplication.deceased.district.name
-                                " :options="dropdowns.districts" option-label="name" option-value="id" label="District"
-                                outlined dense class="q-mb-md" />
-                            <q-input v-model="editableApplication.deceased.locality" label="Locality" outlined dense
-                                class="q-mb-md" />
+                            <q-select
+                                v-model="
+                                    editableApplication.deceased.district.name
+                                "
+                                :options="dropdowns.districts"
+                                option-label="name"
+                                option-value="id"
+                                label="District"
+                                outlined
+                                dense
+                                class="q-mb-md"
+                            />
+                            <q-input
+                                v-model="editableApplication.deceased.locality"
+                                label="Locality"
+                                outlined
+                                dense
+                                class="q-mb-md"
+                            />
 
-                            <q-select v-model="editableApplication.deceased.constituency
-                                    .name
-                                " :options="dropdowns.constituencies" option-label="name" option-value="id"
-                                label="Constituency" outlined dense class="q-mb-md" />
+                            <q-select
+                                v-model="
+                                    editableApplication.deceased.constituency
+                                        .name
+                                "
+                                :options="dropdowns.constituencies"
+                                option-label="name"
+                                option-value="id"
+                                label="Constituency"
+                                outlined
+                                dense
+                                class="q-mb-md"
+                            />
 
-                            <q-input type="datetime-local" v-model="editableApplication.deceased.time_of_death
-                                " label="Thih ni leh darkar" outlined dense class="q-mb-md" />
-                            <q-input v-model="editableApplication.deceased.place_of_death
-                                " label="Thihna hmun" outlined dense class="q-mb-md" />
+                            <q-input
+                                type="datetime-local"
+                                v-model="
+                                    editableApplication.deceased.time_of_death
+                                "
+                                label="Thih ni leh darkar"
+                                outlined
+                                dense
+                                class="q-mb-md"
+                            />
+                            <q-input
+                                v-model="
+                                    editableApplication.deceased.place_of_death
+                                "
+                                label="Thihna hmun"
+                                outlined
+                                dense
+                                class="q-mb-md"
+                            />
                         </div>
 
                         <!-- Step 2: Transport Details -->
                         <div v-if="currentStep === 2">
-                            <p class="text-center w-[242px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8">
+                            <p
+                                class="text-center w-[242px] h-[17px] flex-shrink-0 rounded-[20px] bg-[#E9E9E9] mb-8"
+                            >
                                 Ruang Phurh leh Motor Chungchang
                             </p>
                             <!-- {{ editableApplication.transport.source_district.name }} -->
                             <!-- <q-select v-model="editableApplication.transport.source_district.name"
                                 :options="dropdowns.districts" option-label="name" option-value="id"
                                 label="Ruang phurh tanna tur District awmna" outlined dense class="q-mb-md" /> -->
-                            <q-select v-model="editableApplication.transport
-                                    .source_district
-                                " :options="dropdowns.districts" option-label="name" option-value="id"
-                                label="Ruang phurh tanna tur District awmna" outlined dense class="q-mb-md" />
-                            <q-input ref="sourceInput" v-model="editableApplication.transport.source_locality"
-                                label="Source Locality" outlined dense />
+                            <q-select
+                                v-model="
+                                    editableApplication.transport
+                                        .source_district
+                                "
+                                :options="dropdowns.districts"
+                                option-label="name"
+                                option-value="id"
+                                label="Ruang phurh tanna tur District awmna"
+                                outlined
+                                dense
+                                class="q-mb-md"
+                            />
+                            <q-input
+                                ref="sourceInput"
+                                v-model="
+                                    editableApplication.transport
+                                        .source_locality
+                                "
+                                label="Source Locality"
+                                outlined
+                                dense
+                            />
                             <!-- <q-input
                                 v-model="
                                     editableApplication.transport
@@ -253,13 +385,30 @@
                                 class="q-mb-md"
                             /> -->
 
-                            <q-select v-model="editableApplication.transport
-                                    .destination_district
-                                " :options="dropdowns.districts" option-label="name" option-value="id"
-                                label="Ruang zalhna tur District awmna" outlined dense class="q-mb-md" />
+                            <q-select
+                                v-model="
+                                    editableApplication.transport
+                                        .destination_district
+                                "
+                                :options="dropdowns.districts"
+                                option-label="name"
+                                option-value="id"
+                                label="Ruang zalhna tur District awmna"
+                                outlined
+                                dense
+                                class="q-mb-md"
+                            />
 
-                            <q-input ref="destinationInput" v-model="editableApplication.transport.destination_locality"
-                                label="Destination Locality" outlined dense />
+                            <q-input
+                                ref="destinationInput"
+                                v-model="
+                                    editableApplication.transport
+                                        .destination_locality
+                                "
+                                label="Destination Locality"
+                                outlined
+                                dense
+                            />
 
                             <!-- <q-input
                                 v-model="
@@ -272,43 +421,139 @@
                                 class="q-mb-md"
                             /> -->
                             <div class="mt-4" style="height: 200px">
-                                <TransportRouteMap :transport="editableApplication.transport"
-                                    @update:source-locality="val => editableApplication.transport.source_locality = val"
-                                    @update:destination-locality="val => editableApplication.transport.destination_locality = val"
-                                    @update:distance="val => editableApplication.transport.distance = val"
-                                    @update:transport-cost="val => editableApplication.transport.transport_cost = val"
-                                    @maps-loaded="initAutocomplete" />
+                                <TransportRouteMap
+                                    :transport="editableApplication.transport"
+                                    @update:source-locality="
+                                        (val) =>
+                                            (editableApplication.transport.source_locality =
+                                                val)
+                                    "
+                                    @update:destination-locality="
+                                        (val) =>
+                                            (editableApplication.transport.destination_locality =
+                                                val)
+                                    "
+                                    @update:distance="
+                                        (val) =>
+                                            (editableApplication.transport.distance =
+                                                val)
+                                    "
+                                    @update:transport-cost="
+                                        (val) =>
+                                            (editableApplication.transport.transport_cost =
+                                                val)
+                                    "
+                                    @maps-loaded="initAutocomplete"
+                                />
                             </div>
-                            <q-input v-model="editableApplication.transport.distance" label="Distance (Km)" outlined
-                                dense class="q-mb-md pt-[400px]" />
-                            <q-input v-model="editableApplication.transport.transport_cost
-                                " label="Transport Cost" outlined dense class="q-mb-md" />
-                            <q-input v-model="editableApplication.transport.vehicle_number
-                                " label="Vehicle Number" outlined dense class="q-mb-md" />
-                            <q-input v-model="editableApplication.transport.driver_name
-                                " label="Driver Name" outlined dense class="q-mb-md" />
-                            <q-input v-model="editableApplication.transport.driver_phone
-                                " label="Driver Phone" outlined dense class="q-mb-md" />
+                            <q-input
+                                v-model="editableApplication.transport.distance"
+                                label="Distance (Km)"
+                                outlined
+                                dense
+                                class="q-mb-md pt-[400px]"
+                            />
+                            <q-input
+                                v-model="
+                                    editableApplication.transport.transport_cost
+                                "
+                                label="Transport Cost"
+                                outlined
+                                dense
+                                class="q-mb-md"
+                            />
+                            <q-input
+                                v-model="
+                                    editableApplication.transport.vehicle_number
+                                "
+                                label="Vehicle Number"
+                                outlined
+                                dense
+                                class="q-mb-md"
+                            />
+                            <q-input
+                                v-model="
+                                    editableApplication.transport.driver_name
+                                "
+                                label="Driver Name"
+                                outlined
+                                dense
+                                class="q-mb-md"
+                            />
+                            <q-input
+                                v-model="
+                                    editableApplication.transport.driver_phone
+                                "
+                                label="Driver Phone"
+                                outlined
+                                dense
+                                class="q-mb-md"
+                            />
                         </div>
 
                         <!-- Step 3: Applicant Details -->
                         <div v-if="currentStep === 3">
-                            <q-input v-model="editableApplication.applicant.name" label="Applicant Name" outlined dense
-                                class="q-mb-md" />
-                            <q-input v-model="editableApplication.applicant.mobile" label="Mobile" outlined dense
-                                class="q-mb-md" />
-                            <q-select v-model="editableApplication.applicant.district.name
-                                " :options="dropdowns.districts" option-label="name" option-value="id"
-                                label="Ruang phurhna man diltu district" outlined dense class="q-mb-md" />
-                            <q-input v-model="editableApplication.applicant.locality"
-                                label="Ruang phurhna man diltu veng/khua" outlined dense class="q-mb-md" />
-                            <q-input v-model="editableApplication.applicant.bank_name
-                                " label="Bank hming" outlined dense class="q-mb-md" />
+                            <q-input
+                                v-model="editableApplication.applicant.name"
+                                label="Applicant Name"
+                                outlined
+                                dense
+                                class="q-mb-md"
+                            />
+                            <q-input
+                                v-model="editableApplication.applicant.mobile"
+                                label="Mobile"
+                                outlined
+                                dense
+                                class="q-mb-md"
+                            />
+                            <q-select
+                                v-model="
+                                    editableApplication.applicant.district.name
+                                "
+                                :options="dropdowns.districts"
+                                option-label="name"
+                                option-value="id"
+                                label="Ruang phurhna man diltu district"
+                                outlined
+                                dense
+                                class="q-mb-md"
+                            />
+                            <q-input
+                                v-model="editableApplication.applicant.locality"
+                                label="Ruang phurhna man diltu veng/khua"
+                                outlined
+                                dense
+                                class="q-mb-md"
+                            />
+                            <q-input
+                                v-model="
+                                    editableApplication.applicant.bank_name
+                                "
+                                label="Bank hming"
+                                outlined
+                                dense
+                                class="q-mb-md"
+                            />
 
-                            <q-input v-model="editableApplication.applicant.account_no
-                                " label="Account No" outlined dense class="q-mb-md" />
-                            <q-input v-model="editableApplication.applicant.ifsc_code
-                                " label="IFSC Code" outlined dense class="q-mb-md" />
+                            <q-input
+                                v-model="
+                                    editableApplication.applicant.account_no
+                                "
+                                label="Account No"
+                                outlined
+                                dense
+                                class="q-mb-md"
+                            />
+                            <q-input
+                                v-model="
+                                    editableApplication.applicant.ifsc_code
+                                "
+                                label="IFSC Code"
+                                outlined
+                                dense
+                                class="q-mb-md"
+                            />
                             <!-- <q-file v-model="editableApplication.attachment.id_proof" label="ID Proof" outlined dense
                                 class="q-mb-md" />
                             <q-file v-model="editableApplication.attachment.receipt" label="Receipt" outlined dense
@@ -321,13 +566,54 @@
 
                         <!-- Navigation Buttons -->
                         <q-card-actions align="right">
-                            <q-btn class="text-black" color="white" label="Cancel" v-close-popup />
+                            <q-btn
+                                style="border-radius: 8px"
+                                label="Cancel"
+                                color="negative"
+                                @click="confirmRejection"
+                                v-close-popup
+                            />
+                            <!-- <q-btn class="text-black" color="white" label="Cancel" v-close-popup /> -->
 
-                            <q-btn v-if="currentStep > 1" label="Previous" color="grey" @click="prevStep" />
+                            <q-btn
+                                v-if="currentStep > 1"
+                                label="Previous"
+                                
+                                style="background: transparent;border-radius: 8px;border: 1px solid #5b656f;"
+                                @click="prevStep"
+                            />
 
-                            <q-btn v-if="currentStep < 3" label="Next" color="black" @click="nextStep" />
+                            <q-btn
+                                v-if="currentStep < 3"
+                                label="Next"
+                                size="sm"
+                                style="
+                                    color: #fff;
+                                    width: 144px;
+                                    height: 40px;
+                                    flex-shrink: 0;
+                                    border-radius: 8px;
+                                    border: 1px solid #5b656f;
+                                    background: #000;
+                                "
+                                @click="nextStep"
+                            />
 
-                            <q-btn v-if="currentStep === 3" label="Submit" color="black" type="submit" />
+                            <q-btn
+                                v-if="currentStep === 3"
+                                label="Submit"
+                                size="sm"
+                                style="
+                                    color: #fff;
+                                    width: 144px;
+                                    height: 40px;
+                                    flex-shrink: 0;
+                                    border-radius: 8px;
+                                    border: 1px solid #5b656f;
+                                    background: #000;
+                                "
+                                type="submit"
+                            />
                         </q-card-actions>
                     </q-form>
                 </q-card-section>
@@ -360,7 +646,7 @@
 <script setup>
 import { defineProps, ref, computed, onMounted } from "vue";
 import { router as $inertia } from "@inertiajs/vue3";
-import { Head} from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
 import * as XLSX from "xlsx"; // Import SheetJS library
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import dayjs from "dayjs";
@@ -467,38 +753,11 @@ const currentFilter = ref("All");
 
 const selectedApplications = ref([]); // Array to store selected application IDs
 
-// Computed property to check if any application is selected
-const showActionButtons = computed(() => selectedApplications.value.length > 0);
 
-// Select/Deselect all logic
-const selectAllCheckbox = ref(false);
 
-const toggleSelectAll = () => {
-    if (
-        selectedApplications.value.length === filteredApplications.value.length
-    ) {
-        // Deselect all
-        selectedApplications.value = [];
-        selectAllCheckbox.value = false;
-    } else {
-        // Select all
-        selectedApplications.value = filteredApplications.value.map(
-            (app) => app.id
-        );
-        selectAllCheckbox.value = true;
-    }
-};
 
-const filterByDistrict = () => {
-    if (selectedDistrict.value) {
-        districtFilteredApplications.value = props.applications.filter(
-            (application) =>
-                application.deceased.district.name === selectedDistrict.value
-        );
-    } else {
-        districtFilteredApplications.value = props.applications;
-    }
-};
+
+
 
 const loadDistrictOptions = () => {
     // Assuming applications have a district field
@@ -517,21 +776,23 @@ const loadDistrictOptions = () => {
 // Initialize Autocomplete after maps load
 const initAutocomplete = () => {
     nextTick(() => {
-        const sourceEl = sourceInput.value.$el.querySelector('input');
-        const destEl = destinationInput.value.$el.querySelector('input');
+        const sourceEl = sourceInput.value.$el.querySelector("input");
+        const destEl = destinationInput.value.$el.querySelector("input");
 
         new google.maps.places.Autocomplete(sourceEl, {
-            types: ['geocode'],
-        }).addListener('place_changed', () => {
+            types: ["geocode"],
+        }).addListener("place_changed", () => {
             const place = autocomplete.getPlace();
-            editableApplication.value.transport.source_locality = place.formatted_address;
+            editableApplication.value.transport.source_locality =
+                place.formatted_address;
         });
 
         new google.maps.places.Autocomplete(destEl, {
-            types: ['geocode'],
-        }).addListener('place_changed', () => {
+            types: ["geocode"],
+        }).addListener("place_changed", () => {
             const place = autocomplete.getPlace();
-            editableApplication.value.transport.destination_locality = place.formatted_address;
+            editableApplication.value.transport.destination_locality =
+                place.formatted_address;
         });
     });
 };
@@ -558,24 +819,12 @@ const filteredApplications = computed(() => {
     if (selectedDistrict.value) {
         filtered = filtered.filter(
             (application) =>
-                application.deceased.district.name === selectedDistrict.value
+                application?.deceased?.district?.name ===
+                selectedDistrict.value?.value
         );
     }
 
-    // Filter by status
-    if (currentFilter.value === "Incoming") {
-        filtered = filtered.filter(
-            (application) => application.status === "Pending"
-        );
-    } else if (currentFilter.value === "Approved") {
-        filtered = filtered.filter(
-            (application) => application.status === "Approved"
-        );
-    } else if (currentFilter.value === "Rejected") {
-        filtered = filtered.filter(
-            (application) => application.status === "Rejected"
-        );
-    }
+    
 
     // Filter by search query
     if (searchQuery.value) {
@@ -586,18 +835,10 @@ const filteredApplications = computed(() => {
                     .toString()
                     .toLowerCase()
                     .includes(query) ||
-                application.applicant.name
-                    .toLowerCase()
-                    .includes(query) ||
-                application.deceased.name
-                    .toLowerCase()
-                    .includes(query) ||
-                application.applicant.mobile
-                    .toString()
-                    .includes(query) ||
-                application.deceased.district.name
-                    .toLowerCase()
-                    .includes(query)
+                application.applicant.name.toLowerCase().includes(query) ||
+                application.deceased.name.toLowerCase().includes(query) ||
+                application.applicant.mobile.toString().includes(query) ||
+                application.deceased.district.name.toLowerCase().includes(query)
         );
     }
 
@@ -702,7 +943,6 @@ const printTable = () => {
     printWindow.print();
 };
 // Export table data to Excel
-
 
 const statusCards = computed(() => [
     {

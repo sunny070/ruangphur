@@ -38,7 +38,7 @@ class AdminController extends Controller
             'Incoming' => Application::where('status', 'Pending')->count(),
             'Approved' => Application::where('status', 'Approved')->count(),
             'Rejected' => Application::where('status', 'Rejected')->count(),
-            'Pending' => Application::where('status', 'Pending')->count(), // Adjust if needed
+            'Verified' => Application::where('status', 'Verified')->count(), // Adjust if needed
             'Processed' => Application::where('status', 'Processed')->count(),
         ];
         return Inertia::render('Admin/Application', [
@@ -74,7 +74,7 @@ class AdminController extends Controller
             'Incoming' => Application::where('status', 'Pending')->count(),
             'Approved' => Application::where('status', 'Approved')->count(),
             'Rejected' => Application::where('status', 'Rejected')->count(),
-            'Pending' => Application::where('status', 'Pending')->count(), // Adjust if needed
+            'Verified' => Application::where('status', 'Verified')->count(), // Adjust if needed
             'Processed' => Application::where('status', 'Processed')->count(),
         ];
         return Inertia::render('Admin/Application', [
@@ -110,7 +110,7 @@ class AdminController extends Controller
             'Incoming' => Application::where('status', 'Pending')->count(),
             'Approved' => Application::where('status', 'Approved')->count(),
             'Rejected' => Application::where('status', 'Rejected')->count(),
-            'Pending' => Application::where('status', 'Pending')->count(), // Adjust if needed
+            'Verified' => Application::where('status', 'Verified')->count(), // Adjust if needed
             'Processed' => Application::where('status', 'Processed')->count(),
         ];
         return Inertia::render('Admin/Application', [
@@ -146,7 +146,7 @@ class AdminController extends Controller
             'Incoming' => Application::where('status', 'Pending')->count(),
             'Approved' => Application::where('status', 'Approved')->count(),
             'Rejected' => Application::where('status', 'Rejected')->count(),
-            'Pending' => Application::where('status', 'Pending')->count(), // Adjust if needed
+            'Verified' => Application::where('status', 'Verified')->count(), // Adjust if needed
             'Processed' => Application::where('status', 'Processed')->count(),
         ];
         return Inertia::render('Admin/Application', [
